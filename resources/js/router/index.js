@@ -1,0 +1,43 @@
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
+
+let routes = [
+    {
+        path: '/',
+        redirect: {name: 'dashboard'}
+    },
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: require('../views/dashboard'),
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/profile',
+        name: 'profile',
+        component: require('../views/profile'),
+        meta: {
+            auth: true
+        }
+    }
+];
+
+let context = require.context('./routes', true, /\.js$/);
+context.keys().forEach(function (key) {
+    routes = routes.concat(context(key))
+});
+
+export default new VueRouter({
+    scrollBehavior(to, from, savedPosition) {
+        return {
+            x: 0,
+            y: 0
+        }
+    },
+    routes,
+    mode: 'history'
+});
