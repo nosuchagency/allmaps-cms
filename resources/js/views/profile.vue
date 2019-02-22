@@ -120,9 +120,9 @@
                     const response = await this.$axios.get('/profile');
                     this.item = response.data;
                     this.form = this.getForm();
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 } finally {
                     this.finishProcessing();
@@ -132,9 +132,9 @@
                 this.startProcessing();
                 try {
                     await this.$axios.put('/profile', this.form);
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 } finally {
                     this.finishProcessing();

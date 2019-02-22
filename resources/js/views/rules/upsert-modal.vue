@@ -212,8 +212,8 @@
                     this.creating = true;
 
                     try {
-                        const response = await this.$axios.post(this.getCreateUrl(), this.form);
-                        resolve(response.data);
+                        const {data} = await this.$axios.post(this.getCreateUrl(), this.form);
+                        resolve(data);
                     } catch (error) {
                         reject(error);
                     } finally {
@@ -226,8 +226,8 @@
                     this.updating = true;
 
                     try {
-                        const response = await this.$axios.put(this.getUpdateUrl(), this.form);
-                        resolve(response.data);
+                        const {data} = await this.$axios.put(this.getUpdateUrl(), this.form);
+                        resolve(data);
                     } catch (error) {
                         reject(error);
                     } finally {

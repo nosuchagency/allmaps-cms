@@ -5,7 +5,8 @@ let multipleSelection = {
             bulkRemoving: false,
             bulkActions: [
                 {value: null, label: 'Bulk Actions'},
-                {value: 'delete', label: 'Delete'}
+                {value: 'delete', label: 'Delete'},
+                {value: 'publish', label: 'Publish'},
             ]
         }
     },

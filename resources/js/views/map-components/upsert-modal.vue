@@ -101,10 +101,15 @@
                                               :disabled="isUpdating"></el-input>
                                 </el-form-item>
                             </el-col>
-                            <image-upload @image-uploaded="setImage"
-                                          @image-removed="setImage"
-                                          :image="form.image">
-                            </image-upload>
+                            <el-col :span="12">
+                                <el-form-item :label="$t('map-components.attributes.image')"
+                                              :class="{'is-error' : has('image')}">
+                                    <image-upload @image-uploaded="setImage"
+                                                  @image-removed="setImage"
+                                                  :image="form.image">
+                                    </image-upload>
+                                </el-form-item>
+                            </el-col>
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">

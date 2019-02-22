@@ -204,6 +204,7 @@ export default {
                 "opacity": "Opacity",
                 "weight": "Weight",
                 "curved": "Curved",
+                "image": "Image",
                 "thickness": "Thickness",
                 "width": "Width",
                 "height": "Height",
