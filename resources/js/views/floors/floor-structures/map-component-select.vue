@@ -1,19 +1,20 @@
 <template>
-    <el-select v-model="component"
+    <el-select v-model="mapComponent"
+               class="component-select"
                :placeholder="type"
                size="small"
-               @change="selectComponent"
+               @change="selectMapComponent"
                :no-data-text="'No ' + type + 's'">
         <el-option
-                v-for="item in componentOptions"
+                v-for="item in mapComponentOptions"
                 :key="item.id"
                 :label="item.name"
                 :value="item">
-            <span class="component-name">
+            <span class="component-select-name">
                 {{ item.name }}
             </span>
             <i class="fa fa-square" :style="{color : item.color, opacity : item.opacity}"></i>
-            <span class="component-attribute">
+            <span class="component-select-attribute">
                 {{ item.curved ? 'Curved' : '' }} {{ item.shape }}
             </span>
         </el-option>
@@ -21,60 +22,45 @@
 </template>
 
 <script>
-    import Hub from '../../../events/hub';
-    import {mapGetters} from 'vuex';
-
     export default {
         props: {
-            componentOptions: Array,
-            type: String
+            type: String,
+            mapComponentOptions: Array
         },
         data() {
             return {
-                component: null
+                mapComponent: null
             }
         },
-        computed: {
-            ...mapGetters('plan', ['currentComponent'])
-        },
         methods: {
-            selectComponent(component) {
-                this.component = null;
-
-                if (this.currentComponent) {
-                    Hub.$emit('cancelComponent');
-                }
-
-                this.createComponent(component);
-            },
-            createComponent(component) {
-                Hub.$emit('createComponent', component);
-                this.$store.commit('plan/setCurrentIndex', -1);
+            selectMapComponent(component) {
+                this.mapComponent = null;
+                this.$emit('map-component:select', component);
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .component-name {
-        display: block;
-        float: left;
-        width: 120px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-right: 5px;
-    }
-
-    .component-attribute {
-        display: inline-block;
-        color: #8492a6;
-        font-size: 13px
-    }
-
-    .el-select {
+    .component-select {
         width: 20%;
         margin-right: 7px;
+
+        &-name {
+            display: block;
+            float: left;
+            width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 5px;
+        }
+
+        &-attribute {
+            display: inline-block;
+            color: #8492a6;
+            font-size: 13px
+        }
     }
 
     .el-input {

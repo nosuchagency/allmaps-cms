@@ -137,25 +137,11 @@
                                          property="level"
                                          sortable>
                         </el-table-column>
-                        <el-table-column label="Beacons"
+                        <el-table-column label="Locations"
                                          align="center"
                                          sortable>
                             <template slot-scope="scope">
-                                <span>{{scope.row.beacons.length}}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Pois"
-                                         align="center"
-                                         sortable>
-                            <template slot-scope="scope">
-                                <span>{{scope.row.pois.length}}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Findables"
-                                         align="center"
-                                         sortable>
-                            <template slot-scope="scope">
-                                <span>{{scope.row.findables.length}}</span>
+                                <span>{{scope.row.locations.length}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column align="right">
@@ -168,7 +154,7 @@
                                                icon="el-icon-picture-outline"
                                                circle
                                                v-if="$auth.user().permissions.includes('floors.read')"
-                                               @click="$router.push('/places/' + item.id + '/buildings/' + building.id + '/floors/' + scope.row.id + '/plan')">
+                                               @click="$router.push('/places/' + item.id + '/buildings/' + building.id + '/floors/' + scope.row.id + '/structures')">
                                     </el-button>
                                 </el-tooltip>
                                 <el-tooltip effect="dark"

@@ -1,122 +1,135 @@
 <template>
-    <div>
-        <div class="location-details"
-             v-if="currentLocation">
-            <span>Name: {{name}}</span>
-            <span>Type: {{type}}</span>
-            <span v-if="type === 'poi'">Draw Type: {{isArea ? 'Area' : 'Point'}}</span>
-        </div>
-        <div class="action-buttons"
-             v-if="currentLocation">
-            <el-button type="default"
-                       size="mini"
-                       v-if="!newLocationToolbarActive"
-                       @click="closeLocation()"
-                       plain>
-                Close
-            </el-button>
-
-            <el-button type="default"
-                       size="mini"
-                       v-if="!newLocationToolbarActive && isInDatabase"
-                       @click="removeLocation()"
-                       plain>
-                Remove
-            </el-button>
-
-            <el-button type="default"
-                       size="mini"
-                       v-if="!newLocationToolbarActive && isArea && hasAtleastTwoLatLngs"
-                       @click="finishLocation()"
-                       plain>
-                Done
-            </el-button>
-        </div>
+    <div class="location-toolbar"
+         :class="{'is-active' : !!location}">
+        <template v-if="location">
+            <div class="location-details">
+                <span class="location-name">
+                    {{location.getName()}}
+                </span>
+                <span class="location-type">
+                    {{location.getType()}}
+                </span>
+                <!--<span class="component-color">-->
+                <!--<i class="fa fa-square"-->
+                <!--:style="{color : structure.getColor(), opacity : structure.getOpacity()}">-->
+                <!--</i>-->
+                <!--</span>-->
+                <!--<span class="component-shape">-->
+                <!--{{structure.getShape()}}-->
+                <!--</span>-->
+            </div>
+            <div class="location-actions">
+                <el-button size="mini"
+                           type="danger"
+                           @click="confirmDeleteVisible = true">
+                    <i class="fa fa-trash-alt location-delete"
+                       aria-hidden="true">
+                    </i>
+                </el-button>
+                <el-button size="mini"
+                           type="primary"
+                           @click="cancelLocation()">
+                    Cancel
+                </el-button>
+                <el-button size="mini"
+                           type="primary"
+                           @click="saveLocation()"
+                           v-if="canSave">
+                    Finish
+                </el-button>
+            </div>
+            <confirm-dialog title="Delete Location"
+                            :visible="confirmDeleteVisible"
+                            :message="$t('general.confirm')"
+                            @cancel="confirmDeleteVisible = false"
+                            @confirm="deleteLocation()">
+            </confirm-dialog>
+        </template>
     </div>
 </template>
 
 <script>
-import Hub from '../../../events/hub';
-import { mapGetters } from 'vuex';
+    import Hub from '../../../events/hub';
 
-export default {
-    props: {
-        floor: Object
-    },
-    mounted() {},
-    computed: {
-        ...mapGetters('location', ['currentLocation', 'newLocationToolbarActive']),
-        name() {
-            if (!this.currentLocation) return '';
-
-            switch (this.currentLocation.location.location_type) {
-                case 'poi':
-                    return this.currentLocation.location.poi.name;
-                case 'findable':
-                    return this.currentLocation.location.findable.name;
-                case 'beacon':
-                    return this.currentLocation.location.name;
-                default:
-                    return '';
+    export default {
+        props: {
+            location: Object
+        },
+        data() {
+            return {
+                confirmDeleteVisible: false
             }
         },
-        type() {
-            return this.currentLocation.location.location_type;
+        computed: {
+            canSave() {
+                if (!this.location.isArea()) {
+                    return true;
+                }
+
+                return this.location.getCoordinates()[0].length >= 2;
+            }
         },
-        isArea() {
-            let location = this.currentLocation.location;
-
-            if (location.location_type !== 'poi' || !location.poi) return false;
-
-            return location.poi.type === 'area';
-        },
-        hasAtleastTwoLatLngs() {
-            if (!this.isArea) return false;
-
-            return this.currentLocation.getLatLngs()[0].length >= 2;
-        },
-        isInDatabase() {
-            let location = this.currentLocation.location;
-
-            return location.id ? true : false;
+        methods: {
+            saveLocation() {
+                Hub.$emit('location:save');
+            },
+            cancelLocation() {
+                Hub.$emit('location:cancel');
+            },
+            deleteLocation() {
+                Hub.$emit('location:remove');
+                this.confirmDeleteVisible = false
+            }
         }
-    },
-    methods: {
-        removeLocation() {
-            Hub.$emit('removeLocationFromFloor');
-        },
-        closeLocation() {
-            Hub.$emit('closeLocation');
-        },
-        finishLocation() {
-            Hub.$emit('saveLocationEditing');
-        }
-    }
-};
+    };
 </script>
 
+
 <style rel="stylesheet/scss" lang="scss" scoped>
-.location-select {
-    margin-left: 25px;
-}
+    .location-toolbar {
+        transition: height 0.2s ease-in-out;
+        overflow: hidden;
+        width: 100%;
+        height: 0;
+        background-color: #fff;
+        position: absolute;
+        z-index: 801;
+        display: flex;
+        align-items: center;
 
-.action-buttons {
-    margin-left: auto;
-    margin-right: 25px;
-}
-
-.location-details {
-    color: white;
-    font-size: 14px;
-    margin-left: 25px;
-
-    span {
-        margin-right: 15px;
-        font-weight: bold;
-
-        &:first-child {
-            text-transform: capitalize;
+        &.is-active {
+            height: 56px;
+            border-bottom: 1px solid #e6e6e6;
         }
     }
-}
+
+    .location-actions {
+        margin-left: auto;
+        margin-right: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .location-name {
+        font-size: 16px;
+        font-weight: bold;
+        margin-right: 15px;
+    }
+
+    .location-type {
+        font-size: 13px;
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+
+    .location-delete {
+        cursor: pointer;
+        color: #fff;
+    }
+
+    .location-details {
+        color: #666;
+        font-size: 14px;
+        margin-left: 25px;
+    }
 </style>

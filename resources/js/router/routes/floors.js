@@ -1,8 +1,8 @@
 module.exports = [
     {
-        path: '/places/:placeId/buildings/:buildingId/floors/:id/plan',
-        name: 'floors-plan',
-        component: require('../../views/floors/floor-plan/show'),
+        path: '/places/:placeId/buildings/:buildingId/floors/:id/structures',
+        name: 'floors-structures',
+        component: require('../../views/floors/floor-structures/show'),
         props: true,
         meta: {
             auth: true

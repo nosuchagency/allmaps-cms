@@ -75,16 +75,14 @@
 
                 this.error = null;
 
-                let self = this;
-
                 this.$auth.login({
                     data: this.form,
                     url: 'login',
                     redirect: {name: 'dashboard'},
                     fetchUser: true,
-                    error(error) {
-                        self.error = error.response.data;
-                        self.finishProcessing();
+                    error: (error) => {
+                        this.error = error.response.data;
+                        this.finishProcessing();
                     }
                 });
             }

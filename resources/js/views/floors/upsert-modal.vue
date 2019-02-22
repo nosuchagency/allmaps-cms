@@ -76,9 +76,9 @@
                     this.forget();
                     const floor = await this.create();
                     this.$emit('floor-modal:add', {placeId: this.placeId, buildingId: this.buildingId, floor})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -87,9 +87,9 @@
                     this.forget();
                     const floor = await this.update();
                     this.$emit('floor-modal:update', {placeId: this.placeId, buildingId: this.buildingId, floor})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -101,9 +101,9 @@
                         buildingId: this.buildingId,
                         floor: this.item
                     })
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },

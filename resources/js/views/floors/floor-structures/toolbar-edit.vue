@@ -1,18 +1,18 @@
 <template>
     <div class="component-toolbar"
-         :class="{'is-active' : !!currentComponent}">
-        <template v-if="currentComponent">
+         :class="{'is-active' : !!structure}">
+        <template v-if="structure">
             <div class="component-details">
                 <span class="component-name">
-                    {{component.name}}
+                    {{structure.getName()}}
                 </span>
                 <span class="component-color">
                     <i class="fa fa-square"
-                       :style="{color : component.color, opacity : component.opacity}">
+                       :style="{color : structure.getColor(), opacity : structure.getOpacity()}">
                     </i>
                 </span>
                 <span class="component-shape">
-                    {{component.shape}}
+                    {{structure.getShape()}}
                 </span>
             </div>
             <div class="component-actions">
@@ -25,21 +25,21 @@
                 </el-button>
                 <el-button size="mini"
                            type="primary"
-                           @click="emitComponentEvent('cancelComponent')">
+                           @click="cancelComponent()">
                     Cancel
                 </el-button>
                 <el-button size="mini"
                            type="primary"
-                           @click="emitComponentEvent('saveComponent')"
+                           @click="saveComponent()"
                            v-if="canSave">
                     Finish
                 </el-button>
             </div>
             <confirm-dialog title="Delete Component"
+                            :visible="confirmDeleteVisible"
                             :message="$t('general.confirm')"
                             @cancel="confirmDeleteVisible = false"
-                            @confirm="deleteComponent()"
-                            :visible="confirmDeleteVisible">
+                            @confirm="deleteComponent()">
             </confirm-dialog>
         </template>
     </div>
@@ -47,38 +47,39 @@
 
 <script>
     import Hub from '../../../events/hub';
-    import {mapGetters} from 'vuex';
 
     export default {
+        props: {
+            structure: Object
+        },
         data() {
             return {
                 confirmDeleteVisible: false
             }
         },
         computed: {
-            component() {
-                return this.currentComponent.feature.properties;
-            },
             canSave() {
-                if (['image', 'rectangle', 'circle'].includes(this.component.shape)) {
+                if (['image', 'rectangle', 'circle'].includes(this.structure.getShape())) {
                     return true;
                 }
 
-                if (this.component.shape === 'polygon') {
-                    return this.currentComponent.getLatLngs()[0].length >= 2;
+                if (this.structure.getShape() === 'polygon') {
+                    return this.structure.getCoordinates()[0].length >= 2;
                 }
 
-                return this.currentComponent.getLatLngs().length >= 2;
-            },
-            ...mapGetters('plan', ['currentComponent'])
+                return this.structure.getCoordinates().length >= 2;
+            }
         },
         methods: {
-            deleteComponent() {
-                this.emitComponentEvent('removeComponent');
-                this.confirmDeleteVisible = false
+            saveComponent() {
+                Hub.$emit('structure:save');
             },
-            emitComponentEvent(eventType, parameter = null) {
-                Hub.$emit(eventType, parameter);
+            cancelComponent() {
+                Hub.$emit('structure:cancel');
+            },
+            deleteComponent() {
+                Hub.$emit('structure:remove');
+                this.confirmDeleteVisible = false
             }
         }
     };

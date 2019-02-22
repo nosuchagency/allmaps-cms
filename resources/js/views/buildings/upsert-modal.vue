@@ -84,9 +84,9 @@
                     this.forget();
                     const item = await this.create();
                     this.$emit('building-modal:add', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -95,9 +95,9 @@
                     this.forget();
                     const building = await this.update();
                     this.$emit('building-modal:update', {id: this.item.id, building})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -105,9 +105,9 @@
                 try {
                     await this.remove();
                     this.$emit('building-modal:remove', this.item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },

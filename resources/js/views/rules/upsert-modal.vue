@@ -2,7 +2,7 @@
     <portal to="modals">
         <el-dialog :visible="visible"
                    :before-close="closeModal"
-                    width="60%">
+                   width="60%">
             <el-form>
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Rule" name="rule">
@@ -176,9 +176,9 @@
                     this.forget();
                     const rule = await this.create();
                     this.$emit('rule-modal:add', {beaconId: this.beaconId, containerId: this.containerId, rule})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -187,9 +187,9 @@
                     this.forget();
                     const rule = await this.update();
                     this.$emit('rule-modal:update', {beaconId: this.beaconId, containerId: this.containerId, rule})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -201,9 +201,9 @@
                         containerId: this.containerId,
                         rule: this.item
                     })
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },

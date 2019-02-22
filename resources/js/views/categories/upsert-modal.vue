@@ -75,9 +75,9 @@
                     this.forget();
                     const item = await this.create();
                     this.$emit('upsert-modal:add', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -86,9 +86,9 @@
                     this.forget();
                     const item = await this.update();
                     this.$emit('upsert-modal:update', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -97,9 +97,9 @@
                     this.forget();
                     const item = await this.remove();
                     this.$emit('upsert-modal:remove', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
