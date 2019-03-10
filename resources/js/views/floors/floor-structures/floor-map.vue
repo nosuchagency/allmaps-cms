@@ -48,15 +48,16 @@
             return {
                 popup: null,
 
-                drawHelperPolyline: null,
+                ruler: null,
 
-                mainLayerGroup: null,
-                structuresLayerGroup: null,
+                mainLayer: null,
+
+                structuresLayer: null,
 
                 imageOverlayLayer: null,
 
-                editingLayerGroup: null,
-                editingMarkerLayerGroup: null
+                editingLayer: null,
+                editingMarkerLayer: null
             };
         },
         mounted() {
@@ -64,19 +65,19 @@
 
             this.popup = L.popup();
 
-            this.drawHelperPolyline = new L.Polyline([], {
+            this.ruler = new L.Polyline([], {
                 weight: 2,
                 dashArray: [3, 10]
             }).addTo(this.map);
 
-            this.mainLayerGroup = L.layerGroup([]).addTo(this.map);
+            this.mainLayer = L.layerGroup([]).addTo(this.map);
 
-            this.structuresLayerGroup = L.layerGroup([]).addTo(this.mainLayerGroup);
+            this.structuresLayer = L.layerGroup([]).addTo(this.mainLayer);
 
-            this.imageOverlayLayer = L.layerGroup([]).addTo(this.mainLayerGroup);
+            this.imageOverlayLayer = L.layerGroup([]).addTo(this.mainLayer);
 
-            this.editingMarkerLayerGroup = L.layerGroup([]).addTo(this.mainLayerGroup);
-            this.editingLayerGroup = L.layerGroup([]).addTo(this.mainLayerGroup);
+            this.editingMarkerLayer = L.layerGroup([]).addTo(this.mainLayer);
+            this.editingLayer = L.layerGroup([]).addTo(this.mainLayer);
 
             this.structures.forEach((structure) => this.addStructure(structure, false));
 

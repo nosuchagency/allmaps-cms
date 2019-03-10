@@ -6,16 +6,50 @@
                      status-icon
                      label-width="120px">
                 <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Findable" name="findable">
+                    <el-tab-pane label="Fixture" name="fixture">
                         <br>
-                        <el-form-item :label="$t('findables.attributes.name')"
+                        <el-form-item :label="$t('fixtures.attributes.name')"
                                       :class="{'is-error' : has('name')}">
-                            <el-input v-model="form.name"></el-input>
+                            <el-input v-model="form.name">
+                            </el-input>
                         </el-form-item>
+                        <el-form-item :label="$t('fixtures.attributes.description')"
+                                      :class="{'is-error' : has('description')}">
+                            <el-input v-model="form.description"
+                                      type="textarea"
+                                      :rows="3">
+                            </el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="Image" name="image">
+                        <br>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :label="$t('fixtures.attributes.width')"
+                                              :class="{'is-error' : has('width')}">
+                                    <el-input v-model.number="form.width"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :label="$t('fixtures.attributes.height')"
+                                              :class="{'is-error' : has('height')}">
+                                    <el-input v-model.number="form.height"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :label="$t('fixtures.attributes.image')"
+                                              :class="{'is-error' : has('image')}">
+                                    <image-upload @image-uploaded="setImage"
+                                                  @image-removed="setImage"
+                                                  :image="form.image">
+                                    </image-upload>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
-                        <el-form-item :label="$t('findables.attributes.category')"
+                        <el-form-item :label="$t('fixtures.attributes.category')"
                                       :class="{'is-error' : has('category')}">
                             <fetch-items url="/categories">
                                 <el-select v-model="form.category"
@@ -31,7 +65,7 @@
                                 </el-select>
                             </fetch-items>
                         </el-form-item>
-                        <el-form-item :label="$t('findables.attributes.tags')"
+                        <el-form-item :label="$t('fixtures.attributes.tags')"
                                       :class="{'is-error' : has('tags')}">
                             <fetch-items url="/tags">
                                 <el-select v-model="form.tags"
@@ -77,6 +111,7 @@
 <script>
     import form from 'js/mixins/form';
     import resource from 'js/mixins/resource';
+    import imageUpload from 'js/components/image-upload';
 
     export default {
         mixins: [form, resource],
@@ -84,10 +119,13 @@
             visible: Boolean,
             item: Object
         },
+        components: {
+            imageUpload
+        },
         data() {
             return {
-                currentTab: 'findable',
-                resource: 'findables',
+                currentTab: 'fixture',
+                resource: 'fixtures',
                 form: this.getForm()
             }
         },
@@ -95,9 +133,16 @@
             getForm() {
                 return {
                     name: this.item ? this.item.name : '',
+                    description: this.item ? this.item.description : '',
+                    image: this.item ? this.item.image : '',
+                    width: this.item ? this.item.width : 0,
+                    height: this.item ? this.item.height : 0,
                     category: this.item ? this.item.category : '',
-                    tags: this.item ? this.item.tags : []
+                    tags: this.item ? this.item.tags : [],
                 }
+            },
+            setImage(image = null) {
+                this.form.image = image;
             },
             async createItem() {
                 try {

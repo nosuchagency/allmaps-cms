@@ -38,9 +38,9 @@ let menuItems = {
                             route: 'pois'
                         },
                         {
-                            title: this.$t('menu.findables'),
-                            icon: 'search-location',
-                            route: 'findables'
+                            title: this.$t('menu.fixtures'),
+                            icon: 'couch',
+                            route: 'fixtures'
                         },
                     ]
                 },
@@ -91,6 +91,11 @@ let menuItems = {
                             children: null,
                             icon: 'map-signs',
                             route: 'map-components'
+                        },
+                        {
+                            title: this.$t('menu.searchables'),
+                            icon: 'search-location',
+                            route: 'searchables'
                         },
                         // {
                         //     title: this.$t('menu.map-settings'),

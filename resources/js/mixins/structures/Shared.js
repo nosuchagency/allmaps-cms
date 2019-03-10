@@ -1,52 +1,45 @@
 export default {
     getStructure() {
-        return this.mapStructure;
+        return this.structure;
     },
     getName() {
-        return this.mapStructure.name;
+        return this.structure.name;
     },
     getShape() {
-        return this.mapStructure.component.shape;
+        return this.structure.component.shape;
     },
     getType() {
-        return this.mapStructure.component.type;
+        return this.structure.component.type;
     },
     getCurved() {
-        return this.mapStructure.component.curved;
+        return this.structure.component.curved;
     },
     getColor() {
-        return this.mapStructure.component.color;
+        return this.structure.component.color;
     },
     getOpacity() {
-        return this.mapStructure.component.opacity;
+        return this.structure.component.opacity;
     },
     getWidth() {
-        return this.mapStructure.component.width;
+        return this.structure.component.width;
     },
     getHeight() {
-        return this.mapStructure.component.height;
+        return this.structure.component.height;
     },
     getImage() {
-        return this.mapStructure.component.image;
+        return this.structure.component.image;
     },
-    initializeFeature() {
-        this.feature = {
-            type: 'Feature',
-            properties: {
-                type: this.mapStructure.component.type,
-                shape: this.mapStructure.component.shape,
-                name: this.mapStructure.component.name,
-                weight: this.mapStructure.component.weight,
-                color: this.mapStructure.component.color,
-                curved: this.mapStructure.component.curved,
-                radius: this.mapStructure.component.radius,
-                opacity: this.mapStructure.component.opacity,
-                width: this.mapStructure.component.width,
-                height: this.mapStructure.component.height,
-                image: this.mapStructure.component.image,
-                id: this.mapStructure.component.id,
-                markers: this.mapStructure.component.markers ? this.mapStructure.component.markers.slice(0) : []
-            }
-        };
+    getMarkers() {
+        if (!this.structure.markers) {
+            this.structure.markers = [];
+        }
+
+        return this.structure.markers;
+    },
+    bezierSpline(coordinates) {
+        let line = turf.lineString(coordinates.map(x => [x.lat, x.lng]));
+        let curved = turf.bezierSpline(line);
+
+        return curved.geometry.coordinates;
     }
 }

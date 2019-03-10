@@ -20,41 +20,6 @@
                             </el-input>
                         </el-form-item>
                     </el-tab-pane>
-                    <el-tab-pane label="Taxonomy" name="taxonomies">
-                        <br>
-                        <el-form-item :label="$t('places.attributes.category')"
-                                      :class="{'is-error' : has('category')}">
-                            <fetch-items url="/categories">
-                                <el-select v-model="form.category"
-                                           slot-scope="{items, loading}"
-                                           placeholder="Select"
-                                           clearable
-                                           value-key="id">
-                                    <el-option v-for="item in items"
-                                               :key="item.id"
-                                               :label="item.name"
-                                               :value="item">
-                                    </el-option>
-                                </el-select>
-                            </fetch-items>
-                        </el-form-item>
-                        <el-form-item :label="$t('beacons.attributes.tags')"
-                                      :class="{'is-error' : has('tags')}">
-                            <fetch-items url="/tags">
-                                <el-select v-model="form.tags"
-                                           slot-scope="{items, loading}"
-                                           placeholder="Select"
-                                           multiple
-                                           value-key="id">
-                                    <el-option v-for="item in items"
-                                               :key="item.id"
-                                               :label="item.name"
-                                               :value="item">
-                                    </el-option>
-                                </el-select>
-                            </fetch-items>
-                        </el-form-item>
-                    </el-tab-pane>
                     <el-tab-pane label="iBeacon" name="ibeacon">
                         <br>
                         <el-row :gutter="25">
@@ -110,6 +75,41 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
+                    </el-tab-pane>
+                    <el-tab-pane label="Taxonomy" name="taxonomies">
+                        <br>
+                        <el-form-item :label="$t('beacons.attributes.category')"
+                                      :class="{'is-error' : has('category')}">
+                            <fetch-items url="/categories">
+                                <el-select v-model="form.category"
+                                           slot-scope="{items, loading}"
+                                           placeholder="Select"
+                                           clearable
+                                           value-key="id">
+                                    <el-option v-for="item in items"
+                                               :key="item.id"
+                                               :label="item.name"
+                                               :value="item">
+                                    </el-option>
+                                </el-select>
+                            </fetch-items>
+                        </el-form-item>
+                        <el-form-item :label="$t('beacons.attributes.tags')"
+                                      :class="{'is-error' : has('tags')}">
+                            <fetch-items url="/tags">
+                                <el-select v-model="form.tags"
+                                           slot-scope="{items, loading}"
+                                           placeholder="Select"
+                                           multiple
+                                           value-key="id">
+                                    <el-option v-for="item in items"
+                                               :key="item.id"
+                                               :label="item.name"
+                                               :value="item">
+                                    </el-option>
+                                </el-select>
+                            </fetch-items>
+                        </el-form-item>
                     </el-tab-pane>
                 </el-tabs>
             </el-form>

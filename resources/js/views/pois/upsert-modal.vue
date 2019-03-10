@@ -13,9 +13,11 @@
                             <el-input v-model="form.name">
                             </el-input>
                         </el-form-item>
-                        <el-form-item :label="$t('pois.attributes.internal_name')"
-                                      :class="{'is-error' : has('internal_name')}">
-                            <el-input v-model="form.internal_name">
+                        <el-form-item :label="$t('pois.attributes.description')"
+                                      :class="{'is-error' : has('description')}">
+                            <el-input v-model="form.description"
+                                      type="textarea"
+                                      :rows="3">
                             </el-input>
                         </el-form-item>
                     </el-tab-pane>
@@ -25,7 +27,7 @@
                                       :class="{'is-error' : has('type')}">
                             <el-select v-model="form.type"
                                        placeholder="Select">
-                                <el-option v-for="item in ['icon', 'area']"
+                                <el-option v-for="item in ['image', 'area']"
                                            :key="item"
                                            :label="item"
                                            :value="item">
@@ -45,7 +47,7 @@
                                       v-else>
                             <image-upload @image-uploaded="setImage"
                                           @image-removed="setImage"
-                                          :image="form.icon">
+                                          :image="form.image">
                             </image-upload>
                         </el-form-item>
                     </el-tab-pane>
@@ -135,16 +137,16 @@
             getForm() {
                 return {
                     name: this.item ? this.item.name : '',
-                    internal_name: this.item ? this.item.internal_name : '',
-                    type: this.item ? this.item.type : 'icon',
+                    description: this.item ? this.item.description : '',
+                    type: this.item ? this.item.type : 'image',
                     color: this.item ? this.item.color : '#000000',
-                    icon: this.item ? this.item.icon : '',
+                    image: this.item ? this.item.image : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                 }
             },
             setImage(image = null) {
-                this.form.icon = image;
+                this.form.image = image;
             },
             async createItem() {
                 try {

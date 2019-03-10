@@ -88,9 +88,9 @@
                     this.forget();
                     const container = await this.update();
                     this.$emit('container-modal:update', {id: this.item.id, container})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -98,9 +98,9 @@
                 try {
                     await this.remove();
                     this.$emit('container-modal:remove', this.item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
                     }
                 }
             },
@@ -109,8 +109,8 @@
                     this.creating = true;
 
                     try {
-                        const response = await this.$axios.post(this.getCreateUrl(), this.form);
-                        resolve(response.data);
+                        const {data} = await this.$axios.post(this.getCreateUrl(), this.form);
+                        resolve(data);
                     } catch (error) {
                         reject(error);
                     } finally {
@@ -123,8 +123,8 @@
                     this.updating = true;
 
                     try {
-                        const response = await this.$axios.put(this.getUpdateUrl(), this.form);
-                        resolve(response.data);
+                        const {data} = await this.$axios.put(this.getUpdateUrl(), this.form);
+                        resolve(data);
                     } catch (error) {
                         reject(error);
                     } finally {

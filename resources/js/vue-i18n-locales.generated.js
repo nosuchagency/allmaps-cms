@@ -102,12 +102,16 @@ export default {
                 "link_text": "Go to Dashboard"
             }
         },
-        "findables": {
-            "singular": "Findable",
-            "plural": "Findables",
+        "fixtures": {
+            "singular": "Fixture",
+            "plural": "Fixtures",
             "attributes": {
                 "id": "ID",
                 "name": "Name",
+                "description": "Description",
+                "image": "Image",
+                "width": "Width",
+                "height": "Height",
                 "category": "Category",
                 "tags": "Tags"
             }
@@ -144,7 +148,9 @@ export default {
             "plural": "Folders",
             "attributes": {
                 "id": "ID",
-                "name": "Name"
+                "name": "Name",
+                "category": "Category",
+                "tags": "Tags"
             }
         },
         "general": {
@@ -217,7 +223,7 @@ export default {
             "places": "Places",
             "beacons": "Beacons",
             "pois": "Points of Interest",
-            "findables": "Findables",
+            "fixtures": "Fixtures",
             "containers": "Content",
             "locations": "Locations",
             "user_management": "User Management",
@@ -228,6 +234,7 @@ export default {
             "categories": "Categories",
             "tags": "Tags",
             "map_components": "Map Components",
+            "searchables": "Searchables",
             "map-settings": "Map Settings",
             "email_layouts": "Email Layouts",
             "email_templates": "Email Templates",
@@ -270,7 +277,7 @@ export default {
             "attributes": {
                 "id": "ID",
                 "name": "Name",
-                "internal_name": "Internal Name",
+                "description": "Description",
                 "image": "Image",
                 "type": "Type",
                 "color": "Color",
@@ -295,6 +302,17 @@ export default {
                 "name": "Name"
             },
             "permissions": "Role Permissions"
+        },
+        "searchables": {
+            "singular": "Searchable",
+            "plural": "Searchables",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "status": "Status",
+                "category": "Category",
+                "tags": "Tags"
+            }
         },
         "tags": {
             "singular": "Tag",

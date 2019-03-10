@@ -20,7 +20,7 @@
                                 <el-form-item :label="$t('map-components.attributes.type')"
                                               :class="{'is-error' : has('type')}">
                                     <el-select v-model="form.type">
-                                        <el-option v-for="item in ['plan', 'wall', 'room', 'fixture']"
+                                        <el-option v-for="item in ['plan', 'wall', 'room']"
                                                    :key="item"
                                                    :label="item"
                                                    :value="item">
@@ -46,7 +46,7 @@
                                 <el-form-item :label="$t('map-components.attributes.shape')"
                                               :class="{'is-error' : has('shape')}">
                                     <el-select v-model="form.shape"
-                                               :disabled="isUpdating">
+                                               :disabled="!!item">
                                         <el-option
                                                 v-for="item in ['polyline', 'polygon', 'rectangle', 'circle', 'image']"
                                                 :key="item"
@@ -90,15 +90,13 @@
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.width')"
                                               :class="{'is-error' : has('width')}">
-                                    <el-input v-model.number="form.width"
-                                              :disabled="isUpdating"></el-input>
+                                    <el-input v-model.number="form.width"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.height')"
                                               :class="{'is-error' : has('height')}">
-                                    <el-input v-model.number="form.height"
-                                              :disabled="isUpdating"></el-input>
+                                    <el-input v-model.number="form.height"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
@@ -267,11 +265,6 @@
             },
             setImage(image = null) {
                 this.form.image = image;
-            }
-        },
-        computed: {
-            isUpdating() {
-                return !!this.item;
             }
         }
     }

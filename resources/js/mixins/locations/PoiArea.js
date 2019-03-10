@@ -20,6 +20,7 @@ let PoiArea = {
                 startEditing() {
                 },
                 stopEditing() {
+
                 },
                 componentClicked(e) {
                     if (!self.currentLocation) {

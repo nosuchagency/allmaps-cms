@@ -3,13 +3,13 @@ let stateMethodsMixin = {
         startEditing(structure) {
             this.$emit('structure-copy:set', structure);
 
-            let component = this.initializeStructure(structure.getStructure()).addTo(this.editingLayerGroup);
+            let component = this.initializeStructure(_.cloneDeep(structure.getStructure())).addTo(this.editingLayer);
             component.startEditing();
 
             if (structure.getShape() === 'image') {
-                structure.overlay.removeFrom(this.imageOverlayLayer);
+                setTimeout(() => structure.overlay.removeFrom(this.imageOverlayLayer), 50);
             }
-            structure.removeFrom(this.structuresLayerGroup);
+            structure.removeFrom(this.structuresLayer);
             this.$emit('structure:set', component, (structure) => structure.addMarkers());
         },
         stopEditing() {
@@ -17,27 +17,27 @@ let stateMethodsMixin = {
             this.$emit('structure:set', null);
             this.$emit('structure-copy:set', null);
             this.popup.removeFrom(this.map);
-            this.drawHelperPolyline.setLatLngs([]);
-            this.editingMarkerLayerGroup.clearLayers();
-            this.editingLayerGroup.clearLayers();
+            this.ruler.setLatLngs([]);
+            this.editingMarkerLayer.clearLayers();
+            this.editingLayer.clearLayers();
         },
         saveStructure() {
-            this.currentStructure.removeFrom(this.editingLayerGroup);
-            this.currentStructure.addTo(this.structuresLayerGroup);
+            this.currentStructure.removeFrom(this.editingLayer);
+            this.currentStructure.addTo(this.structuresLayer);
             this.currentStructure.save();
             this.stopEditing();
         },
         cancelStructure() {
-            this.currentStructure.removeFrom(this.editingLayerGroup);
+            this.currentStructure.removeFrom(this.editingLayer);
             this.currentStructure.cancel();
-            this.currentStructureCopy.addTo(this.structuresLayerGroup);
+            this.currentStructureCopy.addTo(this.structuresLayer);
             if (this.currentStructureCopy.getShape() === 'image') {
                 this.currentStructureCopy.overlay.addTo(this.imageOverlayLayer);
             }
             this.stopEditing();
         },
         removeStructure() {
-            this.currentStructure.removeFrom(this.editingLayerGroup);
+            this.currentStructure.removeFrom(this.editingLayer);
             this.currentStructure.remove();
             this.stopEditing();
         },

@@ -40,7 +40,7 @@ let mapSetup = {
             let initializedStructure = this.initializeStructure(structure);
 
             if (initializedStructure) {
-                initializedStructure.addTo(this.structuresLayerGroup);
+                initializedStructure.addTo(this.structuresLayer);
 
                 if (edit) {
                     this.startEditing(initializedStructure);
@@ -64,7 +64,7 @@ let mapSetup = {
             }
         },
         mapMouseOutEventHandler(e) {
-            this.drawHelperPolyline.setLatLngs([]);
+            this.ruler.setLatLngs([]);
             this.popup.removeFrom(this.map);
         },
         mapMouseMoveEventHandler(e) {
@@ -75,7 +75,7 @@ let mapSetup = {
             let destination = this.currentStructure.getDestination();
 
             if (destination) {
-                this.drawHelperPolyline.setLatLngs([destination, e.latlng]);
+                this.ruler.setLatLngs([destination, e.latlng]);
                 this.popup.setContent(Math.round(e.latlng.distanceTo(destination) * 100) / 100 + ' meters');
                 this.popup.setLatLng(e.latlng).openOn(this.map);
             }

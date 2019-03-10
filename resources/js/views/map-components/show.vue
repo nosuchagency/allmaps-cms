@@ -62,11 +62,6 @@
                 item: null
             };
         },
-        computed: {
-            isUpdating() {
-                return !!this.item;
-            }
-        },
         methods: {
             updateItem(item) {
                 this.item = item;

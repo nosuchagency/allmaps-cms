@@ -4,23 +4,19 @@ let markerEvents = {
             polylineLatlng: null
         }
     },
-
     methods: {
         addMarker(latlng, options = {}) {
             return new L.Marker(latlng, {...{draggable: true}, ...options})
-                .addTo(this.editingMarkerLayerGroup)
+                .addTo(this.editingMarkerLayer)
                 .on('dragstart', this.dragStartHandler)
                 .on('drag', this.dragHandler)
                 .on('dragend', this.dragEndHandler)
                 .on('click', this.clickHandler);
         },
         clickHandler(e) {
-            if (!this.currentStructure) {
-                return;
+            if (this.currentStructure) {
+                this.currentStructure.click(e.target.getLatLng());
             }
-
-            this.currentStructure.click(e.target.getLatLng());
-            this.addMarker(e.target.getLatLng());
         },
         dragStartHandler(e) {
             if (!this.currentStructure) {
@@ -33,24 +29,14 @@ let markerEvents = {
 
             switch (this.currentStructure.getShape()) {
                 case 'polyline':
-                    if (this.currentStructure.getCurved()) {
-                        latlngs = this.currentStructure.feature.properties.markers;
-                    } else {
-                        latlngs = this.currentStructure.getLatLngs();
-                    }
-                    break;
                 case 'polygon':
-                    if (this.currentStructure.getCurved()) {
-                        latlngs = this.currentStructure.feature.properties.markers;
-                    } else {
-                        latlngs = this.currentStructure.getLatLngs()[0];
-                    }
+                    latlngs = this.currentStructure.getMarkers();
                     break;
-                case 'rectangle':
-                    return;
                 case 'circle':
                     latlngs = [this.currentStructure.getLatLng()];
                     break;
+                default :
+                    return
             }
 
             let latlng = e.target.getLatLng();
@@ -70,41 +56,23 @@ let markerEvents = {
 
             switch (this.currentStructure.getShape()) {
                 case 'polyline':
-
-                    if (this.currentStructure.getCurved()) {
-                        latlngs = this.currentStructure.feature.properties.markers;
-                    } else {
-                        latlngs = this.currentStructure.getLatLngs();
-                    }
-                    break;
                 case 'polygon':
-                    if (this.currentStructure.getCurved()) {
-                        latlngs = this.currentStructure.feature.properties.markers;
-                    } else {
-                        latlngs = this.currentStructure.getLatLngs()[0];
-                    }
+                    latlngs = this.currentStructure.getMarkers();
                     break;
-                case 'rectangle':
-                    return;
                 case 'circle':
                     latlngs = [this.currentStructure.getLatLng()];
                     break;
+                default :
+                    return
             }
 
             let latlng = e.target.getLatLng();
 
             if (['polyline', 'polygon'].includes(this.currentStructure.getShape())) {
-                latlng = this.currentStructure.getCurved() ? [latlng.lat, latlng.lng] : latlng;
                 latlngs.splice(this.polylineLatlng, 1, latlng);
                 this.currentStructure.setLatLngs(latlngs);
                 if (this.currentStructure.getCurved()) {
-                    let polyline;
-                    if (this.currentStructure.getShape() === 'polygon') {
-                        polyline = this.bezierSpline([].concat.apply([], this.currentStructure.toGeoJSON().geometry.coordinates));
-                    } else {
-                        polyline = this.bezierSpline(this.currentStructure.toGeoJSON().geometry.coordinates);
-                    }
-                    this.currentStructure.setLatLngs(polyline);
+                    this.currentStructure.setLatLngs(this.bezierSpline(this.currentStructure.getMarkers()));
                 } else {
                     this.currentStructure.setLatLngs(latlngs);
                 }
@@ -117,14 +85,12 @@ let markerEvents = {
                 return;
             }
 
-            setTimeout(() => {
-                this.map.on('click', this.mapClickHandler);
-            }, 100);
+            setTimeout(() => this.map.on('click', this.mapClickHandler), 100);
 
             this.polylineLatlng = null;
         },
         bezierSpline(coordinates) {
-            let line = turf.lineString(coordinates);
+            let line = turf.lineString(coordinates.map(x => [x.lat, x.lng]));
             let curved = turf.bezierSpline(line);
 
             return curved.geometry.coordinates;

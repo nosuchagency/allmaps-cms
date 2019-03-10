@@ -4,15 +4,15 @@
             <toolbar>
                 <template slot="left">
                     <div class="title-icon-wrapper">
-                        <i class="fa fa-search-location title-icon"></i>
-                        <label>{{$t('findables.plural')}}</label>
+                        <i class="fa fa-couch title-icon"></i>
+                        <label>{{$t('fixtures.plural')}}</label>
                     </div>
                 </template>
                 <template slot="right">
                     <el-tooltip effect="dark"
-                                :content="$t('general.actions.create', {name : $t('findables.singular')})"
+                                :content="$t('general.actions.create', {name : $t('fixtures.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('findables.create')">
+                                v-if="$auth.user().permissions.includes('fixtures.create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -24,6 +24,7 @@
             </toolbar>
         </template>
         <template slot="content">
+
             <div class="content">
                 <ribbon @bulk-action="applyBulkAction"
                         @ribbon:search="search"
@@ -33,7 +34,6 @@
                         :bulk-actions="bulkActions">
                 </ribbon>
                 <el-table :data="tableItems"
-                          @row-click="$router.push({name: 'findables-show', params: {id: $event.id}})"
                           :default-sort="{prop: 'name', order: 'ascending'}"
                           @selection-change="handleSelectionChange">
                     <el-table-column type="selection"
@@ -41,10 +41,10 @@
                                      align="center">
                     </el-table-column>
                     <el-table-column property="name"
-                                     :label="$t('findables.attributes.name')"
+                                     :label="$t('fixtures.attributes.name')"
                                      sortable>
                     </el-table-column>
-                    <el-table-column :label="$t('findables.attributes.category')"
+                    <el-table-column :label="$t('fixtures.attributes.category')"
                                      align="center"
                                      sortable>
                         <template slot-scope="scope">
@@ -57,6 +57,20 @@
                             <template v-else>
                                 -
                             </template>
+                        </template>
+                    </el-table-column>
+                    <el-table-column align="right">
+                        <template slot-scope="scope">
+                            <el-tooltip effect="dark"
+                                        :content="$t('general.actions.edit', {name : $t('fixtures.singular')})"
+                                        placement="top-start">
+                                <el-button type="primary"
+                                           size="small"
+                                           @click="openUpsertModal(scope.row)"
+                                           circle>
+                                    <i class="fa fa-edit"></i>
+                                </el-button>
+                            </el-tooltip>
                         </template>
                     </el-table-column>
                     <template slot="empty">
@@ -90,8 +104,11 @@
                 </confirm-dialog>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
+                              :item="selectedFixture"
                               @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:add="addItem">
+                              @upsert-modal:add="addItem"
+                              @upsert-modal:update="updateItem"
+                              @upsert-modal:remove="removeItem">
                 </upsert-modal>
             </div>
         </template>
@@ -114,10 +131,11 @@
                 confirmDeleteVisible: false,
                 items: null,
                 loading: false,
-                resource: 'findables',
+                resource: 'fixtures',
                 searchQuery: '',
                 selectedCategory: '',
-                selectedTags: []
+                selectedTags: [],
+                selectedFixture: null
             };
         },
         created() {
@@ -160,9 +178,23 @@
                 }
             },
             addItem(item) {
-                this.$router.push('/' + this.resource + '/' + item.id);
+                this.items.data.push(item);
+                this.items.meta.total++;
+                this.closeUpsertModal();
             },
-            openUpsertModal() {
+            updateItem(item) {
+                let index = _.findIndex(this.items.data, {id: item.id});
+                this.items.data.splice(index, 1, item);
+                this.closeUpsertModal();
+            },
+            removeItem(item) {
+                let index = _.findIndex(this.items.data, {id: item.id});
+                this.items.data.splice(index, 1);
+                this.items.meta.total--;
+                this.closeUpsertModal();
+            },
+            openUpsertModal(fixture = null) {
+                this.selectedFixture = fixture;
                 this.upsertModalVisible = true;
             },
             closeUpsertModal() {
@@ -171,7 +203,7 @@
         },
         computed: {
             text() {
-                let name = this.selectedItems.length > 1 ? this.$t('findables.plural') : this.$t('findables.singular');
+                let name = this.selectedItems.length > 1 ? this.$t('fixtures.plural') : this.$t('fixtures.singular');
 
                 return this.$t('general.actions.delete', {name});
             },
@@ -187,12 +219,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-table {
-        /deep/ &__row {
-            cursor: pointer;
-        }
-    }
-
     .pagination-container {
         margin: 25px 0;
         display: flex;

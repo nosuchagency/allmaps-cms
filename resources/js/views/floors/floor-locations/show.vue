@@ -19,9 +19,14 @@
                     <poi-select :url="getFloorUrl()"
                                 @poi:add="addLocation">
                     </poi-select>
-                    <findable-select :url="getFloorUrl()"
-                                     @findable:add="addLocation">
-                    </findable-select>
+                    <poi-select :url="getFloorUrl()"
+                                @poi:add="addLocation"
+                                type="area"
+                                label="POI Area">
+                    </poi-select>
+                    <fixture-select :url="getFloorUrl()"
+                                    @fixture:add="addLocation">
+                    </fixture-select>
                     <beacon-select :url="getFloorUrl()"
                                    @beacon:add="addLocation">
                     </beacon-select>
@@ -77,7 +82,7 @@
     import Hub from '../../../events/hub';
     import resource from 'js/mixins/resource';
     import poiSelect from './poi-select';
-    import findableSelect from './findable-select';
+    import fixtureSelect from './fixture-select';
     import beaconSelect from './beacon-select';
 
     export default {
@@ -85,7 +90,7 @@
         components: {
             floorMap,
             poiSelect,
-            findableSelect,
+            fixtureSelect,
             beaconSelect,
             toolbarEdit
         },
@@ -95,7 +100,7 @@
                 ids: null,
                 currentLocation: null,
                 currentLocationCopy: null,
-                showStructures: true
+                showStructures: false
             }
         },
         methods: {

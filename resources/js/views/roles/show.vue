@@ -46,7 +46,7 @@
                 </permissions-card>
                 <permissions-card :role="item"
                                   :advanced="item.advanced_locations"
-                                  :permissions="['beacons', 'pois', 'findables']"
+                                  :permissions="['beacons', 'pois', 'searchables']"
                                   title="Locations"
                                   icon="map-pin">
                 </permissions-card>

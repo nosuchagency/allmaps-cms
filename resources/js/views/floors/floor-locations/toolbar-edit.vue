@@ -9,16 +9,13 @@
                 <span class="location-type">
                     {{location.getType()}}
                 </span>
-                <!--<span class="component-color">-->
-                <!--<i class="fa fa-square"-->
-                <!--:style="{color : structure.getColor(), opacity : structure.getOpacity()}">-->
-                <!--</i>-->
-                <!--</span>-->
-                <!--<span class="component-shape">-->
-                <!--{{structure.getShape()}}-->
-                <!--</span>-->
             </div>
             <div class="location-actions">
+                <el-button size="mini"
+                           type="primary"
+                           @click="editLocation()">
+                    Edit
+                </el-button>
                 <el-button size="mini"
                            type="danger"
                            @click="confirmDeleteVisible = true">
@@ -70,6 +67,9 @@
             }
         },
         methods: {
+            editLocation() {
+
+            },
             saveLocation() {
                 Hub.$emit('location:save');
             },

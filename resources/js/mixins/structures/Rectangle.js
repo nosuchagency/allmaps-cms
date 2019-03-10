@@ -7,20 +7,19 @@ let Rectangle = {
 
         L.RectangleComponent = L.Rectangle.extend({
             ...shared, ...{
-                initialize(mapStructure, readonly = false) {
-                    this.mapStructure = mapStructure;
+                initialize(structure, readonly = false) {
+                    this.structure = structure;
                     this.readonly = readonly;
 
-                    let options = {...mapStructure.component, ...{draggable: true, transform: true}};
+                    let options = {...structure.component, ...{draggable: true, transform: true}};
 
                     L.Rectangle.prototype.initialize.call(this, this.initialCoordinates(), options);
 
-                    if (mapStructure.coordinates) {
-                        this.setLatLngs(mapStructure.coordinates);
+                    if (structure.coordinates) {
+                        this.setLatLngs(structure.coordinates);
                     }
 
                     this.activateEventListeners();
-                    this.initializeFeature();
                 },
                 activateEventListeners() {
                     this.on('click', this.componentClicked);
@@ -55,16 +54,16 @@ let Rectangle = {
                 async save() {
                     try {
                         let coordinates = this.getCoordinates();
-                        let url = self.url + '/structures/' + this.mapStructure.id;
+                        let url = self.url + '/structures/' + this.structure.id;
                         const {data: structure} = await axios.put(url, {coordinates});
-                        this.mapStructure = structure;
+                        this.structure = structure;
                     } catch (error) {
                         console.log(error);
                     }
                 },
                 async remove() {
                     try {
-                        await axios.delete(self.url + '/structures/' + this.mapStructure.id);
+                        await axios.delete(self.url + '/structures/' + this.structure.id);
                     } catch (error) {
                         console.log(error);
                     }

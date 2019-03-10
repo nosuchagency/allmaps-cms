@@ -44,14 +44,6 @@
                                      :label="$t('pois.attributes.name')"
                                      sortable>
                     </el-table-column>
-                    <el-table-column :label="$t('pois.attributes.internal_name')"
-                                     sortable>
-                        <template slot-scope="scope">
-                            <template>
-                                {{scope.row.internal_name || '-'}}
-                            </template>
-                        </template>
-                    </el-table-column>
                     <el-table-column property="type"
                                      :label="$t('pois.attributes.type')"
                                      sortable>

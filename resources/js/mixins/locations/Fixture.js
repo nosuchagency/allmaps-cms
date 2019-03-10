@@ -1,20 +1,19 @@
 import axios from 'axios';
 import shared from './Shared';
 
-let Image = {
+let Fixture = {
     mounted() {
         let self = this;
 
-        L.ImageComponent = L.Rectangle.extend({
+        L.Fixture = L.Rectangle.extend({
             ...shared, ...{
-                initialize(structure, readonly = false) {
-                    this.structure = structure;
-                    this.readonly = readonly;
+                initialize(location) {
+                    this.location = location;
 
                     let coordinates, topLeft, topRight, bottomLeft;
 
-                    if (structure.coordinates) {
-                        coordinates = structure.coordinates;
+                    if (location.coordinates) {
+                        coordinates = location.coordinates;
                     } else {
                         let metersPerPixel = this.getMetersPerPixel();
                         let width = (this.getWidth() / 100) / metersPerPixel;
@@ -28,19 +27,20 @@ let Image = {
                         coordinates = [[bottomLeft.lat, bottomLeft.lng], [topRight.lat, topRight.lng]];
                     }
 
-                    let options = {...structure.component, ...{transform: true, draggable: true, weight: 0}};
+                    let options = {...location.fixture, ...{transform: true, draggable: true, weight: 0}};
 
                     L.Rectangle.prototype.initialize.call(this, coordinates, options);
+                    setTimeout(() => this.dragging.disable(), 1);
 
-                    if (structure.coordinates) {
-                        this.setLatLngs(structure.coordinates);
+                    if (location.coordinates) {
+                        this.setLatLngs(location.coordinates);
                     }
 
                     if (!topLeft) {
                         ({topLeft, topRight, bottomLeft} = this.extractDimensions(this.getLatLngs()));
                     }
 
-                    this.overlay = new L.imageOverlay.rotated(this.getImage(), topLeft, topRight, bottomLeft).addTo(self.imageOverlayLayer);
+                    this.overlay = new L.imageOverlay.rotated(this.getImage(), topLeft, topRight, bottomLeft).addTo(self.locationImageOverlayLayer);
 
                     this.activateEventListeners();
                 },
@@ -48,11 +48,16 @@ let Image = {
                     this.on('click', this.componentClicked);
                 },
                 startEditing() {
+                    setTimeout(() => this.dragging.enable(), 1);
                     this.transform.enable();
                     this.transform.setOptions({rotation: true, scaling: false});
 
                     this.addEventListener('rotateend', this.rotateEnd);
                     this.addEventListener('dragend', this.dragEnd);
+                },
+                stopEditing() {
+                    this.dragging.disable();
+                    this.transform.disable();
                 },
                 rotateEnd(e) {
                     let {topLeft, topRight, bottomLeft} = this.extractDimensions(e.target.getLatLngs());
@@ -60,15 +65,11 @@ let Image = {
                 },
                 dragEnd(e) {
                     let {topLeft, topRight, bottomLeft} = this.extractDimensions(e.target.getLatLngs());
-                    this.overlay.addTo(self.imageOverlayLayer);
+                    this.overlay.addTo(self.locationImageOverlayLayer);
                     this.overlay.reposition(topLeft, topRight, bottomLeft);
                 },
-                stopEditing() {
-                    this.dragging.disable();
-                    this.transform.disable();
-                },
                 componentClicked(e) {
-                    if (!self.currentStructure && !this.readonly) {
+                    if (!self.currentStructure) {
                         L.DomEvent.stopPropagation(e);
                         self.startEditing(e.target);
                     }
@@ -79,26 +80,26 @@ let Image = {
                 async save() {
                     try {
                         let coordinates = this.getCoordinates();
-                        const {data: structure} = await axios.put(self.url + '/structures/' + this.structure.id, {coordinates});
-                        this.structure = structure;
+                        const {data: location} = await axios.put(self.url + '/locations/' + this.location.id, {coordinates});
+                        this.location = location;
                     } catch (error) {
                         console.log(error);
                     }
                 },
                 async remove() {
-                    this.overlay.removeFrom(self.imageOverlayLayer);
+                    this.overlay.removeFrom(self.locationImageOverlayLayer);
 
                     try {
-                        await axios.delete(self.url + '/structures/' + this.structure.id);
+                        await axios.delete(self.url + '/locations/' + this.location.id);
                     } catch (error) {
                         console.log(error);
                     }
                 },
                 undo() {
-                    console.log('Undoing', 'image');
+                    console.log('Undoing', 'fixture');
                 },
                 cancel() {
-                    this.overlay.removeFrom(self.imageOverlayLayer);
+                    this.overlay.removeFrom(self.locationImageOverlayLayer);
                 },
                 getCoordinates() {
                     return this.getLatLngs();
@@ -148,10 +149,22 @@ let Image = {
                     return latLngC.distanceTo(latLngX);
                 },
                 addMarkers() {
+                },
+                getWidth() {
+                    return this.location.fixture.width;
+                },
+                getHeight() {
+                    return this.location.fixture.height;
+                },
+                getImage() {
+                    return this.location.fixture.image;
+                },
+                isArea() {
+                    return false;
                 }
             }
         });
     }
 };
 
-export default Image;
+export default Fixture;

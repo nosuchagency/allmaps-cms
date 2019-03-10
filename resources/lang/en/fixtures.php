@@ -1,16 +1,16 @@
 <?php
 
 return [
-    'singular' => 'Point of interest',
-    'plural' => 'Points of interest',
+    'singular' => 'Fixture',
+    'plural' => 'Fixtures',
 
     'attributes' => [
         'id' => 'ID',
         'name' => 'Name',
         'description' => 'Description',
         'image' => 'Image',
-        'type' => 'Type',
-        'color' => 'Color',
+        'width' => 'Width',
+        'height' => 'Height',
         'category' => 'Category',
         'tags' => 'Tags'
     ],

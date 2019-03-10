@@ -1,17 +1,17 @@
 <template>
-    <div class="findable-select">
+    <div class="fixture-select">
         <el-button size="small"
                    type="primary"
                    @click="showModal = true">
-            Findable
+            Fixture
         </el-button>
         <portal to="modals" v-if="showModal">
             <el-dialog :visible.sync="showModal">
                 <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Findable" name="findable">
+                    <el-tab-pane label="Fixture" name="fixture">
                         <br>
-                        <fetch-items url="/findables">
-                            <el-select v-model="findable"
+                        <fetch-items url="/fixtures">
+                            <el-select v-model="fixture"
                                        slot-scope="{items, loading}"
                                        placeholder="Select"
                                        clearable
@@ -34,10 +34,10 @@
                     </el-button>
                     <el-button type="primary"
                                size="small"
-                               @click="addFindable"
+                               @click="addFixture"
                                :loading="adding"
-                               :disabled="!findable">
-                        Add Findable
+                               :disabled="!fixture">
+                        Add Fixture
                     </el-button>
                 </span>
             </el-dialog>
@@ -52,20 +52,20 @@
         },
         data() {
             return {
-                currentTab: 'findable',
+                currentTab: 'fixture',
                 showModal: false,
-                findable: null,
+                fixture: null,
                 adding: false
             }
         },
         methods: {
-            async addFindable() {
+            async addFixture() {
                 try {
                     this.adding = true;
-                    const {data: location} = await this.$axios.post(this.url + '/locations', {findable_id: this.findable.id});
-                    this.$emit('findable:add', location);
+                    const {data: location} = await this.$axios.post(this.url + '/locations', {fixture_id: this.fixture.id});
+                    this.$emit('fixture:add', location);
                     this.showModal = false;
-                    this.findable = null;
+                    this.fixture = null;
                 } catch (error) {
                     console.log(error);
                 } finally {
@@ -77,7 +77,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .findable-select {
+    .fixture-select {
         margin-right: 7px;
     }
 

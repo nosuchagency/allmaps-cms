@@ -22,7 +22,7 @@
     // Locations
     import poiPoint from 'js/mixins/locations/PoiPoint';
     import poiArea from 'js/mixins/locations/PoiArea';
-    import findable from 'js/mixins/locations/Findable';
+    import fixture from 'js/mixins/locations/Fixture';
     import beacon from 'js/mixins/locations/Beacon';
 
     export default {
@@ -39,7 +39,7 @@
 
             poiPoint,
             poiArea,
-            findable,
+            fixture,
             beacon
         ],
         props: {
@@ -56,13 +56,20 @@
             return {
                 popup: null,
 
-                drawHelperPolyline: null,
+                ruler: null,
+
+                mainLayer: null,
+
+                structuresLayer: null,
 
                 locationsLayer: null,
-                markerLayer: null,
 
-                editingLayerGroup: null,
-                editingMarkerLayerGroup: null,
+                imageOverlayLayer: null,
+                locationImageOverlayLayer: null,
+
+                editingLayer: null,
+                markerLayer: null,
+                editingMarkerLayer: null,
             };
         },
         mounted() {
@@ -70,41 +77,47 @@
 
             this.popup = L.popup();
 
-            this.drawHelperPolyline = new L.Polyline([], {
+            this.ruler = new L.Polyline([], {
                 weight: 2,
                 dashArray: [3, 10]
             }).addTo(this.map);
 
-            this.mainLayerGroup = L.layerGroup([]).addTo(this.map);
+            this.mainLayer = L.layerGroup([]).addTo(this.map);
 
-            this.structuresLayer = L.layerGroup([]).addTo(this.mainLayerGroup);
-            this.locationsLayer = L.layerGroup([]).addTo(this.mainLayerGroup);
-            this.markerLayer = L.layerGroup([]).addTo(this.mainLayerGroup);
+            this.structuresLayer = L.layerGroup([]);
 
-            this.editingMarkerLayerGroup = L.layerGroup([]).addTo(this.mainLayerGroup);
-            this.editingLayerGroup = L.layerGroup([]).addTo(this.mainLayerGroup);
+            this.locationsLayer = L.layerGroup([]).addTo(this.mainLayer);
+
+            this.imageOverlayLayer = L.layerGroup([]).addTo(this.structuresLayer);
+            this.locationImageOverlayLayer = L.layerGroup([]).addTo(this.locationsLayer);
+
+            this.editingLayer = L.layerGroup([]).addTo(this.mainLayer);
+            this.markerLayer = L.layerGroup([]).addTo(this.mainLayer);
+            this.editingMarkerLayer = L.layerGroup([]).addTo(this.mainLayer);
 
             this.structures.forEach(this.addStructure);
             this.locations.forEach((location) => this.addLocation(location, false));
 
-            Hub.$on('location:add', (location) => this.addLocation(location, true));
-            Hub.$on('location:undo', this.undoLocation);
-            Hub.$on('location:remove', this.removeLocation);
-            Hub.$on('location:cancel', this.cancelLocation);
-            Hub.$on('location:save', this.saveLocation);
-
-            Hub.$on('repositionMap', this.repositionMap);
+            this.activateEventListeners();
         },
         watch: {
             showStructures(value) {
                 if (value) {
-                    this.structuresLayer.addTo(this.mainLayerGroup);
+                    this.structuresLayer.addTo(this.mainLayer);
                 } else {
-                    this.structuresLayer.removeFrom(this.mainLayerGroup);
+                    this.structuresLayer.removeFrom(this.mainLayer);
                 }
             }
         },
         methods: {
+            activateEventListeners() {
+                Hub.$on('location:add', (location) => this.addLocation(location, true));
+                Hub.$on('location:undo', this.undoLocation);
+                Hub.$on('location:remove', this.removeLocation);
+                Hub.$on('location:cancel', this.cancelLocation);
+                Hub.$on('location:save', this.saveLocation);
+                Hub.$on('repositionMap', this.repositionMap);
+            },
             repositionMap() {
                 this.map.flyTo(new L.LatLng(this.lat, this.lng), 19);
             }

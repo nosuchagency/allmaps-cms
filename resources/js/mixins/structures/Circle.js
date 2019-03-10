@@ -7,18 +7,17 @@ let Circle = {
 
         L.CircleComponent = L.Circle.extend({
             ...shared, ...{
-                initialize(mapStructure, readonly = false) {
-                    this.mapStructure = mapStructure;
+                initialize(structure, readonly = false) {
+                    this.structure = structure;
                     this.readonly = readonly;
 
-                    let coordinates = this.mapStructure.coordinates || self.map.getCenter();
+                    let coordinates = this.structure.coordinates || self.map.getCenter();
 
-                    L.Circle.prototype.initialize.call(this, coordinates, mapStructure.component);
+                    L.Circle.prototype.initialize.call(this, coordinates, structure.component);
 
-                    this.setRadius(this.mapStructure.radius || 5);
+                    this.setRadius(this.structure.radius || 5);
 
                     this.activateEventListeners();
-                    this.initializeFeature();
                 },
                 activateEventListeners() {
                     this.on('click', this.componentClicked);
@@ -44,16 +43,16 @@ let Circle = {
                 async save() {
                     try {
                         let coordinates = this.getCoordinates();
-                        let url = self.url + '/structures/' + this.mapStructure.id;
+                        let url = self.url + '/structures/' + this.structure.id;
                         const {data: structure} = await axios.put(url, {coordinates, radius: this.getRadius()});
-                        this.mapStructure = structure;
+                        this.structure = structure;
                     } catch (error) {
                         console.log(error);
                     }
                 },
                 async remove() {
                     try {
-                        await axios.delete(self.url + '/structures/' + this.mapStructure.id);
+                        await axios.delete(self.url + '/structures/' + this.structure.id);
                     } catch (error) {
                         console.log(error);
                     }

@@ -12,26 +12,20 @@ let Beacon = {
 
                     let coordinates = location.coordinates || self.map.getCenter();
 
-                    let options = {
-                        draggable: true,
+                    L.Marker.prototype.initialize.call(this, coordinates, {
                         icon: this.getIcon()
-                    };
-
-                    L.Marker.prototype.initialize.call(this, coordinates, options);
+                    });
 
                     this.activateEventListeners();
                 },
                 activateEventListeners() {
-                    this.on('dragend', this.dragEndHandler);
                     this.on('click', this.componentClicked);
-
-                    this.bindPopup('<b>' + this.getName() + '</b>');
-                    this.on('mouseover', (e) => this.openPopup());
-                    this.on('mouseout', (e) => this.closePopup());
                 },
                 startEditing() {
+                    this.dragging.enable();
                 },
                 stopEditing() {
+                    console.log(this.dragging);
                 },
                 componentClicked(e) {
                     if (!self.currentLocation) {
@@ -41,16 +35,15 @@ let Beacon = {
                 },
                 click(latlng) {
                 },
-                dragEndHandler() {
-                    this.save();
-                },
                 getIcon() {
                     return new L.Icon({
-                        iconUrl: this.location.beacon.icon,
+                        iconUrl: this.location.beacon.image,
                         iconSize: [20, 20]
                     });
                 },
                 async save() {
+                    this.dragging.disable();
+
                     try {
                         let coordinates = this.getCoordinates();
                         const {data: location} = await axios.put(self.url + '/locations/' + this.location.id, {coordinates});

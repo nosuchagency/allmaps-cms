@@ -23,7 +23,7 @@
                     case 'containers':
                         return 'archive';
                     case 'findable':
-                    case 'findables':
+                    case 'searchables':
                         return 'search-location';
                     case 'folder':
                     case 'folders':

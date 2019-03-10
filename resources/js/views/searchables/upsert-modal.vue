@@ -6,16 +6,16 @@
                      status-icon
                      label-width="120px">
                 <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Folder" name="folder">
+                    <el-tab-pane label="Findable" name="findable">
                         <br>
-                        <el-form-item :label="$t('folders.attributes.name')"
+                        <el-form-item :label="$t('searchables.attributes.name')"
                                       :class="{'is-error' : has('name')}">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
-                        <el-form-item :label="$t('folders.attributes.category')"
+                        <el-form-item :label="$t('searchables.attributes.category')"
                                       :class="{'is-error' : has('category')}">
                             <fetch-items url="/categories">
                                 <el-select v-model="form.category"
@@ -31,7 +31,7 @@
                                 </el-select>
                             </fetch-items>
                         </el-form-item>
-                        <el-form-item :label="$t('folders.attributes.tags')"
+                        <el-form-item :label="$t('searchables.attributes.tags')"
                                       :class="{'is-error' : has('tags')}">
                             <fetch-items url="/tags">
                                 <el-select v-model="form.tags"
@@ -82,13 +82,12 @@
         mixins: [form, resource],
         props: {
             visible: Boolean,
-            item: Object,
-            containerId: Number
+            item: Object
         },
         data() {
             return {
-                currentTab: 'folder',
-                resource: 'folders',
+                currentTab: 'searchable',
+                resource: 'searchables',
                 form: this.getForm()
             }
         },
@@ -96,11 +95,6 @@
             getForm() {
                 return {
                     name: this.item ? this.item.name : '',
-                    address: this.item ? this.item.address : '',
-                    zipcode: this.item ? this.item.zipcode : '',
-                    city: this.item ? this.item.city : '',
-                    lat: this.item && this.item.lat ? this.item.lat : 55.663874,
-                    lng: this.item && this.item.lng ? this.item.lng : 12.393955,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 }
@@ -139,51 +133,8 @@
             },
             async fetch() {
             },
-            getReadUrl() {
-                return '/containers/' + this.containerId + '/folders/' + this.item.id;
-            },
-            getCreateUrl() {
-                return '/containers/' + this.containerId + '/folders';
-            },
-            getUpdateUrl() {
-                return this.getReadUrl();
-            },
-            getRemoveUrl() {
-                return this.getReadUrl();
-            },
             closeModal() {
                 this.$emit('upsert-modal:close');
-            },
-            setupMap() {
-                this.map = new L.Map('map', {
-                    center: new L.LatLng(this.form.lat, this.form.lng),
-                    zoom: 10
-                });
-
-                this.marker = new L.Marker({lat: this.form.lat, lng: this.form.lng}, {draggable: true})
-                    .addTo(this.map)
-                    .on('drag', this.markerDrag)
-                    .on('dragend', this.markerDragEnd);
-
-                L.gridLayer.googleMutant({type: 'roadmap'}).addTo(this.map);
-
-                this.map.zoomControl.setPosition('bottomleft');
-
-                this.map.on('click', this.setLocation);
-            },
-            setLocation(e) {
-                this.marker.setLatLng(e.latlng);
-                this.form.lat = e.latlng.lat;
-                this.form.lng = e.latlng.lng;
-            },
-            markerDrag(e) {
-                this.marker.setLatLng(e.latlng);
-            },
-            markerDragEnd(e) {
-                let latLng = e.target.getLatLng();
-                this.marker.setLatLng(latLng);
-                this.form.lat = latLng.lat;
-                this.form.lng = latLng.lng;
             }
         }
     }
@@ -199,11 +150,5 @@
             padding: 20px;
             border-top: 1px solid #dfdfdf;
         }
-    }
-
-    #map {
-        height: 300px;
-        width: 100%;
-        cursor: crosshair;
     }
 </style>

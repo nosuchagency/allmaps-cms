@@ -54,8 +54,8 @@ let mapSetup = {
             switch (location.type) {
                 case 'beacon':
                     return new L.Beacon(location);
-                case 'findable':
-                    return new L.Findable(location);
+                case 'fixture':
+                    return new L.Fixture(location);
                 case 'poi':
                     if (location.poi.type === 'area') {
                         return new L.PoiArea(location);

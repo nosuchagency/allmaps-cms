@@ -8,8 +8,12 @@ let creationMethodsMixin = {
         startEditing(location) {
             this.$emit('location-copy:set', location);
 
-            let component = this.initializeLocation(location.getLocation()).addTo(this.editingLayerGroup);
+            let component = this.initializeLocation(_.cloneDeep(location.getLocation())).addTo(this.editingLayer);
             component.startEditing();
+
+            if (location.getType() === 'fixture') {
+                setTimeout(() => location.overlay.removeFrom(this.locationImageOverlayLayer), 50);
+            }
 
             location.removeFrom(this.locationsLayer);
             this.$emit('location:set', component, (location) => location.addMarkers());
@@ -19,24 +23,27 @@ let creationMethodsMixin = {
             this.$emit('location:set', null);
             this.$emit('location-copy:set', null);
             this.popup.removeFrom(this.map);
-            this.drawHelperPolyline.setLatLngs([]);
-            this.editingMarkerLayerGroup.clearLayers();
-            this.editingLayerGroup.clearLayers();
+            this.ruler.setLatLngs([]);
+            this.editingMarkerLayer.clearLayers();
+            this.editingLayer.clearLayers();
         },
         saveLocation() {
-            this.currentLocation.removeFrom(this.editingLayerGroup);
+            this.currentLocation.removeFrom(this.editingLayer);
             this.currentLocation.addTo(this.locationsLayer);
             this.currentLocation.save();
             this.stopEditing();
         },
         cancelLocation() {
-            this.currentLocation.removeFrom(this.editingLayerGroup);
+            this.currentLocation.removeFrom(this.editingLayer);
             this.currentLocation.cancel();
             this.currentLocationCopy.addTo(this.locationsLayer);
+            if (this.currentLocationCopy.getType() === 'fixture') {
+                this.currentLocationCopy.overlay.addTo(this.locationImageOverlayLayer);
+            }
             this.stopEditing();
         },
         removeLocation() {
-            this.currentLocation.removeFrom(this.editingLayerGroup);
+            this.currentLocation.removeFrom(this.editingLayer);
             this.currentLocation.remove();
             this.stopEditing();
         },
@@ -44,7 +51,7 @@ let creationMethodsMixin = {
             this.currentLocation.undo();
         },
         mapMouseOutEventHandler(e) {
-            this.drawHelperPolyline.setLatLngs([]);
+            this.ruler.setLatLngs([]);
             this.popup.removeFrom(this.map);
         },
         mapMouseMoveEventHandler(e) {
@@ -60,7 +67,7 @@ let creationMethodsMixin = {
                 return;
             }
 
-            this.drawHelperPolyline.setLatLngs([destination, e.latlng]);
+            this.ruler.setLatLngs([destination, e.latlng]);
             this.popup.setContent(Math.round(e.latlng.distanceTo(destination) * 100) / 100 + ' meters');
             this.popup.setLatLng(e.latlng).openOn(this.map);
         },
@@ -91,7 +98,7 @@ let creationMethodsMixin = {
         },
         addMarker(latlng, options = {}) {
             return new L.Marker(latlng, {...{draggable: true}, ...options})
-                .addTo(this.editingMarkerLayerGroup)
+                .addTo(this.editingMarkerLayer)
                 .on('dragstart', this.dragStartHandler)
                 .on('drag', this.dragHandler)
                 .on('dragend', this.dragEndHandler)

@@ -83,8 +83,7 @@
                 mapComponentTypes: [
                     'plan',
                     'wall',
-                    'room',
-                    'fixture'
+                    'room'
                 ],
                 currentStructure: null,
                 currentStructureCopy: null

@@ -3,7 +3,7 @@
         <el-button size="small"
                    type="primary"
                    @click="showModal = true">
-            Point of Interest
+            {{label}}
         </el-button>
         <portal to="modals" v-if="showModal">
             <el-dialog :visible.sync="showModal">
@@ -17,7 +17,7 @@
                                        clearable
                                        filterable
                                        value-key="id">
-                                <el-option v-for="item in items"
+                                <el-option v-for="item in items.filter(i => i.type === type)"
                                            :key="item.id"
                                            :label="item.name"
                                            :value="item">
@@ -48,7 +48,15 @@
 <script>
     export default {
         props: {
-            url: String
+            url: String,
+            type: {
+                type: String,
+                default: 'image'
+            },
+            label: {
+                type: String,
+                default: 'POI Point'
+            }
         },
         data() {
             return {

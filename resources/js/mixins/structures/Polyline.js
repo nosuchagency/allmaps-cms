@@ -7,14 +7,13 @@ let Polyline = {
 
         L.PolylineComponent = L.Polyline.extend({
             ...shared, ...{
-                initialize(mapStructure, readonly = false) {
-                    this.mapStructure = mapStructure;
+                initialize(structure, readonly = false) {
+                    this.structure = structure;
                     this.readonly = readonly;
 
-                    L.Polyline.prototype.initialize.call(this, this.mapStructure.coordinates || [], mapStructure.component);
+                    L.Polyline.prototype.initialize.call(this, this.structure.coordinates || [], structure.component);
 
                     this.activateEventListeners();
-                    this.initializeFeature();
                 },
                 activateEventListeners() {
                     this.on('click', this.componentClicked);
@@ -32,17 +31,14 @@ let Polyline = {
                 click(latlng) {
                     self.addMarker(latlng);
 
-                    let points = this.feature.properties.markers;
-                    points.push([latlng.lat, latlng.lng]);
+                    console.log(self.currentStructure.getMarkers() === self.currentStructureCopy.getMarkers());
+
+                    let points = this.getMarkers();
+                    points.push(latlng);
 
                     if (this.getCurved() && points.length > 1) {
                         let polyline = this.bezierSpline(points);
-
                         this.setLatLngs(polyline);
-                        this.feature.properties.markers = points;
-                    } else if (this.getCurved() && points.length <= 1) {
-                        this.addLatLng(latlng);
-                        this.feature.properties.markers = points;
                     } else {
                         this.addLatLng(latlng);
                     }
@@ -50,16 +46,17 @@ let Polyline = {
                 async save() {
                     try {
                         let coordinates = this.getCoordinates();
-                        let url = self.url + '/structures/' + this.mapStructure.id;
-                        const {data: structure} = await axios.put(url, {coordinates});
-                        this.mapStructure = structure;
+                        let markers = this.getMarkers();
+                        let url = self.url + '/structures/' + this.structure.id;
+                        const {data: structure} = await axios.put(url, {coordinates, markers});
+                        this.structure = structure;
                     } catch (error) {
                         console.log(error);
                     }
                 },
                 async remove() {
                     try {
-                        await axios.delete(self.url + '/structures/' + this.mapStructure.id);
+                        await axios.delete(self.url + '/structures/' + this.structure.id);
                     } catch (error) {
                         console.log(error);
                     }
@@ -83,18 +80,8 @@ let Polyline = {
                     return null;
                 },
                 addMarkers() {
-                    if (this.getCurved()) {
-                        this.feature.properties.markers.forEach(self.addMarker);
-                    } else {
-                        this.getLatLngs().forEach(self.addMarker);
-                    }
-                },
-                bezierSpline(coordinates) {
-                    let line = turf.lineString(coordinates);
-                    let curved = turf.bezierSpline(line);
-
-                    return curved.geometry.coordinates;
-                },
+                    this.getMarkers().forEach(self.addMarker);
+                }
             }
         });
     }

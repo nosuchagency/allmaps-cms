@@ -12,22 +12,20 @@ let PoiPoint = {
 
                     let coordinates = location.coordinates || self.map.getCenter();
 
-                    let options = {
-                        draggable: true,
+                    L.Marker.prototype.initialize.call(this, coordinates, {
                         icon: this.getIcon()
-                    };
-
-                    L.Marker.prototype.initialize.call(this, coordinates, options);
+                    });
 
                     this.activateEventListeners();
                 },
                 activateEventListeners() {
-                    this.on('dragend', this.dragEndHandler);
                     this.on('click', this.componentClicked);
                 },
                 startEditing() {
+                    this.dragging.enable();
                 },
                 stopEditing() {
+
                 },
                 componentClicked(e) {
                     if (!self.currentLocation) {
@@ -37,16 +35,15 @@ let PoiPoint = {
                 },
                 click(latlng) {
                 },
-                dragEndHandler() {
-                    this.save();
-                },
                 getIcon() {
                     return new L.Icon({
-                        iconUrl: this.location.poi.icon,
+                        iconUrl: this.location.poi.image,
                         iconSize: [20, 20]
                     });
                 },
                 async save() {
+                    this.dragging.disable();
+
                     try {
                         let coordinates = this.getCoordinates();
                         const {data: location} = await axios.put(self.url + '/locations/' + this.location.id, {coordinates});
@@ -66,7 +63,7 @@ let PoiPoint = {
                     console.log('Undoing', 'poi point');
                 },
                 cancel() {
-                    console.log('Cancelling', 'poi point');
+                    console.log('cancelling!');
                 },
                 getCoordinates() {
                     return this.getLatLng();

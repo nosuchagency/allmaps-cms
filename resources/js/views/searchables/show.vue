@@ -12,9 +12,9 @@
                 </template>
                 <template slot="right">
                     <el-tooltip effect="dark"
-                                :content="$t('general.actions.update', {name : $t('findables.singular')})"
+                                :content="$t('general.actions.update', {name : $t('searchables.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('findables.update')">
+                                v-if="$auth.user().permissions.includes('searchables.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -55,7 +55,7 @@
         },
         data() {
             return {
-                resource: 'findables',
+                resource: 'searchables',
                 upsertModalVisible: false,
                 item: null
             };
