@@ -1,18 +1,18 @@
 <template>
     <div class="component-toolbar"
-         :class="{'is-active' : !!structure}">
-        <template v-if="structure">
+         :class="{'is-active' : !!currentStructure}">
+        <template v-if="currentStructure">
             <div class="component-details">
                 <span class="component-name">
-                    {{structure.getName()}}
+                    {{currentStructure.getName()}}
                 </span>
                 <span class="component-color">
                     <i class="fa fa-square"
-                       :style="{color : structure.getColor(), opacity : structure.getOpacity()}">
+                       :style="{color : currentStructure.getColor(), opacity : currentStructure.getOpacity()}">
                     </i>
                 </span>
                 <span class="component-shape">
-                    {{structure.getShape()}}
+                    {{currentStructure.getShape()}}
                 </span>
             </div>
             <div class="component-actions">
@@ -31,7 +31,7 @@
                 <el-button size="mini"
                            type="primary"
                            @click="saveComponent()"
-                           v-if="canSave">
+                           v-if="saveable">
                     Finish
                 </el-button>
             </div>
@@ -42,7 +42,7 @@
                             @confirm="deleteComponent()">
             </confirm-dialog>
         </template>
-        <structure-modal :structure="structure"></structure-modal>
+        <structure-modal :structure="currentStructure"></structure-modal>
     </div>
 </template>
 
@@ -55,7 +55,7 @@
             structureModal
         },
         props: {
-            structure: Object
+            currentStructure: Object
         },
         data() {
             return {
@@ -63,16 +63,16 @@
             }
         },
         computed: {
-            canSave() {
-                if (['image', 'rectangle', 'circle'].includes(this.structure.getShape())) {
+            saveable() {
+                if (['image', 'rectangle', 'circle'].includes(this.currentStructure.getShape())) {
                     return true;
                 }
 
-                if (this.structure.getShape() === 'polygon') {
-                    return this.structure.getCoordinates()[0].length >= 2;
+                if (this.currentStructure.getShape() === 'polygon') {
+                    return this.currentStructure.getCoordinates()[0].length >= 2;
                 }
 
-                return this.structure.getCoordinates().length >= 2;
+                return this.currentStructure.getCoordinates().length >= 2;
             }
         },
         methods: {

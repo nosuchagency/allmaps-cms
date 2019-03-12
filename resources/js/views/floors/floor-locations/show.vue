@@ -99,7 +99,9 @@
         data() {
             return {
                 item: null,
-                ids: null,
+                placeId: null,
+                buildingId: null,
+                floorId: null,
                 currentLocation: null,
                 currentLocationCopy: null,
                 showStructures: false
@@ -127,10 +129,10 @@
                 Hub.$emit('repositionMap');
             },
             getFloorUrl() {
-                return '/places/' + this.ids.placeId + '/buildings/' + this.ids.buildingId + '/floors/' + this.ids.id;
+                return '/places/' + this.placeId + '/buildings/' + this.buildingId + '/floors/' + this.floorId;
             },
             getReadUrl() {
-                this.ids = this.$route.params;
+                ({placeId: this.placeId, buildingId: this.buildingId, id: this.floorId} = this.$route.params);
                 return this.getFloorUrl();
             }
         }

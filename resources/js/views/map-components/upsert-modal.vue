@@ -19,7 +19,7 @@
                                 <el-form-item :label="$t('map-components.attributes.type')"
                                               :class="{'is-error' : has('type')}">
                                     <el-select v-model="form.type">
-                                        <el-option v-for="item in ['plan', 'wall', 'room']"
+                                        <el-option v-for="item in ['plan', 'wall', 'room', 'decor']"
                                                    :key="item"
                                                    :label="item"
                                                    :value="item">
