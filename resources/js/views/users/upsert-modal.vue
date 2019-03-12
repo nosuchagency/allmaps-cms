@@ -10,8 +10,7 @@
                         <br>
                         <el-form-item :label="$t('users.attributes.name')"
                                       :class="{'is-error' : has('name')}">
-                            <el-input v-model="form.name">
-                            </el-input>
+                            <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('users.attributes.email')"
                                       :class="{'is-error' : has('email')}">
@@ -41,7 +40,7 @@
                         </el-form-item>
                         <el-form-item label="Invitation">
                             <el-switch v-model="form.send_invitation" label="Send invitation email"
-                                         border></el-switch>
+                                       border></el-switch>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">

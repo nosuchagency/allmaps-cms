@@ -11,8 +11,7 @@
                         <br>
                         <el-form-item :label="$t('locations.attributes.name')"
                                       :class="{'is-error' : has('name')}">
-                            <el-input v-model="form.name">
-                            </el-input>
+                            <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.type')"
                                       :class="{'is-error' : has('type')}">
@@ -44,8 +43,7 @@
                         <br>
                         <el-form-item :label="$t('locations.attributes.title')"
                                       :class="{'is-error' : has('title')}">
-                            <el-input v-model="form.title">
-                            </el-input>
+                            <el-input v-model="form.title"></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.subtitle')"
                                       :class="{'is-error' : has('subtitle')}">
@@ -123,6 +121,139 @@
                     </el-tab-pane>
                     <el-tab-pane label="Hours" name="hours">
                         <br>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('monday_from')}">
+                                    <span slot="label" style="font-weight: bold;">Monday</span>
+                                    <el-time-select v-model="form.monday_from"
+                                                    placeholder="From"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('monday_to')}">
+                                    <el-time-select v-model="form.monday_to"
+                                                    placeholder="To"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('tuesday_from')}">
+                                    <span slot="label" style="font-weight: bold;">Tuesday</span>
+                                    <el-time-select v-model="form.tuesday_from"
+                                                    placeholder="From"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('tuesday_to')}">
+                                    <el-time-select v-model="form.tuesday_to"
+                                                    placeholder="To"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('wednesday_from')}">
+                                    <span slot="label" style="font-weight: bold;">Wednesday</span>
+                                    <el-time-select v-model="form.wednesday_from"
+                                                    placeholder="From"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('wednesday_to')}">
+                                    <el-time-select v-model="form.wednesday_to"
+                                                    placeholder="To"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('thursday_from')}">
+                                    <span slot="label" style="font-weight: bold;">Thursday</span>
+                                    <el-time-select v-model="form.thursday_from"
+                                                    placeholder="From"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('thursday_to')}">
+                                    <el-time-select v-model="form.thursday_to"
+                                                    placeholder="To"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('friday_from')}">
+                                    <span slot="label" style="font-weight: bold;">Friday</span>
+                                    <el-time-select v-model="form.friday_from"
+                                                    placeholder="From"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('friday_to')}">
+                                    <el-time-select v-model="form.friday_to"
+                                                    placeholder="To"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('saturday_from')}">
+                                    <span slot="label" style="font-weight: bold;">Saturday</span>
+                                    <el-time-select v-model="form.saturday_from"
+                                                    placeholder="From"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('saturday_to')}">
+                                    <el-time-select v-model="form.saturday_to"
+                                                    placeholder="To"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('sunday_from')}">
+                                    <span slot="label" style="font-weight: bold;">Sunday</span>
+                                    <el-time-select v-model="form.sunday_from"
+                                                    placeholder="From"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :class="{'is-error' : has('sunday_to')}">
+                                    <el-time-select v-model="form.sunday_to"
+                                                    placeholder="To"
+                                                    :picker-options="pickerOptions">
+                                    </el-time-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
                     </el-tab-pane>
                     <el-tab-pane label="Status" name="status">
                         <br>
@@ -206,6 +337,22 @@
                     email: this.location.email,
                     search_activated: this.location.search_activated,
                     search_text: this.location.search_text,
+
+                    monday_from: this.location.monday_from,
+                    monday_to: this.location.monday_to,
+                    tuesday_from: this.location.tuesday_from,
+                    tuesday_to: this.location.tuesday_to,
+                    wednesday_from: this.location.wednesday_from,
+                    wednesday_to: this.location.wednesday_to,
+                    thursday_from: this.location.thursday_from,
+                    thursday_to: this.location.thursday_to,
+                    friday_from: this.location.friday_from,
+                    friday_to: this.location.friday_to,
+                    saturday_from: this.location.saturday_from,
+                    saturday_to: this.location.saturday_to,
+                    sunday_from: this.location.sunday_from,
+                    sunday_to: this.location.sunday_to,
+
                     activated_at: this.location.activated_at,
                     publish_at: this.location.publish_at,
                     unpublish_at: this.location.unpublish_at
@@ -233,6 +380,15 @@
             },
             setImage(image = null) {
                 this.form.image = image;
+            }
+        },
+        computed: {
+            pickerOptions() {
+                return {
+                    start: '00:00',
+                    step: '00:05',
+                    end: '23:55'
+                }
             }
         }
     }

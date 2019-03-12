@@ -10,7 +10,7 @@
                         <br>
                         <el-form-item :label="$t('places.attributes.name')"
                                       :class="{'is-error' : has('name')}">
-                            <el-input v-model="form.name"></el-input>
+                            <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('places.attributes.address')"
                                       :class="{'is-error' : has('address')}">

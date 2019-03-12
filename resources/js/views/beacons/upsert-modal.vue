@@ -10,7 +10,7 @@
                         <br>
                         <el-form-item :label="$t('beacons.attributes.name')"
                                       :class="{'is-error' : has('name')}">
-                            <el-input v-model="form.name"></el-input>
+                            <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('beacons.attributes.description')"
                                       :class="{'is-error' : has('description')}">

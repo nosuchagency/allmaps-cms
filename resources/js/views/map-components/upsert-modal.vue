@@ -12,8 +12,7 @@
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.name')"
                                               :class="{'is-error' : has('name')}">
-                                    <el-input v-model="form.name">
-                                    </el-input>
+                                    <el-input v-model="form.name" autofocus></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">

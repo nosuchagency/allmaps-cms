@@ -10,7 +10,7 @@
                         <br>
                         <el-form-item :label="$t('folders.attributes.name')"
                                       :class="{'is-error' : has('name')}">
-                            <el-input v-model="form.name"></el-input>
+                            <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">

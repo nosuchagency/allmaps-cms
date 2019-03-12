@@ -19,6 +19,7 @@ let upsert = {
             if (this.$route.params.id) {
                 try {
                     this.item = await this.read();
+                    console.log(this.item);
                 } catch (error) {
                     console.log(error);
                 }
