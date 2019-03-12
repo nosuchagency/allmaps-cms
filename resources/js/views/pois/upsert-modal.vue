@@ -130,12 +130,7 @@
             return {
                 currentTab: 'poi',
                 resource: 'pois',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     type: this.item ? this.item.type : 'image',
@@ -144,7 +139,9 @@
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                 }
-            },
+            }
+        },
+        methods: {
             setImage(image = null) {
                 this.form.image = image;
             },

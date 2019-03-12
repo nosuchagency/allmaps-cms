@@ -89,22 +89,19 @@
             return {
                 currentTab: 'folder',
                 resource: 'folders',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     address: this.item ? this.item.address : '',
-                    zipcode: this.item ? this.item.zipcode : '',
+                    postcode: this.item ? this.item.postcode : '',
                     city: this.item ? this.item.city : '',
                     lat: this.item && this.item.lat ? this.item.lat : 55.663874,
                     lng: this.item && this.item.lng ? this.item.lng : 12.393955,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 }
-            },
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

@@ -88,17 +88,14 @@
             return {
                 currentTab: 'searchable',
                 resource: 'searchables',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 }
-            },
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

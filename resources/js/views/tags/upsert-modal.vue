@@ -60,16 +60,13 @@
             return {
                 currentTab: 'tag',
                 resource: 'tags',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : ''
                 }
-            },
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

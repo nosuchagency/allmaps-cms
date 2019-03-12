@@ -1,56 +1,61 @@
 <template>
-    <div class="location-toolbar"
-         :class="{'is-active' : !!location}">
-        <template v-if="location">
-            <div class="location-details">
-                <span class="location-name">
-                    {{location.getName()}}
+    <div class="component-toolbar"
+         :class="{'is-active' : !!structure}">
+        <template v-if="structure">
+            <div class="component-details">
+                <span class="component-name">
+                    {{structure.getName()}}
                 </span>
-                <span class="location-type">
-                    {{location.getType()}}
+                <span class="component-color">
+                    <i class="fa fa-square"
+                       :style="{color : structure.getColor(), opacity : structure.getOpacity()}">
+                    </i>
+                </span>
+                <span class="component-shape">
+                    {{structure.getShape()}}
                 </span>
             </div>
-            <div class="location-actions">
-                <el-button size="mini"
-                           type="primary"
-                           @click="editLocation()">
-                    Edit
-                </el-button>
+            <div class="component-actions">
                 <el-button size="mini"
                            type="danger"
                            @click="confirmDeleteVisible = true">
-                    <i class="fa fa-trash-alt location-delete"
+                    <i class="fa fa-trash-alt component-delete"
                        aria-hidden="true">
                     </i>
                 </el-button>
                 <el-button size="mini"
                            type="primary"
-                           @click="cancelLocation()">
+                           @click="cancelComponent()">
                     Cancel
                 </el-button>
                 <el-button size="mini"
                            type="primary"
-                           @click="saveLocation()"
+                           @click="saveComponent()"
                            v-if="canSave">
                     Finish
                 </el-button>
             </div>
-            <confirm-dialog title="Delete Location"
+            <confirm-dialog title="Delete Component"
                             :visible="confirmDeleteVisible"
                             :message="$t('general.confirm')"
                             @cancel="confirmDeleteVisible = false"
-                            @confirm="deleteLocation()">
+                            @confirm="deleteComponent()">
             </confirm-dialog>
         </template>
+        <structure-modal :structure="structure"></structure-modal>
     </div>
 </template>
 
 <script>
     import Hub from '../../../events/hub';
+    import structureModal from './structure-modal';
 
     export default {
+        components: {
+            structureModal
+        },
         props: {
-            location: Object
+            structure: Object
         },
         data() {
             return {
@@ -59,25 +64,26 @@
         },
         computed: {
             canSave() {
-                if (!this.location.isArea()) {
+                if (['image', 'rectangle', 'circle'].includes(this.structure.getShape())) {
                     return true;
                 }
 
-                return this.location.getCoordinates()[0].length >= 2;
+                if (this.structure.getShape() === 'polygon') {
+                    return this.structure.getCoordinates()[0].length >= 2;
+                }
+
+                return this.structure.getCoordinates().length >= 2;
             }
         },
         methods: {
-            editLocation() {
-
+            saveComponent() {
+                Hub.$emit('structure:save');
             },
-            saveLocation() {
-                Hub.$emit('location:save');
+            cancelComponent() {
+                Hub.$emit('structure:cancel');
             },
-            cancelLocation() {
-                Hub.$emit('location:cancel');
-            },
-            deleteLocation() {
-                Hub.$emit('location:remove');
+            deleteComponent() {
+                Hub.$emit('structure:remove');
                 this.confirmDeleteVisible = false
             }
         }
@@ -86,7 +92,7 @@
 
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-    .location-toolbar {
+    .component-toolbar {
         transition: height 0.2s ease-in-out;
         overflow: hidden;
         width: 100%;
@@ -103,31 +109,31 @@
         }
     }
 
-    .location-actions {
+    .component-actions {
         margin-left: auto;
         margin-right: 25px;
         display: flex;
         align-items: center;
     }
 
-    .location-name {
+    .component-name {
         font-size: 16px;
         font-weight: bold;
         margin-right: 15px;
     }
 
-    .location-type {
+    .component-shape {
         font-size: 13px;
         font-weight: bold;
         text-transform: capitalize;
     }
 
-    .location-delete {
+    .component-delete {
         cursor: pointer;
         color: #fff;
     }
 
-    .location-details {
+    .component-details {
         color: #666;
         font-size: 14px;
         margin-left: 25px;

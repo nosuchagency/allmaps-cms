@@ -34,8 +34,8 @@
                     </el-button>
                     <el-button type="primary"
                                size="small"
-                               @click="addBeacon"
-                               :loading="adding"
+                               @click="createBeacon"
+                               :loading="busy"
                                :disabled="!beacon">
                         Add Beacon
                     </el-button>
@@ -46,7 +46,10 @@
 </template>
 
 <script>
+    import form from 'js/mixins/form';
+
     export default {
+        mixins: [form],
         props: {
             url: String
         },
@@ -54,22 +57,24 @@
             return {
                 currentTab: 'beacon',
                 showModal: false,
-                beacon: null,
-                adding: false
+                beacon: null
             }
         },
         methods: {
-            async addBeacon() {
+            async createBeacon() {
+                this.startProcessing();
+
                 try {
-                    this.adding = true;
                     const {data: location} = await this.$axios.post(this.url + '/locations', {beacon_id: this.beacon.id});
                     this.$emit('beacon:add', location);
                     this.showModal = false;
                     this.beacon = null;
-                } catch (error) {
-                    console.log(error);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
+                    }
                 } finally {
-                    this.adding = false;
+                    this.finishProcessing()
                 }
             }
         }

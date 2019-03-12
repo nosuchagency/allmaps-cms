@@ -59,7 +59,9 @@
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
             <div v-else>
-                <toolbar-edit :location="currentLocation"></toolbar-edit>
+                <location-toolbar :current-location="currentLocation"
+                                  :url="getFloorUrl()">
+                </location-toolbar>
                 <floor-map :url="getFloorUrl()"
                            :lat="item.place.lat"
                            :lng="item.place.lng"
@@ -78,7 +80,7 @@
 
 <script>
     import floorMap from './floor-map';
-    import toolbarEdit from './toolbar-edit.vue';
+    import locationToolbar from './location-toolbar';
     import Hub from '../../../events/hub';
     import resource from 'js/mixins/resource';
     import poiSelect from './poi-select';
@@ -92,7 +94,7 @@
             poiSelect,
             fixtureSelect,
             beaconSelect,
-            toolbarEdit
+            locationToolbar
         },
         data() {
             return {

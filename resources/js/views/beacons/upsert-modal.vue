@@ -151,12 +151,7 @@
             return {
                 currentTab: 'beacon',
                 resource: 'beacons',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     proximity_uuid: this.item ? this.item.proximity_uuid : '',
@@ -169,7 +164,9 @@
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 }
-            },
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

@@ -119,12 +119,7 @@
             return {
                 currentTab: 'user',
                 resource: 'users',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     email: this.item ? this.item.email : '',
                     password: '',
@@ -133,7 +128,9 @@
                     tags: this.item ? this.item.tags : [],
                     send_invitation: false
                 }
-            },
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

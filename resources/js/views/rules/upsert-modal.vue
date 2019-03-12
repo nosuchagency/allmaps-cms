@@ -154,13 +154,7 @@
                     {label: 'Medium', 'value': 'medium'},
                     {label: 'Far', 'value': 'far'},
                 ],
-                form: this.getForm(),
-                deleting: false
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     distance: this.item ? this.item.distance : 'close',
                     weekday: this.item ? this.item.weekday : 'all',
                     time_from: this.item ? this.item.time_from : null,
@@ -169,8 +163,11 @@
                     date_to: this.item ? this.item.date_to : null,
                     time_restricted: this.item ? !!this.item.time_restricted : false,
                     date_restricted: this.item ? !!this.item.date_restricted : false,
-                }
-            },
+                },
+                deleting: false
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

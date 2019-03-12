@@ -34,8 +34,8 @@
                     </el-button>
                     <el-button type="primary"
                                size="small"
-                               @click="addFixture"
-                               :loading="adding"
+                               @click="createFixture"
+                               :loading="busy"
                                :disabled="!fixture">
                         Add Fixture
                     </el-button>
@@ -46,7 +46,10 @@
 </template>
 
 <script>
+    import form from 'js/mixins/form';
+
     export default {
+        mixins: [form],
         props: {
             url: String
         },
@@ -54,22 +57,24 @@
             return {
                 currentTab: 'fixture',
                 showModal: false,
-                fixture: null,
-                adding: false
+                fixture: null
             }
         },
         methods: {
-            async addFixture() {
+            async createFixture() {
+                this.startProcessing();
+
                 try {
-                    this.adding = true;
                     const {data: location} = await this.$axios.post(this.url + '/locations', {fixture_id: this.fixture.id});
                     this.$emit('fixture:add', location);
                     this.showModal = false;
                     this.fixture = null;
-                } catch (error) {
-                    console.log(error);
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
+                    }
                 } finally {
-                    this.adding = false;
+                    this.finishProcessing()
                 }
             }
         }

@@ -120,12 +120,7 @@
             return {
                 currentTab: 'template',
                 resource: 'templates',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     content: this.item ? this.item.content : '',
@@ -134,7 +129,9 @@
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 }
-            },
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

@@ -77,17 +77,14 @@
             return {
                 currentTab: 'token',
                 resource: 'tokens',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     role: this.item ? this.item.role : '',
                     token: this.item ? this.item.token : ''
                 }
-            },
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

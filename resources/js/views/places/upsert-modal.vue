@@ -16,14 +16,20 @@
                                       :class="{'is-error' : has('address')}">
                             <el-input v-model="form.address"></el-input>
                         </el-form-item>
-                        <el-form-item :label="$t('places.attributes.zipcode')"
-                                      :class="{'is-error' : has('zipcode')}">
-                            <el-input v-model="form.zipcode"></el-input>
-                        </el-form-item>
-                        <el-form-item :label="$t('places.attributes.city')"
-                                      :class="{'is-error' : has('city')}">
-                            <el-input v-model="form.city"></el-input>
-                        </el-form-item>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :label="$t('places.attributes.city')"
+                                              :class="{'is-error' : has('city')}">
+                                    <el-input v-model="form.city"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :label="$t('places.attributes.postcode')"
+                                              :class="{'is-error' : has('postcode')}">
+                                    <el-input v-model="form.postcode"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
                         <el-form-item :label="$t('places.attributes.activated')"
                                       :class="{'is-error' : has('activated')}">
                             <el-switch v-model="form.activated"></el-switch>
@@ -129,16 +135,10 @@
             return {
                 currentTab: 'place',
                 resource: 'places',
-                form: this.getForm(),
-                mapInitialized: false
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     address: this.item ? this.item.address : '',
-                    zipcode: this.item ? this.item.zipcode : '',
+                    postcode: this.item ? this.item.postcode : '',
                     city: this.item ? this.item.city : '',
                     image: this.item ? this.item.image : '',
                     lat: this.item && this.item.lat ? this.item.lat : 55.663874,
@@ -146,8 +146,11 @@
                     activated: this.item ? this.item.activated : false,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
-                }
-            },
+                },
+                mapInitialized: false
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

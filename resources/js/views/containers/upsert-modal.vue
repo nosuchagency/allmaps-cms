@@ -105,12 +105,7 @@
             return {
                 currentTab: 'container',
                 resource: 'containers',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     folders_enabled: this.item ? !!this.item.folders_enabled : false,
@@ -118,7 +113,9 @@
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 }
-            },
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

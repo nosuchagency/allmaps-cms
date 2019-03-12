@@ -126,12 +126,7 @@
             return {
                 currentTab: 'fixture',
                 resource: 'fixtures',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     image: this.item ? this.item.image : '',
@@ -140,7 +135,9 @@
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                 }
-            },
+            }
+        },
+        methods: {
             setImage(image = null) {
                 this.form.image = image;
             },

@@ -19,72 +19,6 @@ export default {
         }
     },
     "en": {
-        "auth": {
-            "failed": "These credentials do not match our records.",
-            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
-        },
-        "beacons": {
-            "singular": "Beacon",
-            "plural": "Beacons",
-            "attributes": {
-                "id": "ID",
-                "name": "Name",
-                "description": "Description",
-                "eddystone_uid": "Eddystone UID",
-                "eddystone_url": "Eddystone URL",
-                "eddystone_tlm": "Eddystone TLM",
-                "eddystone_eid": "Eddystone EID",
-                "proximity_uuid": "Proximity UUID",
-                "major": "Major",
-                "minor": "Minor",
-                "lat": "Latitude",
-                "lng": "Longitude",
-                "floor_id": "Floor ID",
-                "category": "Category",
-                "content": "Content",
-                "map": "Map",
-                "tags": "Tags"
-            }
-        },
-        "buildings": {
-            "singular": "Building",
-            "plural": "Buildings",
-            "attributes": {
-                "id": "ID",
-                "name": "Name",
-                "image": "Image",
-                "place_id": "Place ID"
-            },
-            "map_plan": "Map Plan"
-        },
-        "categories": {
-            "singular": "Category",
-            "plural": "Categories",
-            "attributes": {
-                "id": "ID",
-                "name": "Name",
-                "description": "Description"
-            }
-        },
-        "containers": {
-            "singular": "Container",
-            "plural": "Containers",
-            "attributes": {
-                "id": "ID",
-                "name": "Name",
-                "description": "Description",
-                "folders_enabled": "Folders enabled",
-                "folders": "Folders",
-                "category": "Category",
-                "tags": "Tags",
-                "beacons": "Beacons"
-            }
-        },
-        "emails": {
-            "invitation": {
-                "subject": "Velkommen til {name}"
-            }
-        },
         "errors": {
             "401": {
                 "title": "Unauthenticated - 401",
@@ -102,6 +36,24 @@ export default {
                 "link_text": "Go to Dashboard"
             }
         },
+        "searchables": {
+            "singular": "Searchable",
+            "plural": "Searchables",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "status": "Status",
+                "category": "Category",
+                "tags": "Tags"
+            }
+        },
+        "passwords": {
+            "password": "Passwords must be at least six characters and match the confirmation.",
+            "reset": "Your password has been reset!",
+            "sent": "We have e-mailed your password reset link!",
+            "token": "This password reset token is invalid.",
+            "user": "We can't find a user with that e-mail address."
+        },
         "fixtures": {
             "singular": "Fixture",
             "plural": "Fixtures",
@@ -112,6 +64,54 @@ export default {
                 "image": "Image",
                 "width": "Width",
                 "height": "Height",
+                "category": "Category",
+                "tags": "Tags"
+            }
+        },
+        "folders": {
+            "singular": "Folder",
+            "plural": "Folders",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "category": "Category",
+                "tags": "Tags"
+            }
+        },
+        "auth": {
+            "failed": "These credentials do not match our records.",
+            "throttle": "Too many login attempts. Please try again in {seconds} seconds."
+        },
+        "roles": {
+            "singular": "Role",
+            "plural": "Roles",
+            "attributes": {
+                "id": "ID",
+                "name": "Name"
+            },
+            "permissions": "Role Permissions"
+        },
+        "tokens": {
+            "singular": "Token",
+            "plural": "Tokens",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "token": "Token",
+                "role": "Role"
+            }
+        },
+        "templates": {
+            "singular": "Template",
+            "plural": "Templates",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "description": "Description",
+                "activated": "Activated",
+                "content": "Content",
+                "hook": "Hook",
+                "layout": "Layout",
                 "category": "Category",
                 "tags": "Tags"
             }
@@ -143,80 +143,62 @@ export default {
                 "name": "Name"
             }
         },
-        "folders": {
-            "singular": "Folder",
-            "plural": "Folders",
+        "pagination": {
+            "previous": "&laquo; Previous",
+            "next": "Next &raquo;"
+        },
+        "buildings": {
+            "singular": "Building",
+            "plural": "Buildings",
             "attributes": {
                 "id": "ID",
                 "name": "Name",
-                "category": "Category",
-                "tags": "Tags"
-            }
-        },
-        "general": {
-            "yes": "Yes",
-            "no": "No",
-            "confirm": "Are you sure?",
-            "details": "Details",
-            "meta": "Meta",
-            "prepositions": {
-                "at": "at",
-                "of": "of",
-                "by": "by"
+                "image": "Image",
+                "place_id": "Place ID"
             },
-            "attributes": {
-                "created_by": "Created by",
-                "created_at": "Created at",
-                "updated_at": "Updated at",
-                "deleted_at": "Deleted at"
-            },
-            "actions": {
-                "create": "Create {name}",
-                "read": "Read {name}",
-                "update": "Update {name}",
-                "delete": "Delete {name}",
-                "edit": "Edit {name}",
-                "select": "Select {name}",
-                "add": "Add {name}",
-                "show": "Show {name}",
-                "apply": "Apply",
-                "detach": "Detach {name}",
-                "cancel": "Cancel",
-                "confirm": "Confirm"
-            }
+            "map_plan": "Map Plan"
         },
-        "layouts": {
-            "singular": "Layout",
-            "plural": "Layouts",
-            "attributes": {
-                "id": "ID",
-                "name": "Name",
-                "description": "Description",
-                "content": "Content",
-                "category": "Category",
-                "tags": "Tags"
-            }
-        },
-        "map-components": {
-            "singular": "Map Component",
-            "plural": "Map Components",
+        "locations": {
+            "singular": "Location",
+            "plural": "Locations",
             "attributes": {
                 "id": "ID",
                 "name": "Name",
                 "type": "Type",
-                "description": "Description",
-                "shape": "Shape",
-                "color": "Color",
-                "opacity": "Opacity",
-                "weight": "Weight",
-                "curved": "Curved",
+                "zoom_from": "Zoom From",
+                "zoom_to": "Zoom To",
+                "title": "Title",
+                "subtitle": "Subtitle",
                 "image": "Image",
-                "thickness": "Thickness",
-                "width": "Width",
-                "height": "Height",
+                "description": "Description",
+                "contact_name": "Name",
+                "company": "Company",
+                "address": "Address",
+                "city": "City",
+                "postcode": "Postal Code",
+                "phone": "Phone",
+                "email": "Email",
+                "search_activated": "Search Activated",
+                "search_text": "Search Text"
+            }
+        },
+        "users": {
+            "singular": "User",
+            "plural": "Users",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "email": "Email",
+                "avatar": "Avatar",
+                "locale": "Locale",
+                "password": "Password",
+                "activated": "Activated",
+                "remember_token": "Remember Token",
+                "role": "Role",
                 "category": "Category",
                 "tags": "Tags"
-            }
+            },
+            "password_placeholder": "Only fill out if changing password"
         },
         "menu": {
             "dashboard": "Dashboard",
@@ -242,16 +224,19 @@ export default {
             "profile": "Profile",
             "log_out": "Log out"
         },
-        "pagination": {
-            "previous": "&laquo; Previous",
-            "next": "Next &raquo;"
-        },
-        "passwords": {
-            "password": "Passwords must be at least six characters and match the confirmation.",
-            "reset": "Your password has been reset!",
-            "sent": "We have e-mailed your password reset link!",
-            "token": "This password reset token is invalid.",
-            "user": "We can't find a user with that e-mail address."
+        "containers": {
+            "singular": "Container",
+            "plural": "Containers",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "description": "Description",
+                "folders_enabled": "Folders enabled",
+                "folders": "Folders",
+                "category": "Category",
+                "tags": "Tags",
+                "beacons": "Beacons"
+            }
         },
         "places": {
             "singular": "Place",
@@ -260,7 +245,7 @@ export default {
                 "id": "ID",
                 "name": "Name",
                 "address": "Address",
-                "zipcode": "Zipcode",
+                "postcode": "Postal Code",
                 "city": "City",
                 "image": "Image",
                 "lat": "Latitude",
@@ -271,18 +256,13 @@ export default {
             },
             "location": "Place location"
         },
-        "pois": {
-            "singular": "Point of interest",
-            "plural": "Points of interest",
+        "tags": {
+            "singular": "Tag",
+            "plural": "Tags",
             "attributes": {
                 "id": "ID",
                 "name": "Name",
-                "description": "Description",
-                "image": "Image",
-                "type": "Type",
-                "color": "Color",
-                "category": "Category",
-                "tags": "Tags"
+                "description": "Description"
             }
         },
         "profile": {
@@ -294,77 +274,38 @@ export default {
             "password_placeholder": "Only fill out if changing password",
             "role": "Role"
         },
-        "roles": {
-            "singular": "Role",
-            "plural": "Roles",
-            "attributes": {
-                "id": "ID",
-                "name": "Name"
-            },
-            "permissions": "Role Permissions"
-        },
-        "searchables": {
-            "singular": "Searchable",
-            "plural": "Searchables",
+        "map-components": {
+            "singular": "Map Component",
+            "plural": "Map Components",
             "attributes": {
                 "id": "ID",
                 "name": "Name",
-                "status": "Status",
+                "type": "Type",
+                "description": "Description",
+                "shape": "Shape",
+                "color": "Color",
+                "opacity": "Opacity",
+                "weight": "Weight",
+                "curved": "Curved",
+                "image": "Image",
+                "thickness": "Thickness",
+                "width": "Width",
+                "height": "Height",
                 "category": "Category",
                 "tags": "Tags"
             }
         },
-        "tags": {
-            "singular": "Tag",
-            "plural": "Tags",
-            "attributes": {
-                "id": "ID",
-                "name": "Name",
-                "description": "Description"
-            }
-        },
-        "templates": {
-            "singular": "Template",
-            "plural": "Templates",
+        "layouts": {
+            "singular": "Layout",
+            "plural": "Layouts",
             "attributes": {
                 "id": "ID",
                 "name": "Name",
                 "description": "Description",
-                "activated": "Activated",
                 "content": "Content",
-                "hook": "Hook",
-                "layout": "Layout",
                 "category": "Category",
                 "tags": "Tags"
             }
-        },
-        "tokens": {
-            "singular": "Token",
-            "plural": "Tokens",
-            "attributes": {
-                "id": "ID",
-                "name": "Name",
-                "token": "Token",
-                "role": "Role"
-            }
-        },
-        "users": {
-            "singular": "User",
-            "plural": "Users",
-            "attributes": {
-                "id": "ID",
-                "name": "Name",
-                "email": "Email",
-                "avatar": "Avatar",
-                "locale": "Locale",
-                "password": "Password",
-                "activated": "Activated",
-                "remember_token": "Remember Token",
-                "role": "Role",
-                "category": "Category",
-                "tags": "Tags"
-            },
-            "password_placeholder": "Only fill out if changing password"
         },
         "validation": {
             "accepted": "The {attribute} must be accepted.",
@@ -448,6 +389,89 @@ export default {
                 }
             },
             "attributes": []
+        },
+        "emails": {
+            "invitation": {
+                "subject": "Velkommen til {name}"
+            }
+        },
+        "categories": {
+            "singular": "Category",
+            "plural": "Categories",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "description": "Description"
+            }
+        },
+        "beacons": {
+            "singular": "Beacon",
+            "plural": "Beacons",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "description": "Description",
+                "eddystone_uid": "Eddystone UID",
+                "eddystone_url": "Eddystone URL",
+                "eddystone_tlm": "Eddystone TLM",
+                "eddystone_eid": "Eddystone EID",
+                "proximity_uuid": "Proximity UUID",
+                "major": "Major",
+                "minor": "Minor",
+                "lat": "Latitude",
+                "lng": "Longitude",
+                "floor_id": "Floor ID",
+                "category": "Category",
+                "content": "Content",
+                "map": "Map",
+                "tags": "Tags"
+            }
+        },
+        "general": {
+            "yes": "Yes",
+            "no": "No",
+            "confirm": "Are you sure?",
+            "details": "Details",
+            "meta": "Meta",
+            "prepositions": {
+                "at": "at",
+                "of": "of",
+                "by": "by"
+            },
+            "attributes": {
+                "created_by": "Created by",
+                "created_at": "Created at",
+                "updated_at": "Updated at",
+                "deleted_at": "Deleted at"
+            },
+            "actions": {
+                "create": "Create {name}",
+                "read": "Read {name}",
+                "update": "Update {name}",
+                "delete": "Delete {name}",
+                "edit": "Edit {name}",
+                "select": "Select {name}",
+                "add": "Add {name}",
+                "show": "Show {name}",
+                "apply": "Apply",
+                "detach": "Detach {name}",
+                "cancel": "Cancel",
+                "confirm": "Confirm"
+            }
+        },
+        "pois": {
+            "singular": "Point of interest",
+            "plural": "Points of interest",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "description": "Description",
+                "image": "Image",
+                "type": "Type",
+                "color": "Color",
+                "category": "Category",
+                "tags": "Tags"
+            }
         }
     }
 }

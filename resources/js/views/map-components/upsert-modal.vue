@@ -201,12 +201,7 @@
             return {
                 currentTab: 'map_component',
                 resource: 'map-components',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: {
                     name: this.item ? this.item.name : '',
                     type: this.item ? this.item.type : 'plan',
                     description: this.item ? this.item.description : '',
@@ -221,7 +216,9 @@
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 }
-            },
+            }
+        },
+        methods: {
             async createItem() {
                 try {
                     this.forget();

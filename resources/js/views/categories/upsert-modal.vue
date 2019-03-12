@@ -60,16 +60,13 @@
             return {
                 currentTab: 'category',
                 resource: 'categories',
-                form: this.getForm()
+                form: {
+                    name: this.item ? this.item.name : '',
+                    description: this.item ? this.item.description : ''
+                }
             }
         },
         methods: {
-            getForm() {
-                return {
-                    name: this.item ? this.item.name : '',
-                    description: this.item ? this.item.description : '',
-                }
-            },
             async createItem() {
                 try {
                     this.forget();

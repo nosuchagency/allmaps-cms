@@ -54,15 +54,12 @@
             return {
                 currentTab: 'role',
                 resource: 'roles',
-                form: this.getForm()
+                form: {
+                    name: this.item ? this.item.name : ''
+                }
             }
         },
         methods: {
-            getForm() {
-                return {
-                    name: this.item ? this.item.name : ''
-                }
-            },
             async createItem() {
                 try {
                     this.forget();

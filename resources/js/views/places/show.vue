@@ -58,7 +58,7 @@
                                 <label style="font-weight: bold; color: #666; display: block; margin-bottom: 3px; font-size: 14px;">
                                     Zip Code
                                 </label>
-                                <span style="font-size: 14px;">{{item.zipcode || '-'}}</span>
+                                <span style="font-size: 14px;">{{item.postcode || '-'}}</span>
                             </div>
                             <div style="margin-bottom: 10px;">
                                 <label style="font-weight: bold; color: #666; display: block; margin-bottom: 3px; font-size: 14px;">
@@ -308,7 +308,7 @@
                     <div class="place-popup-image" style="background-image : url(${this.item.image || 'http://www.tkp.ca/images/02/003/main.jpg'})"></div>
                     <div class="place-popup-details">
                         <span>${this.item.address || ''}</span>
-                        <span>${this.item.zipcode || ''}</span>
+                        <span>${this.item.postcode || ''}</span>
                         <span>${this.item.city || ''}</span>
                     </div>
                 </div>

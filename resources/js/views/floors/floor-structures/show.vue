@@ -47,7 +47,7 @@
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
             <div v-else>
-                <toolbar-edit :structure="currentStructure"></toolbar-edit>
+                <structure-toolbar :structure="currentStructure"></structure-toolbar>
                 <floor-map :url="getFloorUrl()"
                            :lat="item.place.lat"
                            :lng="item.place.lng"
@@ -66,14 +66,14 @@
     import Hub from '../../../events/hub';
     import resource from 'js/mixins/resource';
     import floorMap from './floor-map.vue';
-    import toolbarEdit from './toolbar-edit.vue';
+    import structureToolbar from './structure-toolbar';
     import mapComponentSelect from './map-component-select';
 
     export default {
         mixins: [resource],
         components: {
             floorMap,
-            toolbarEdit,
+            structureToolbar,
             mapComponentSelect
         },
         data() {
