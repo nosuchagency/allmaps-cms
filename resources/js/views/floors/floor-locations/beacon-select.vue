@@ -16,7 +16,8 @@
                                        placeholder="Select"
                                        clearable
                                        filterable
-                                       value-key="id">
+                                       value-key="id"
+                                       ref="select">
                                 <el-option v-for="item in items"
                                            :key="item.id"
                                            :label="item.name"
@@ -58,6 +59,13 @@
                 currentTab: 'beacon',
                 showModal: false,
                 beacon: null
+            }
+        },
+        watch: {
+            showModal(value) {
+                if (value) {
+                    setTimeout(() => this.$refs.select.focus(), 500);
+                }
             }
         },
         methods: {
