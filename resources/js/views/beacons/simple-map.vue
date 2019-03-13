@@ -34,7 +34,7 @@
                 this.map.on('blur', this.disableScrollZoom);
 
                 let icon = L.icon({
-                    iconUrl: '/storage/icons/bullseye.png',
+                    iconUrl: '/img/bullseye.png',
                     iconSize: [20, 20]
                 });
 
