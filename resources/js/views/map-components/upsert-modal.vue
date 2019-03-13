@@ -78,7 +78,8 @@
                                 <el-form-item :label="$t('map-components.attributes.opacity')"
                                               :class="{'is-error' : has('opacity')}"
                                               v-if="form.shape === 'polygon' || form.shape === 'circle'  || form.shape === 'rectangle'">
-                                    <el-slider v-model="form.opacity"
+                                    <el-slider v-model="opacity"
+                                               :step="10"
                                                :format-tooltip="formatTooltip">
                                     </el-slider>
                                 </el-form-item>
@@ -208,7 +209,7 @@
                     color: this.item ? this.item.color : '#000000',
                     weight: this.item ? this.item.weight : 2,
                     curved: this.item ? !!this.item.curved : false,
-                    opacity: this.item ? this.item.opacity : 100,
+                    opacity: this.item ? this.item.opacity : 1,
                     width: this.item ? this.item.width : 0,
                     height: this.item ? this.item.height : 0,
                     image: this.item ? this.item.image : null,
@@ -261,6 +262,16 @@
             },
             setImage(image = null) {
                 this.form.image = image;
+            }
+        },
+        computed: {
+            opacity: {
+                get() {
+                    return this.form.opacity * 100;
+                },
+                set(value) {
+                    this.form.opacity = value / 100;
+                }
             }
         }
     }
