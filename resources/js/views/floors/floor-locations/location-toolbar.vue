@@ -16,7 +16,6 @@
                 </span>
             </div>
             <div class="location-actions">
-                <span v-if="currentLocation.getUnsavedChanges()">Unsaved Changes</span>
                 <el-button size="mini"
                            type="text"
                            class="btn-cancel"
