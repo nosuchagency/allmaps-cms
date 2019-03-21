@@ -102,15 +102,4 @@
     .poi-select {
         margin-right: 7px;
     }
-
-    .el-dialog {
-        /deep/ &__header {
-            display: none;
-        }
-
-        /deep/ &__footer {
-            padding: 20px;
-            border-top: 1px solid #dfdfdf;
-        }
-    }
 </style>

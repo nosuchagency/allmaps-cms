@@ -159,23 +159,5 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-dialog {
-        /deep/ &__header {
-            display: none;
-        }
 
-        /deep/ &__footer {
-            padding: 20px;
-            border-top: 1px solid #dfdfdf;
-        }
-
-        .btn-remove {
-            float: left;
-            color: #FF0000;
-
-            &:hover {
-                color: #990000;
-            }
-        }
-    }
 </style>

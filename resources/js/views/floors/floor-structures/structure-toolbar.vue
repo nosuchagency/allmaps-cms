@@ -3,6 +3,11 @@
          :class="{'is-active' : !!currentStructure}">
         <template v-if="currentStructure">
             <div class="component-details">
+                <el-button size="mini"
+                           type="primary"
+                           @click="openStructureModal()">
+                    Edit
+                </el-button>
                 <span class="component-name">
                     {{currentStructure.getName()}}
                 </span>
@@ -35,7 +40,13 @@
                             @confirm="deleteComponent()">
             </confirm-dialog>
         </template>
-        <structure-modal :structure="currentStructure"></structure-modal>
+        <structure-modal v-if="structureModalVisible"
+                         :visible="structureModalVisible"
+                         :structure="currentStructure.structure"
+                         :url="url"
+                         @structure-modal:close="closeStructureModal"
+                         @structure-modal:update="updateStructure">
+        </structure-modal>
     </div>
 </template>
 
@@ -48,10 +59,12 @@
             structureModal
         },
         props: {
-            currentStructure: Object
+            currentStructure: Object,
+            url: String
         },
         data() {
             return {
+                structureModalVisible: false,
                 confirmDeleteVisible: false
             }
         },
@@ -69,6 +82,9 @@
             }
         },
         methods: {
+            updateStructure(structure) {
+                this.currentStructure.structure = structure;
+            },
             saveComponent() {
                 Hub.$emit('structure:save');
             },
@@ -78,6 +94,12 @@
             deleteComponent() {
                 Hub.$emit('structure:remove');
                 this.confirmDeleteVisible = false
+            },
+            openStructureModal() {
+                this.structureModalVisible = true;
+            },
+            closeStructureModal() {
+                this.structureModalVisible = false;
             }
         }
     };
@@ -112,7 +134,7 @@
     .component-name {
         font-size: 16px;
         font-weight: bold;
-        margin-right: 15px;
+        margin: 0 15px;
     }
 
     .component-shape {

@@ -3,6 +3,11 @@
          :class="{'is-active' : !!currentLocation}">
         <template v-if="currentLocation">
             <div class="location-details">
+                <el-button size="mini"
+                           type="primary"
+                           @click="openLocationModal()">
+                    Edit
+                </el-button>
                 <span class="location-name">
                     {{currentLocation.getName()}}
                 </span>
@@ -12,19 +17,8 @@
             </div>
             <div class="location-actions">
                 <el-button size="mini"
-                           type="primary"
-                           @click="openLocationModal()">
-                    Edit
-                </el-button>
-                <el-button size="mini"
-                           type="danger"
-                           @click="confirmDeleteVisible = true">
-                    <i class="fa fa-trash-alt location-delete"
-                       aria-hidden="true">
-                    </i>
-                </el-button>
-                <el-button size="mini"
                            type="text"
+                           class="btn-cancel"
                            @click="cancelLocation()">
                     Cancel
                 </el-button>
@@ -132,7 +126,7 @@
     .location-name {
         font-size: 16px;
         font-weight: bold;
-        margin-right: 15px;
+        margin: 0 15px;
     }
 
     .location-type {

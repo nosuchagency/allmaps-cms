@@ -25,7 +25,6 @@ let Beacon = {
                     this.dragging.enable();
                 },
                 stopEditing() {
-                    console.log(this.dragging);
                 },
                 componentClicked(e) {
                     if (!self.currentLocation) {

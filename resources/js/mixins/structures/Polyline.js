@@ -31,8 +31,6 @@ let Polyline = {
                 click(latlng) {
                     self.addMarker(latlng);
 
-                    console.log(self.currentStructure.getMarkers() === self.currentStructureCopy.getMarkers());
-
                     let points = this.getMarkers();
                     points.push(latlng);
 

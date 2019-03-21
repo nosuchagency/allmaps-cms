@@ -302,6 +302,12 @@
             <span slot="footer">
                 <el-button type="text"
                            size="small"
+                           class="btn-remove"
+                           @click="removeItem">
+                    Delete
+                </el-button>
+                <el-button type="text"
+                           size="small"
                            class="btn-cancel"
                            @click="closeModal">
                     Cancel
@@ -330,9 +336,6 @@
             visible: Boolean,
             location: Object,
             url: String
-        },
-        created() {
-            console.log(this.location.searchables);
         },
         data() {
             return {
@@ -385,7 +388,6 @@
             }
         },
         methods: {
-
             async updateItem() {
                 this.startProcessing();
 
@@ -399,6 +401,15 @@
                     }
                 } finally {
                     this.finishProcessing();
+                }
+            },
+            async removeItem() {
+                try {
+
+                } catch ({response}) {
+                    if (response.data.errors) {
+                        this.setErrors(response.data.errors);
+                    }
                 }
             },
             closeModal() {
@@ -421,17 +432,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-dialog {
-        /deep/ &__header {
-            display: none;
-        }
-
-        /deep/ &__footer {
-            padding: 20px;
-            border-top: 1px solid #dfdfdf;
-        }
-    }
-
     .searchable-label {
         height: 40px;
         line-height: 40px;
