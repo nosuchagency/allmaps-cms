@@ -22,14 +22,14 @@ let markerEvents = {
             this.popupText = '';
         },
         markerClickHandler(e) {
-            if (this.currentStructure) {
-                this.currentStructure.click(e.target.getLatLng());
+            if (this.currentLocation) {
+                this.currentLocation.click(e.target.getLatLng());
             }
         },
         dragStartHandler(e) {
             this.map.off('click', this.mapClickHandler);
 
-            let latlngs = this.currentStructure.getLatLngs()[0];
+            let latlngs = this.currentLocation.getLatLngs()[0];
 
             let latlng = e.target.getLatLng();
             for (let i = 0; i < latlngs.length; i++) {
@@ -39,10 +39,10 @@ let markerEvents = {
             }
         },
         dragHandler(e) {
-            let latlngs = this.currentStructure.getLatLngs()[0];
+            let latlngs = this.currentLocation.getLatLngs()[0];
             let latlng = e.target.getLatLng();
             latlngs.splice(this.polylineLatlng, 1, latlng);
-            this.currentStructure.setLatLngs(latlngs);
+            this.currentLocation.setLatLngs(latlngs);
         },
         dragEndHandler(e) {
             setTimeout(() => {

@@ -33,12 +33,12 @@ let mapSetup = {
                 position: 'bottomleft'
             }).addTo(this.map);
 
-            this.map.addEventListener('mouseout', this.mapMouseOutEventHandler);
-            this.map.addEventListener('mousemove', this.mapMouseMoveEventHandler);
-
             L.control.scale({
                 position: 'bottomright'
             }).addTo(this.map);
+
+            this.map.addEventListener('mouseout', this.mapMouseOutEventHandler);
+            this.map.addEventListener('mousemove', this.mapMouseMoveEventHandler);
         },
         mapClickHandler(e) {
             if (this.currentStructure) {
@@ -85,7 +85,8 @@ let mapSetup = {
 
             if (destination) {
                 this.ruler.setLatLngs([destination, e.latlng]);
-                this.popup.setContent(Math.round(e.latlng.distanceTo(destination) * 100) / 100 + ' meters');
+                let meters = (Math.round(e.latlng.distanceTo(destination) * 100) / 100);
+                this.popup.setContent(meters + ' meters ' + this.popupText);
                 this.popup.setLatLng(e.latlng).openOn(this.map);
             }
         }

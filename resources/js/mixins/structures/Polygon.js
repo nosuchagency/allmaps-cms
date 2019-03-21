@@ -78,7 +78,7 @@ let Polygon = {
                     return null;
                 },
                 addMarkers() {
-                    this.getMarkers().forEach(self.addMarker);
+                    this.getLatLngs()[0].forEach(self.addMarker);
                 }
             }
         });

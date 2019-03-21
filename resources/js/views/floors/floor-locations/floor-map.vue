@@ -12,6 +12,9 @@
     // Map state methods
     import stateMethods from './mixins/map/state-handlers';
 
+    // Marker event handlers
+    import eventHandlers from './mixins/marker/event-handlers';
+
     // Structures
     import polyline from 'js/mixins/structures/Polyline';
     import polygon from 'js/mixins/structures/Polygon';
@@ -30,6 +33,8 @@
             mapSetup,
 
             stateMethods,
+
+            eventHandlers,
 
             polyline,
             polygon,
@@ -54,6 +59,7 @@
         data() {
             return {
                 popup: null,
+                popupText : '',
 
                 ruler: null,
 

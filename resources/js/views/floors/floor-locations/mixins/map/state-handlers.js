@@ -49,60 +49,6 @@ let creationMethodsMixin = {
         },
         undoLocation() {
             this.currentLocation.undo();
-        },
-        mapMouseOutEventHandler(e) {
-            this.ruler.setLatLngs([]);
-            this.popup.removeFrom(this.map);
-        },
-        mapMouseMoveEventHandler(e) {
-            let destination = null;
-
-            let coords = this.currentLocation.getLatLngs()[0];
-
-            if (coords.length > 0) {
-                destination = coords[coords.length - 1];
-            }
-
-            if (!destination) {
-                return;
-            }
-
-            this.ruler.setLatLngs([destination, e.latlng]);
-            this.popup.setContent(Math.round(e.latlng.distanceTo(destination) * 100) / 100 + ' meters');
-            this.popup.setLatLng(e.latlng).openOn(this.map);
-        },
-        dragStartHandler(e) {
-            this.map.off('click', this.mapClickHandler);
-
-            let latlngs = this.currentLocation.getLatLngs()[0];
-
-            let latlng = e.target.getLatLng();
-            for (let i = 0; i < latlngs.length; i++) {
-                if (latlng.equals(latlngs[i])) {
-                    this.polylineLatlng = i;
-                }
-            }
-        },
-        dragHandler(e) {
-            let latlngs = this.currentLocation.getLatLngs()[0];
-            let latlng = e.target.getLatLng();
-            latlngs.splice(this.polylineLatlng, 1, latlng);
-            this.currentLocation.setLatLngs(latlngs);
-        },
-        dragEndHandler(e) {
-            setTimeout(() => {
-                this.map.on('click', this.mapClickHandler);
-            }, 100);
-
-            this.polylineLatlng = null;
-        },
-        addMarker(latlng, options = {}) {
-            return new L.Marker(latlng, {...{draggable: true}, ...options})
-                .addTo(this.editingMarkerLayer)
-                .on('dragstart', this.dragStartHandler)
-                .on('drag', this.dragHandler)
-                .on('dragend', this.dragEndHandler)
-                .on('click', this.clickHandler);
         }
     }
 };

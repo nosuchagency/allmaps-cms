@@ -9,7 +9,6 @@ let Beacon = {
             ...shared, ...{
                 initialize(location) {
                     this.location = location;
-                    this.unsavedChanges = false;
 
                     let coordinates = location.coordinates || self.map.getCenter();
 
@@ -67,6 +66,9 @@ let Beacon = {
                 },
                 getCoordinates() {
                     return this.getLatLng();
+                },
+                getDestination() {
+                    return null;
                 },
                 addMarkers() {
 

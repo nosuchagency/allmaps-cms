@@ -53,6 +53,9 @@ let mapSetup = {
                     }
                 }]
             }).addTo(this.map);
+
+            this.map.addEventListener('mouseout', this.mapMouseOutEventHandler);
+            this.map.addEventListener('mousemove', this.mapMouseMoveEventHandler);
         },
         mapClickHandler(e) {
             if (this.currentLocation) {
@@ -106,6 +109,24 @@ let mapSetup = {
                     return new L.ImageComponent(structure, true);
                 default:
                     return null
+            }
+        },
+        mapMouseOutEventHandler(e) {
+            this.ruler.setLatLngs([]);
+            this.popup.removeFrom(this.map);
+        },
+        mapMouseMoveEventHandler(e) {
+            if (!this.currentLocation) {
+                return;
+            }
+
+            let destination = this.currentLocation.getDestination();
+
+            if (destination) {
+                this.ruler.setLatLngs([destination, e.latlng]);
+                let meters = (Math.round(e.latlng.distanceTo(destination) * 100) / 100);
+                this.popup.setContent(meters + ' meters ' + this.popupText);
+                this.popup.setLatLng(e.latlng).openOn(this.map);
             }
         }
     }

@@ -9,7 +9,6 @@ let PoiPoint = {
             ...shared, ...{
                 initialize(location) {
                     this.location = location;
-                    this.unsavedChanges = false;
 
                     let coordinates = location.coordinates || self.map.getCenter();
 
@@ -68,6 +67,9 @@ let PoiPoint = {
                 },
                 getCoordinates() {
                     return this.getLatLng();
+                },
+                getDestination() {
+                    return null;
                 },
                 addMarkers() {
 

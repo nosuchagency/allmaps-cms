@@ -9,7 +9,6 @@ let PoiArea = {
             ...shared, ...{
                 initialize(location) {
                     this.location = location;
-                    this.unsavedChanges = false;
 
                     L.Polygon.prototype.initialize.call(this, this.location.coordinates || [], location.poi);
 
@@ -21,7 +20,6 @@ let PoiArea = {
                 startEditing() {
                 },
                 stopEditing() {
-
                 },
                 componentClicked(e) {
                     if (!self.currentLocation) {
@@ -57,6 +55,15 @@ let PoiArea = {
                 },
                 getCoordinates() {
                     return this.getLatLngs();
+                },
+                getDestination() {
+                    let coords = this.getLatLngs()[0];
+
+                    if (coords.length > 0) {
+                        return coords[coords.length - 1];
+                    }
+
+                    return null;
                 },
                 addMarkers() {
                     this.getLatLngs()[0].forEach(self.addMarker);

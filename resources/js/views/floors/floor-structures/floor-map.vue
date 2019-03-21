@@ -47,6 +47,7 @@
         data() {
             return {
                 popup: null,
+                popupText : '',
 
                 ruler: null,
 
