@@ -30,6 +30,7 @@
                 <span slot="footer">
                     <el-button type="text"
                                size="small"
+                               class="btn-cancel"
                                @click="showModal = false">
                         Cancel
                     </el-button>

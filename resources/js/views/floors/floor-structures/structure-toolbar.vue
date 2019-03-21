@@ -1,43 +1,44 @@
 <template>
-    <div class="component-toolbar"
+    <div class="structure-toolbar"
          :class="{'is-active' : !!currentStructure}">
         <template v-if="currentStructure">
-            <div class="component-details">
+            <div class="structure-details">
                 <el-button size="mini"
                            type="primary"
                            @click="openStructureModal()">
                     Edit
                 </el-button>
-                <span class="component-name">
+                <span class="structure-name">
                     {{currentStructure.getName()}}
                 </span>
-                <span class="component-color">
+                <span class="structure-color">
                     <i class="fa fa-square"
                        :style="{color : currentStructure.getColor(), opacity : currentStructure.getOpacity()}">
                     </i>
                 </span>
-                <span class="component-shape">
+                <span class="structure-shape">
                     {{currentStructure.getShape()}}
                 </span>
             </div>
-            <div class="component-actions">
+            <div class="structure-actions">
                 <el-button size="mini"
                            type="text"
-                           @click="cancelComponent()">
+                           class="btn-cancel"
+                           @click="cancelStructure()">
                     Cancel
                 </el-button>
                 <el-button size="mini"
                            type="success"
-                           @click="saveComponent()"
+                           @click="saveStructure()"
                            :disabled="!saveable">
                     Confirm
                 </el-button>
             </div>
-            <confirm-dialog title="Delete Component"
+            <confirm-dialog title="Delete structure"
                             :visible="confirmDeleteVisible"
                             :message="$t('general.confirm')"
                             @cancel="confirmDeleteVisible = false"
-                            @confirm="deleteComponent()">
+                            @confirm="deleteStructure()">
             </confirm-dialog>
         </template>
         <structure-modal v-if="structureModalVisible"
@@ -85,13 +86,13 @@
             updateStructure(structure) {
                 this.currentStructure.structure = structure;
             },
-            saveComponent() {
+            saveStructure() {
                 Hub.$emit('structure:save');
             },
-            cancelComponent() {
+            cancelStructure() {
                 Hub.$emit('structure:cancel');
             },
-            deleteComponent() {
+            deleteStructure() {
                 Hub.$emit('structure:remove');
                 this.confirmDeleteVisible = false
             },
@@ -107,7 +108,7 @@
 
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-    .component-toolbar {
+    .structure-toolbar {
         transition: height 0.2s ease-in-out;
         overflow: hidden;
         width: 100%;
@@ -124,31 +125,31 @@
         }
     }
 
-    .component-actions {
+    .structure-actions {
         margin-left: auto;
         margin-right: 25px;
         display: flex;
         align-items: center;
     }
 
-    .component-name {
+    .structure-name {
         font-size: 16px;
         font-weight: bold;
         margin: 0 15px;
     }
 
-    .component-shape {
+    .structure-shape {
         font-size: 13px;
         font-weight: bold;
         text-transform: capitalize;
     }
 
-    .component-delete {
+    .structure-delete {
         cursor: pointer;
         color: #fff;
     }
 
-    .component-details {
+    .structure-details {
         color: #666;
         font-size: 14px;
         margin-left: 25px;
