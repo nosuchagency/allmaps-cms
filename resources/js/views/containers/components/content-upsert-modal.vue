@@ -28,14 +28,14 @@
                            @click="closeModal()">
                     Cancel
                 </el-button>
-                <el-button type="primary"
+                <el-button type="success"
                            v-if="item"
                            size="small"
                            @click="submit(true)"
                            :loading="busy">
                     Confirm
                 </el-button>
-                <el-button type="primary"
+                <el-button type="success"
                            v-if="!item"
                            size="small"
                            @click="submit()"

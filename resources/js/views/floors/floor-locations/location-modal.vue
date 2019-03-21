@@ -109,15 +109,34 @@
                     </el-tab-pane>
                     <el-tab-pane label="Search" name="search">
                         <br>
-                        <el-form-item :label="$t('locations.attributes.search_activated')"
-                                      :class="{'is-error' : has('search_activated')}">
+                        <div class="searchable-label">
                             <el-switch v-model="form.search_activated"></el-switch>
-                        </el-form-item>
-                        <el-form-item :label="$t('locations.attributes.search_text')"
+                            <span class="searchable-name">Internal Search</span>
+                        </div>
+                        <el-form-item label="Text"
                                       :class="{'is-error' : has('search_text')}">
-                            <el-input v-model="form.search_text">
-                            </el-input>
+                            <el-input v-model="form.search_text"></el-input>
                         </el-form-item>
+                        <br>
+                        <template v-for="searchable in form.searchables">
+                            <div class="searchable-label">
+                                <el-switch v-model="searchable.activated"></el-switch>
+                                <span class="searchable-name">
+                                    {{searchable.name}}
+                                </span>
+                            </div>
+                            <template v-for="field in searchable.fields">
+                                <el-form-item :label="field.label">
+                                    <template v-if="field.type === 'text'">
+                                        <el-input v-model="field.value"></el-input>
+                                    </template>
+                                    <template v-else-if="field.type === 'boolean'">
+                                        <el-checkbox v-model="field.value"></el-checkbox>
+                                    </template>
+                                </el-form-item>
+                            </template>
+                            <br>
+                        </template>
                     </el-tab-pane>
                     <el-tab-pane label="Hours" name="hours">
                         <br>
@@ -283,15 +302,11 @@
             <span slot="footer">
                 <el-button type="text"
                            size="small"
-                           style="float: left; color: red;">
-                    Delete
-                </el-button>
-                <el-button type="text"
-                           size="small"
+                           class="btn-cancel"
                            @click="closeModal">
                     Cancel
                 </el-button>
-                <el-button type="primary"
+                <el-button type="success"
                            size="small"
                            :loading="busy"
                            @click="updateItem">
@@ -316,9 +331,17 @@
             location: Object,
             url: String
         },
+        created() {
+            console.log(this.location.searchables);
+        },
         data() {
             return {
                 currentTab: 'location',
+                pigs: [
+                    {'label': 'Test1', 'active': false},
+                    {'label': 'Test2', 'active': false},
+                    {'label': 'Test3', 'active': false},
+                ],
                 form: {
                     name: this.location.name,
                     type: this.location.type,
@@ -335,8 +358,10 @@
                     postcode: this.location.postcode,
                     phone: this.location.phone,
                     email: this.location.email,
+
                     search_activated: this.location.search_activated,
                     search_text: this.location.search_text,
+                    searchables: this.location.searchables,
 
                     monday_from: this.location.monday_from,
                     monday_to: this.location.monday_to,
@@ -360,6 +385,7 @@
             }
         },
         methods: {
+
             async updateItem() {
                 this.startProcessing();
 
@@ -404,5 +430,18 @@
             padding: 20px;
             border-top: 1px solid #dfdfdf;
         }
+    }
+
+    .searchable-label {
+        height: 40px;
+        line-height: 40px;
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        margin-left: 120px;
+    }
+
+    .searchable-name {
+        margin-left: 10px;
     }
 </style>

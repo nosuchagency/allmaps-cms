@@ -42,8 +42,11 @@
                 this.processing = true;
 
                 try {
-                    await this.$axios.post('/searchables', {name: this.plugin.name});
-                    this.$emit('refetch');
+                    await this.$axios.post('/searchables', {
+                        identifier: this.plugin.identifier,
+                        name: this.plugin.name
+                    });
+                    this.$emit('searchables:refetch');
                 } catch (error) {
                     console.log(error);
                 } finally {
@@ -56,7 +59,7 @@
                 try {
                     await this.$axios.delete('/searchables/' + this.plugin.id);
                     this.confirmUninstallVisible = false;
-                    this.$emit('refetch');
+                    this.$emit('searchables:refetch');
                 } catch (error) {
                     console.log(error);
                 } finally {

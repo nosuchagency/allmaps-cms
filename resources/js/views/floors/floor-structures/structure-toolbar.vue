@@ -17,22 +17,15 @@
             </div>
             <div class="component-actions">
                 <el-button size="mini"
-                           type="danger"
-                           @click="confirmDeleteVisible = true">
-                    <i class="fa fa-trash-alt component-delete"
-                       aria-hidden="true">
-                    </i>
-                </el-button>
-                <el-button size="mini"
-                           type="primary"
+                           type="text"
                            @click="cancelComponent()">
                     Cancel
                 </el-button>
                 <el-button size="mini"
-                           type="primary"
+                           type="success"
                            @click="saveComponent()"
-                           v-if="saveable">
-                    Finish
+                           :disabled="!saveable">
+                    Confirm
                 </el-button>
             </div>
             <confirm-dialog title="Delete Component"

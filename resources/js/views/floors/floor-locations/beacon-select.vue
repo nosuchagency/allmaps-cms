@@ -33,7 +33,7 @@
                                @click="showModal = false">
                         Cancel
                     </el-button>
-                    <el-button type="primary"
+                    <el-button type="success"
                                size="small"
                                @click="createBeacon"
                                :loading="busy"

@@ -24,15 +24,15 @@
                     </i>
                 </el-button>
                 <el-button size="mini"
-                           type="primary"
+                           type="text"
                            @click="cancelLocation()">
                     Cancel
                 </el-button>
                 <el-button size="mini"
-                           type="primary"
+                           type="success"
                            @click="saveLocation()"
-                           v-if="saveable">
-                    Finish
+                           :disabled="!saveable">
+                    Confirm
                 </el-button>
             </div>
             <confirm-dialog title="Delete Location"

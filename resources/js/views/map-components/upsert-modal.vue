@@ -169,10 +169,11 @@
                 </el-button>
                 <el-button type="text"
                            size="small"
+                           class="btn-cancel"
                            @click="closeModal">
                     Cancel
                 </el-button>
-                <el-button type="primary"
+                <el-button type="success"
                            size="small"
                            @click="item ? updateItem() : createItem()"
                            :loading="creating || updating || deleting">
@@ -286,15 +287,6 @@
         /deep/ &__footer {
             padding: 20px;
             border-top: 1px solid #dfdfdf;
-        }
-
-        .btn-remove {
-            float: left;
-            color: #FF0000;
-
-            &:hover {
-                color: #990000;
-            }
         }
     }
 </style>

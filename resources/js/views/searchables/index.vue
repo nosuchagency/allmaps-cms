@@ -30,12 +30,16 @@
                                      :label="$t('searchables.attributes.name')"
                                      sortable>
                     </el-table-column>
+                    <el-table-column property="identifier"
+                                     :label="$t('searchables.attributes.identifier')"
+                                     sortable>
+                    </el-table-column>
                     <el-table-column align="center"
                                      label="Activated">
                         <template slot-scope="scope">
                             <plugin-activation v-if="scope.row.installed"
                                                :plugin="scope.row"
-                                               @refetch="getItems(getUrl())">
+                                               @searchables:refetch="getItems(getUrl())">
                             </plugin-activation>
                             <template v-else>
                                 -
@@ -45,7 +49,7 @@
                     <el-table-column align="center">
                         <template slot-scope="scope">
                             <plugin-installation :plugin="scope.row"
-                                                 @refetch="getItems(getUrl())">
+                                                 @searchables:refetch="getItems(getUrl())">
                             </plugin-installation>
                         </template>
                     </el-table-column>

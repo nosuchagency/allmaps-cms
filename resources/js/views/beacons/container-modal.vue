@@ -36,10 +36,11 @@
                 </el-button>
                 <el-button type="text"
                            size="small"
+                           class="btn-cancel"
                            @click="closeModal">
                     Cancel
                 </el-button>
-                <el-button type="primary"
+                <el-button type="success"
                            size="small"
                            @click="item ? updateItem() : createItem()">
                     Confirm
@@ -58,7 +59,7 @@
             visible: Boolean,
             item: Object,
             beaconId: Number,
-            containers : Array
+            containers: Array
         },
         data() {
             return {

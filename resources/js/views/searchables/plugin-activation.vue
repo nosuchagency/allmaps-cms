@@ -22,12 +22,9 @@
                 this.processing = true;
 
                 try {
-                    await this.$axios.put('/searchables/' + this.plugin.id, {
-                        name: this.name,
-                        activated: this.activated
-                    });
+                    await this.$axios.put('/searchables/' + this.plugin.id, {activated: this.activated});
 
-                    this.$emit('refetch');
+                    this.$emit('searchables:refetch');
                 } catch (error) {
                     console.log(error);
                 } finally {

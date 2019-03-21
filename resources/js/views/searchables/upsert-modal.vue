@@ -54,16 +54,17 @@
                 <el-button v-if="item"
                            type="text"
                            size="small"
-                           style="float: left; color: red;"
+                           class="btn-remove"
                            @click="removeItem">
                     Delete
                 </el-button>
                 <el-button type="text"
                            size="small"
+                           class="btn-cancel"
                            @click="closeModal">
                     Cancel
                 </el-button>
-                <el-button type="primary"
+                <el-button type="success"
                            size="small"
                            @click="item ? updateItem() : createItem()"
                            :loading="creating || updating">

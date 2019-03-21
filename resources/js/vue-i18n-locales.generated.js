@@ -42,6 +42,7 @@ export default {
             "attributes": {
                 "id": "ID",
                 "name": "Name",
+                "identifier": "Identifier",
                 "status": "Status",
                 "category": "Category",
                 "tags": "Tags"
