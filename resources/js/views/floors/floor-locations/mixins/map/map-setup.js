@@ -26,6 +26,30 @@ let mapSetup = {
             this.map.zoomControl.setPosition('bottomleft');
 
             this.map.on('click', this.mapClickHandler);
+
+            L.easyButton('fa-compress-arrows-alt', (btn, map) => {
+                map.flyTo(new L.LatLng(this.lat, this.lng), 19)
+            }, 'Reposition Map').addTo(this.map);
+
+            L.easyButton({
+                states: [{
+                    stateName: 'structures-hidden',
+                    icon: 'fa-image',
+                    title: 'Click to show structures',
+                    onClick: (btn, map) => {
+                        btn.state('structures-visible');
+                        this.structuresLayer.addTo(this.mainLayer);
+                    }
+                }, {
+                    stateName: 'structures-visible',
+                    icon: 'fa-image',
+                    title: 'Click to hide structures',
+                    onClick: (btn, map) => {
+                        btn.state('structures-hidden');
+                        this.structuresLayer.removeFrom(this.mainLayer);
+                    }
+                }]
+            }).addTo(this.map);
         },
         mapClickHandler(e) {
             if (this.currentLocation) {

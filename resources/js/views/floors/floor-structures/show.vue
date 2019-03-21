@@ -29,15 +29,6 @@
                             </div>
                         </fetch-items>
                     </template>
-                    <el-tooltip effect="dark" content="Reposition Map" placement="top-start">
-                        <el-button type="primary"
-                                   size="small"
-                                   @click="repositionMap"
-                                   circle
-                                   style="width: 32px;">
-                            <i class="fa fa-bullseye"></i>
-                        </el-button>
-                    </el-tooltip>
                 </template>
             </toolbar>
         </template>
@@ -121,9 +112,6 @@
                 } catch (error) {
                     console.log(error);
                 }
-            },
-            repositionMap() {
-                Hub.$emit('map:reposition');
             },
             getFloorUrl() {
                 return '/places/' + this.placeId + '/buildings/' + this.buildingId + '/floors/' + this.floorId;

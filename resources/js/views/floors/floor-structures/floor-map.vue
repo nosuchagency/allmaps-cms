@@ -86,13 +86,6 @@
             Hub.$on('structure:remove', this.removeStructure);
             Hub.$on('structure:cancel', this.cancelStructure);
             Hub.$on('structure:save', this.saveStructure);
-
-            Hub.$on('map:reposition', this.repositionMap);
-        },
-        methods: {
-            repositionMap() {
-                this.map.flyTo(new L.LatLng(this.lat, this.lng), 19);
-            }
         },
         computed: {
             cursor() {

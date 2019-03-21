@@ -7,5 +7,8 @@ export default {
     },
     getType() {
         return this.location.type;
+    },
+    getUnsavedChanges() {
+        return true;
     }
 }

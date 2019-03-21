@@ -30,26 +30,6 @@
                     <beacon-select :url="getFloorUrl()"
                                    @beacon:add="addLocation">
                     </beacon-select>
-                    <el-tooltip effect="dark"
-                                content="Reposition Map"
-                                placement="top-start">
-                        <el-button type="primary"
-                                   size="small"
-                                   @click="repositionMap"
-                                   circle>
-                            <i class="fa fa-bullseye"></i>
-                        </el-button>
-                    </el-tooltip>
-                    <el-tooltip effect="dark"
-                                content="Toggle Structures"
-                                placement="top-start">
-                        <el-button @click="showStructures = !showStructures"
-                                   :type="showStructures ? 'primary' : 'default'"
-                                   size="small"
-                                   icon="el-icon-picture-outline"
-                                   circle>
-                        </el-button>
-                    </el-tooltip>
                 </template>
             </toolbar>
         </template>
@@ -67,7 +47,6 @@
                            :lng="item.place.lng"
                            :current-location="currentLocation"
                            :current-location-copy="currentLocationCopy"
-                           :show-structures="showStructures"
                            :structures="item.structures"
                            :locations="item.locations"
                            @location:set="setCurrentLocation"
@@ -103,8 +82,7 @@
                 buildingId: null,
                 floorId: null,
                 currentLocation: null,
-                currentLocationCopy: null,
-                showStructures: false
+                currentLocationCopy: null
             }
         },
         methods: {
@@ -124,9 +102,6 @@
             },
             addLocation(location) {
                 Hub.$emit('location:add', location);
-            },
-            repositionMap() {
-                Hub.$emit('repositionMap');
             },
             getFloorUrl() {
                 return '/places/' + this.placeId + '/buildings/' + this.buildingId + '/floors/' + this.floorId;

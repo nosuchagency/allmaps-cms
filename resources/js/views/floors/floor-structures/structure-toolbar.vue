@@ -34,12 +34,6 @@
                     Confirm
                 </el-button>
             </div>
-            <confirm-dialog title="Delete structure"
-                            :visible="confirmDeleteVisible"
-                            :message="$t('general.confirm')"
-                            @cancel="confirmDeleteVisible = false"
-                            @confirm="deleteStructure()">
-            </confirm-dialog>
         </template>
         <structure-modal v-if="structureModalVisible"
                          :visible="structureModalVisible"
@@ -65,8 +59,7 @@
         },
         data() {
             return {
-                structureModalVisible: false,
-                confirmDeleteVisible: false
+                structureModalVisible: false
             }
         },
         computed: {
@@ -91,10 +84,6 @@
             },
             cancelStructure() {
                 Hub.$emit('structure:cancel');
-            },
-            deleteStructure() {
-                Hub.$emit('structure:remove');
-                this.confirmDeleteVisible = false
             },
             openStructureModal() {
                 this.structureModalVisible = true;
@@ -142,11 +131,6 @@
         font-size: 13px;
         font-weight: bold;
         text-transform: capitalize;
-    }
-
-    .structure-delete {
-        cursor: pointer;
-        color: #fff;
     }
 
     .structure-details {

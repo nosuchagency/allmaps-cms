@@ -18,6 +18,7 @@ require('leaflet/dist/leaflet');
 require('leaflet-path-transform');
 require('leaflet.gridlayer.googlemutant');
 require('leaflet-imageoverlay-rotated');
+require('leaflet-easybutton');
 require('./leaflet-icon-fix');
 
 require('./sentry-setup');

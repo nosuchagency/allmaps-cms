@@ -48,7 +48,6 @@
             lng: Number,
             currentLocation: Object,
             currentLocationCopy: Object,
-            showStructures: Boolean,
             structures: Array,
             locations: Array
         },
@@ -100,15 +99,6 @@
 
             this.activateEventListeners();
         },
-        watch: {
-            showStructures(value) {
-                if (value) {
-                    this.structuresLayer.addTo(this.mainLayer);
-                } else {
-                    this.structuresLayer.removeFrom(this.mainLayer);
-                }
-            }
-        },
         methods: {
             activateEventListeners() {
                 Hub.$on('location:add', (location) => this.addLocation(location, true));
@@ -116,10 +106,6 @@
                 Hub.$on('location:remove', this.removeLocation);
                 Hub.$on('location:cancel', this.cancelLocation);
                 Hub.$on('location:save', this.saveLocation);
-                Hub.$on('repositionMap', this.repositionMap);
-            },
-            repositionMap() {
-                this.map.flyTo(new L.LatLng(this.lat, this.lng), 19);
             }
         },
         computed: {

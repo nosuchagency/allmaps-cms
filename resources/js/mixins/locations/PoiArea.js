@@ -9,6 +9,7 @@ let PoiArea = {
             ...shared, ...{
                 initialize(location) {
                     this.location = location;
+                    this.unsavedChanges = false;
 
                     L.Polygon.prototype.initialize.call(this, this.location.coordinates || [], location.poi);
 

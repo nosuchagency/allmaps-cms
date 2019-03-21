@@ -16,6 +16,7 @@
                 </span>
             </div>
             <div class="location-actions">
+                <span v-if="currentLocation.getUnsavedChanges()">Unsaved Changes</span>
                 <el-button size="mini"
                            type="text"
                            class="btn-cancel"
@@ -29,12 +30,6 @@
                     Confirm
                 </el-button>
             </div>
-            <confirm-dialog title="Delete Location"
-                            :visible="confirmDeleteVisible"
-                            :message="$t('general.confirm')"
-                            @cancel="confirmDeleteVisible = false"
-                            @confirm="deleteLocation()">
-            </confirm-dialog>
         </template>
         <location-modal v-if="locationModalVisible"
                         :visible="locationModalVisible"
@@ -60,8 +55,7 @@
         },
         data() {
             return {
-                locationModalVisible: false,
-                confirmDeleteVisible: false
+                locationModalVisible: false
             }
         },
         computed: {
@@ -82,10 +76,6 @@
             },
             cancelLocation() {
                 Hub.$emit('location:cancel');
-            },
-            deleteLocation() {
-                Hub.$emit('location:remove');
-                this.confirmDeleteVisible = false
             },
             openLocationModal() {
                 this.locationModalVisible = true;
@@ -133,11 +123,6 @@
         font-size: 13px;
         font-weight: bold;
         text-transform: capitalize;
-    }
-
-    .location-delete {
-        cursor: pointer;
-        color: #fff;
     }
 
     .location-details {
