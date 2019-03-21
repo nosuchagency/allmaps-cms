@@ -225,6 +225,14 @@ export default {
             "profile": "Profile",
             "log_out": "Log out"
         },
+        "structures": {
+            "singular": "Structure",
+            "plural": "Structures",
+            "attributes": {
+                "id": "ID",
+                "name": "Name"
+            }
+        },
         "containers": {
             "singular": "Container",
             "plural": "Containers",

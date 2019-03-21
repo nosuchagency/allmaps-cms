@@ -47,7 +47,9 @@
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
             <div v-else>
-                <structure-toolbar :current-structure="currentStructure"></structure-toolbar>
+                <structure-toolbar :current-structure="currentStructure"
+                                   :url="getFloorUrl()">
+                </structure-toolbar>
                 <floor-map :url="getFloorUrl()"
                            :lat="item.place.lat"
                            :lng="item.place.lng"
