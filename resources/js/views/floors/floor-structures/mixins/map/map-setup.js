@@ -29,11 +29,16 @@ let mapSetup = {
 
             L.easyButton('fa-compress-arrows-alt', (btn, map) => {
                 map.flyTo(new L.LatLng(this.lat, this.lng), 19)
-            }, 'Reposition Map').addTo(this.map);
+            }, 'Reposition Map', {
+                position: 'bottomleft'
+            }).addTo(this.map);
 
             this.map.addEventListener('mouseout', this.mapMouseOutEventHandler);
             this.map.addEventListener('mousemove', this.mapMouseMoveEventHandler);
-            L.control.scale().addTo(this.map);
+
+            L.control.scale({
+                position: 'bottomright'
+            }).addTo(this.map);
         },
         mapClickHandler(e) {
             if (this.currentStructure) {

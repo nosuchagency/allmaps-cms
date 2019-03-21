@@ -29,9 +29,12 @@ let mapSetup = {
 
             L.easyButton('fa-compress-arrows-alt', (btn, map) => {
                 map.flyTo(new L.LatLng(this.lat, this.lng), 19)
-            }, 'Reposition Map').addTo(this.map);
+            }, 'Reposition Map', {
+                position: 'bottomleft'
+            }).addTo(this.map);
 
             L.easyButton({
+                position: 'bottomleft',
                 states: [{
                     stateName: 'structures-hidden',
                     icon: 'fa-image',
