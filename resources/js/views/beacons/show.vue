@@ -222,6 +222,21 @@
             closeContainerModal() {
                 this.containerModalVisible = false;
             },
+            addContainer(container) {
+                this.item.containers.push(container);
+                this.closeContainerModal();
+            },
+            updateContainer(container) {
+                let index = this.item.containers.findIndex(({id}) => id === container.id);
+                this.item.containers.splice(index, 1, container);
+                this.closeContainerModal();
+            },
+            removeContainer(container) {
+                let index = this.item.containers.findIndex(({id}) => id === container.id);
+                this.item.containers.splice(index, 1);
+
+                this.closeContainerModal();
+            },
             openRuleModal(container, item = null) {
                 this.selectedContainer = container;
                 this.selectedRule = item;
@@ -229,20 +244,6 @@
             },
             closeRuleModal() {
                 this.ruleModalVisible = false;
-            },
-            addContainer(container) {
-                this.item.containers.push(container);
-                this.closeContainerModal();
-            },
-            updateContainer(data) {
-                let index = _.findIndex(this.item.containers, {id: data.id});
-                this.item.containers.splice(index, 1, data.container);
-                this.closeContainerModal();
-            },
-            removeContainer(container) {
-                let index = _.findIndex(this.item.containers, {id: container.id});
-                this.item.containers.splice(index, 1);
-                this.closeContainerModal();
             },
             addRule(data) {
                 let container = _.find(this.item.containers, {id: data.containerId});

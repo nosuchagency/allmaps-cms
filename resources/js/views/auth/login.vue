@@ -7,23 +7,24 @@
                 </div>
                 <el-form :model="form"
                          autoComplete="on"
-                         label-position="left">
-                    <el-form-item :class="{'is-error' : has('email')}">
-                <span class="svg-container">
-                    <i class="fa fa-user"></i>
-                </span>
+                         label-position="left"
+                         @keydown.native="form.errors.clear($event.target.name)">
+                    <el-form-item :class="{'is-error' : form.errors.has('email')}">
+                        <span class="svg-container">
+                            <i class="fa fa-user"></i>
+                        </span>
                         <el-input v-model="form.email"
                                   name="email"
                                   type="text"
                                   autoComplete="on"
                                   placeholder="email">
                         </el-input>
-                        <div class="el-form-item__error" v-if="has('email')">
-                            {{get('email')}}
+                        <div class="el-form-item__error" v-if="form.errors.has('email')">
+                            {{form.errors.get('email')}}
                         </div>
                     </el-form-item>
                     <el-form-item class="last-field"
-                                  :class="{'is-error' : has('password')}">
+                                  :class="{'is-error' : form.errors.has('password')}">
                         <span class="svg-container">
                             <i class="fa fa-lock"></i>
                         </span>
@@ -34,8 +35,8 @@
                                   autoComplete="on"
                                   placeholder="password">
                         </el-input>
-                        <div class="el-form-item__error" v-if="has('password')">
-                            {{get('password')}}
+                        <div class="el-form-item__error" v-if="form.errors.has('password')">
+                            {{form.errors.get('password')}}
                         </div>
                     </el-form-item>
                     <div class="link-container">
@@ -54,24 +55,23 @@
 </template>
 
 <script>
-    import form from '../../mixins/form';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form],
         data() {
             return {
                 busy: false,
                 validEmail: null,
                 error: false,
-                form: {
+                form: new Form({
                     email: '',
                     password: ''
-                }
+                })
             };
         },
         methods: {
             login() {
-                this.startProcessing();
+                this.busy = true;
 
                 this.error = null;
 
@@ -82,7 +82,7 @@
                     fetchUser: true,
                     error: (error) => {
                         this.error = error.response.data;
-                        this.finishProcessing();
+                        this.busy = false;
                     }
                 });
             }

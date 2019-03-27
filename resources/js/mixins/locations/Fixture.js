@@ -1,4 +1,3 @@
-import axios from 'axios';
 import shared from './Shared';
 
 let Fixture = {
@@ -9,6 +8,7 @@ let Fixture = {
             ...shared, ...{
                 initialize(location) {
                     this.location = location;
+                    this.unsavedChanges = false;
 
                     let coordinates, topLeft, topRight, bottomLeft;
 
@@ -62,50 +62,33 @@ let Fixture = {
                 rotateEnd(e) {
                     let {topLeft, topRight, bottomLeft} = this.extractDimensions(e.target.getLatLngs());
                     this.overlay.reposition(topLeft, topRight, bottomLeft);
+                    this.unsavedChanges = true;
                 },
                 dragEnd(e) {
                     let {topLeft, topRight, bottomLeft} = this.extractDimensions(e.target.getLatLngs());
                     this.overlay.addTo(self.locationImageOverlayLayer);
                     this.overlay.reposition(topLeft, topRight, bottomLeft);
+                    this.unsavedChanges = true;
                 },
                 componentClicked(e) {
-                    if (!self.currentStructure) {
+                    if (!self.currentLocation || !self.currentLocation.hasUnsavedChanges()) {
+
+                        if (self.currentLocation) {
+                            self.cancelLocation();
+                        }
+
                         L.DomEvent.stopPropagation(e);
                         self.startEditing(e.target);
                     }
                 },
-                click(latlng) {
-                    console.log('Nothing to do at the moment! Everything is handled by the leaflet transform plug-in!', latlng);
-                },
-                async save() {
-                    try {
-                        let coordinates = this.getCoordinates();
-                        const {data: location} = await axios.put(self.url + '/locations/' + this.location.id, {coordinates});
-                        this.location = location;
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                async remove() {
+                remove() {
                     this.overlay.removeFrom(self.locationImageOverlayLayer);
-
-                    try {
-                        await axios.delete(self.url + '/locations/' + this.location.id);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                undo() {
-                    console.log('Undoing', 'fixture');
                 },
                 cancel() {
                     this.overlay.removeFrom(self.locationImageOverlayLayer);
                 },
                 getCoordinates() {
                     return this.getLatLngs();
-                },
-                getDestination() {
-                    return null;
                 },
                 transformHandler(e) {
                     this.setLatLngs(e.target.getLatLngs());
@@ -148,8 +131,6 @@ let Fixture = {
 
                     return latLngC.distanceTo(latLngX);
                 },
-                addMarkers() {
-                },
                 getWidth() {
                     return this.location.fixture.width;
                 },
@@ -158,9 +139,6 @@ let Fixture = {
                 },
                 getImage() {
                     return this.location.fixture.image;
-                },
-                isArea() {
-                    return false;
                 }
             }
         });

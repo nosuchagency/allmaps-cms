@@ -4,16 +4,17 @@
                    :before-close="closeModal">
             <el-form :model="form"
                      status-icon
-                     label-width="120px">
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Beacon" name="beacon">
                         <br>
                         <el-form-item :label="$t('beacons.attributes.name')"
-                                      :class="{'is-error' : has('name')}">
+                                      :class="{'is-error' : form.errors.has('name')}">
                             <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('beacons.attributes.description')"
-                                      :class="{'is-error' : has('description')}">
+                                      :class="{'is-error' : form.errors.has('description')}">
                             <el-input v-model="form.description"
                                       type="textarea"
                                       :rows="3">
@@ -25,7 +26,7 @@
                         <el-row :gutter="25">
                             <el-col :span="24">
                                 <el-form-item :label="$t('beacons.attributes.proximity_uuid')"
-                                              :class="{'is-error' : has('proximity_uuid')}">
+                                              :class="{'is-error' :form.errors.has('proximity_uuid')}">
                                     <el-input v-model="form.proximity_uuid"></el-input>
                                 </el-form-item>
                             </el-col>
@@ -33,13 +34,13 @@
                         <el-row :gutter="25">
                             <el-col :span="12">
                                 <el-form-item :label="$t('beacons.attributes.major')"
-                                              :class="{'is-error' : has('major')}">
+                                              :class="{'is-error' : form.errors.has('major')}">
                                     <el-input v-model="form.major"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('beacons.attributes.minor')"
-                                              :class="{'is-error' : has('minor')}">
+                                              :class="{'is-error' : form.errors.has('minor')}">
                                     <el-input v-model="form.minor"></el-input>
                                 </el-form-item>
                             </el-col>
@@ -50,13 +51,13 @@
                         <el-row>
                             <el-col :span="12">
                                 <el-form-item :label="$t('beacons.attributes.eddystone_uid')"
-                                              :class="{'is-error' : has('eddystone_uid')}">
+                                              :class="{'is-error' : form.errors.has('eddystone_uid')}">
                                     <el-input v-model="form.eddystone_uid"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('beacons.attributes.eddystone_url')"
-                                              :class="{'is-error' : has('eddystone_url')}">
+                                              :class="{'is-error' : form.errors.has('eddystone_url')}">
                                     <el-input v-model="form.eddystone_url"></el-input>
                                 </el-form-item>
                             </el-col>
@@ -64,13 +65,13 @@
                         <el-row>
                             <el-col :span="12">
                                 <el-form-item :label="$t('beacons.attributes.eddystone_tlm')"
-                                              :class="{'is-error' : has('eddystone_tlm')}">
+                                              :class="{'is-error' : form.errors.has('eddystone_tlm')}">
                                     <el-input v-model="form.eddystone_tlm"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('beacons.attributes.eddystone_eid')"
-                                              :class="{'is-error' : has('eddystone_eid')}">
+                                              :class="{'is-error' : form.errors.has('eddystone_eid')}">
                                     <el-input v-model="form.eddystone_eid"></el-input>
                                 </el-form-item>
                             </el-col>
@@ -79,7 +80,7 @@
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
                         <el-form-item :label="$t('beacons.attributes.category')"
-                                      :class="{'is-error' : has('category')}">
+                                      :class="{'is-error' : form.errors.has('category')}">
                             <fetch-items url="/categories">
                                 <el-select v-model="form.category"
                                            slot-scope="{items, loading}"
@@ -95,7 +96,7 @@
                             </fetch-items>
                         </el-form-item>
                         <el-form-item :label="$t('beacons.attributes.tags')"
-                                      :class="{'is-error' : has('tags')}">
+                                      :class="{'is-error' : form.errors.has('tags')}">
                             <fetch-items url="/tags">
                                 <el-select v-model="form.tags"
                                            slot-scope="{items, loading}"
@@ -118,7 +119,7 @@
                            type="text"
                            size="small"
                            class="btn-remove"
-                           @click="removeItem">
+                           @click="remove">
                     Delete
                 </el-button>
                 <el-button type="text"
@@ -129,8 +130,7 @@
                 </el-button>
                 <el-button type="success"
                            size="small"
-                           @click="item ? updateItem() : createItem()"
-                           :loading="creating || updating || deleting">
+                           @click="item ? update() : create()">
                     Confirm
                 </el-button>
             </span>
@@ -139,11 +139,9 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
-    import resource from 'js/mixins/resource';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form, resource],
         props: {
             visible: Boolean,
             item: Object
@@ -152,7 +150,8 @@
             return {
                 currentTab: 'beacon',
                 resource: 'beacons',
-                form: {
+
+                form: new Form({
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     proximity_uuid: this.item ? this.item.proximity_uuid : '',
@@ -164,44 +163,24 @@
                     eddystone_eid: this.item ? this.item.eddystone_eid : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
-                }
+                })
             }
         },
         methods: {
-            async createItem() {
-                try {
-                    this.forget();
-                    const item = await this.create();
-                    this.$emit('upsert-modal:add', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            create() {
+                this.form.post(`/${this.resource}`)
+                    .then(response => this.$emit('upsert-modal:add', response))
+                    .catch(error => console.log(error));
             },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const item = await this.update();
-                    this.$emit('upsert-modal:update', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            update() {
+                this.form.put(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:update', response))
+                    .catch(error => console.log(error));
             },
-            async removeItem() {
-                try {
-                    this.forget();
-                    const item = await this.remove();
-                    this.$emit('upsert-modal:remove', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
-            },
-            fetch() {
+            remove() {
+                this.form.delete(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('upsert-modal:close');

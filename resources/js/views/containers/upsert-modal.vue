@@ -4,16 +4,17 @@
                    :before-close="closeModal">
             <el-form :model="form"
                      status-icon
-                     label-width="120px">
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Container" name="container">
                         <br>
                         <el-form-item :label="$t('containers.attributes.name')"
-                                      :class="{'is-error' : has('name')}">
+                                      :class="{'is-error' : form.errors.has('name')}">
                             <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('containers.attributes.description')"
-                                      :class="{'is-error' : has('description')}">
+                                      :class="{'is-error' : form.errors.has('description')}">
                             <el-input v-model="form.description" type="textarea">
                             </el-input>
                         </el-form-item>
@@ -21,7 +22,7 @@
                     <el-tab-pane label="Folders" name="folders">
                         <br>
                         <el-form-item label="Enabled"
-                                      :class="{'is-error' : has('folders_enabled')}">
+                                      :class="{'is-error' : form.errors.has('folders_enabled')}">
                             <el-switch v-model="form.folders_enabled">
                             </el-switch>
                         </el-form-item>
@@ -32,7 +33,7 @@
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
                         <el-form-item :label="$t('containers.attributes.category')"
-                                      :class="{'is-error' : has('category')}">
+                                      :class="{'is-error' : form.errors.has('category')}">
                             <fetch-items url="/categories">
                                 <el-select v-model="form.category"
                                            slot-scope="{items, loading}"
@@ -48,7 +49,7 @@
                             </fetch-items>
                         </el-form-item>
                         <el-form-item :label="$t('containers.attributes.tags')"
-                                      :class="{'is-error' : has('tags')}">
+                                      :class="{'is-error' : form.errors.has('tags')}">
                             <fetch-items url="/tags">
                                 <el-select v-model="form.tags"
                                            slot-scope="{items, loading}"
@@ -71,7 +72,7 @@
                            type="text"
                            size="small"
                            class="btn-remove"
-                           @click="removeItem">
+                           @click="remove">
                     Delete
                 </el-button>
                 <el-button type="text"
@@ -82,8 +83,7 @@
                 </el-button>
                 <el-button type="success"
                            size="small"
-                           @click="item ? updateItem() : createItem()"
-                           :loading="creating || updating || deleting">
+                           @click="item ? update() : create()">
                     Confirm
                 </el-button>
             </span>
@@ -92,11 +92,9 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
-    import resource from 'js/mixins/resource';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form, resource],
         props: {
             visible: Boolean,
             item: Object
@@ -105,51 +103,31 @@
             return {
                 currentTab: 'container',
                 resource: 'containers',
-                form: {
+                form: new Form({
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     folders_enabled: this.item ? !!this.item.folders_enabled : false,
                     folder_name: this.item ? this.item.primary_folder.name : 'Auto generated folder',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
-                }
+                })
             }
         },
         methods: {
-            async createItem() {
-                try {
-                    this.forget();
-                    const item = await this.create();
-                    this.$emit('upsert-modal:add', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            create() {
+                this.form.post(`/${this.resource}`)
+                    .then(response => this.$emit('upsert-modal:add', response))
+                    .catch(error => console.log(error));
             },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const item = await this.update();
-                    this.$emit('upsert-modal:update', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            update() {
+                this.form.put(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:update', response))
+                    .catch(error => console.log(error));
             },
-            async removeItem() {
-                try {
-                    this.forget();
-                    const item = await this.remove();
-                    this.$emit('upsert-modal:remove', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
-            },
-            async fetch() {
+            remove() {
+                this.form.delete(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('upsert-modal:close');

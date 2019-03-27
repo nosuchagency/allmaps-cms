@@ -6,7 +6,7 @@
                     <div class="title-icon-wrapper">
                         <i class="fa fa-map-marked-alt title-icon"></i>
                         <template v-if="item">
-                            <router-link :to="'/places/' + item.place.id">
+                            <router-link :to="'/places/' + placeId">
                                 {{ item.place.name }}
                             </router-link>
                             <i class="fa fa-caret-right" style="margin: 0 10px;"></i>
@@ -20,12 +20,13 @@
                         <fetch-items url="/map-components">
                             <div class="map-components-container"
                                  slot-scope="{items, loading}">
-                                <map-component-select v-for="type in mapComponentTypes"
-                                                      :key="type"
-                                                      :type="type"
-                                                      :map-component-options="items.filter(item => item.type === type)"
-                                                      @map-component:select="createMapStructure">
-                                </map-component-select>
+                                <structure-select v-for="type in structureTypes"
+                                                  :key="type"
+                                                  :type="type"
+                                                  :floor-url="getFloorUrl()"
+                                                  :components="items.filter(item => item.type === type)"
+                                                  @structure:add="structureCreated">
+                                </structure-select>
                             </div>
                         </fetch-items>
                     </template>
@@ -38,11 +39,13 @@
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
             <div v-else>
-                <structure-toolbar :current-structure="currentStructure"
+                <structure-toolbar :structure="currentStructure"
+                                   @structure:saved="structureSaved"
+                                   @structure:cancelled="structureCancelled"
+                                   @structure:removed="structureRemoved"
                                    :url="getFloorUrl()">
                 </structure-toolbar>
-                <floor-map :url="getFloorUrl()"
-                           :lat="item.place.lat"
+                <floor-map :lat="item.place.lat"
                            :lng="item.place.lng"
                            :structures="item.structures"
                            :current-structure="currentStructure"
@@ -60,14 +63,14 @@
     import resource from 'js/mixins/resource';
     import floorMap from './floor-map.vue';
     import structureToolbar from './structure-toolbar';
-    import mapComponentSelect from './map-component-select';
+    import structureSelect from './structure-select';
 
     export default {
         mixins: [resource],
         components: {
             floorMap,
             structureToolbar,
-            mapComponentSelect
+            structureSelect
         },
         data() {
             return {
@@ -75,7 +78,7 @@
                 placeId: null,
                 buildingId: null,
                 floorId: null,
-                mapComponentTypes: [
+                structureTypes: [
                     'plan',
                     'wall',
                     'room',
@@ -100,18 +103,17 @@
                     this.$nextTick(() => callback(structure))
                 }
             },
-            async createMapStructure(mapComponent) {
-                if (this.currentStructure) {
-                    Hub.$emit('structure:cancel');
-                }
-
-                try {
-                    let url = this.getFloorUrl() + '/structures';
-                    const {data: structure} = await this.$axios.post(url, {map_component_id: mapComponent.id});
-                    Hub.$emit('structure:add', structure);
-                } catch (error) {
-                    console.log(error);
-                }
+            structureCreated(structure) {
+                Hub.$emit('structure:created', structure);
+            },
+            structureSaved() {
+                Hub.$emit('structure:saved');
+            },
+            structureCancelled() {
+                Hub.$emit('structure:cancelled');
+            },
+            structureRemoved() {
+                Hub.$emit('structure:removed');
             },
             getFloorUrl() {
                 return '/places/' + this.placeId + '/buildings/' + this.buildingId + '/floors/' + this.floorId;

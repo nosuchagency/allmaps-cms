@@ -47,7 +47,7 @@
         data() {
             return {
                 popup: null,
-                popupText : '',
+                popupText: '',
 
                 ruler: null,
 
@@ -82,11 +82,16 @@
 
             this.structures.forEach((structure) => this.addStructure(structure, false));
 
-            Hub.$on('structure:add', (structure) => this.addStructure(structure, true));
-            Hub.$on('structure:undo', this.undoStructure);
-            Hub.$on('structure:remove', this.removeStructure);
-            Hub.$on('structure:cancel', this.cancelStructure);
-            Hub.$on('structure:save', this.saveStructure);
+            this.activateEventListeners();
+        },
+        methods: {
+            activateEventListeners() {
+                Hub.$on('structure:created', (structure) => this.addStructure(structure, true));
+                Hub.$on('structure:undo', this.undoStructure);
+                Hub.$on('structure:removed', this.removeStructure);
+                Hub.$on('structure:cancelled', this.cancelStructure);
+                Hub.$on('structure:saved', this.saveStructure);
+            }
         },
         computed: {
             cursor() {

@@ -14,6 +14,8 @@ Vue.use(elementUI, {locale});
 Vue.use(wysiwyg, {});
 Vue.use(PortalVue);
 
+require('./bootstrap');
+
 require('leaflet/dist/leaflet');
 require('leaflet-path-transform');
 require('leaflet.gridlayer.googlemutant');

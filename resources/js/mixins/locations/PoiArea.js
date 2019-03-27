@@ -1,4 +1,3 @@
-import axios from 'axios';
 import shared from './Shared';
 
 let PoiArea = {
@@ -9,20 +8,23 @@ let PoiArea = {
             ...shared, ...{
                 initialize(location) {
                     this.location = location;
+                    this.unsavedChanges = false;
 
                     L.Polygon.prototype.initialize.call(this, this.location.coordinates || [], location.poi);
 
                     this.activateEventListeners();
+                    console.log('Unsaved changes', this.hasUnsavedChanges());
                 },
                 activateEventListeners() {
                     this.on('click', this.componentClicked);
                 },
-                startEditing() {
-                },
-                stopEditing() {
-                },
                 componentClicked(e) {
-                    if (!self.currentLocation) {
+                    if (!self.currentLocation || !self.currentLocation.hasUnsavedChanges()) {
+
+                        if (self.currentLocation) {
+                            self.cancelLocation();
+                        }
+
                         L.DomEvent.stopPropagation(e);
                         self.startEditing(e.target);
                     }
@@ -30,28 +32,9 @@ let PoiArea = {
                 click(latlng) {
                     self.addMarker(latlng);
                     this.addLatLng(latlng);
-                },
-                async save() {
-                    try {
-                        let coordinates = this.getCoordinates();
-                        const {data: location} = await axios.put(self.url + '/locations/' + this.location.id, {coordinates});
-                        this.location = location;
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                async remove() {
-                    try {
-                        await axios.delete(self.url + '/locations/' + this.location.id);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                undo() {
-                    console.log('Undoing', 'poi area');
-                },
-                cancel() {
-                    console.log('Cancelling', 'poi area');
+                    this.unsavedChanges = true;
+
+                    console.log('Unsaved changes', this.hasUnsavedChanges());
                 },
                 getCoordinates() {
                     return this.getLatLngs();

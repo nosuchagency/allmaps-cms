@@ -1,4 +1,3 @@
-import axios from 'axios';
 import shared from './Shared';
 
 let Image = {
@@ -73,38 +72,14 @@ let Image = {
                         self.startEditing(e.target);
                     }
                 },
-                click(latlng) {
-                    console.log('Nothing to do at the moment! Everything is handled by the leaflet transform plug-in!', latlng);
-                },
-                async save() {
-                    try {
-                        let coordinates = this.getCoordinates();
-                        const {data: structure} = await axios.put(self.url + '/structures/' + this.structure.id, {coordinates});
-                        this.structure = structure;
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                async remove() {
+                remove() {
                     this.overlay.removeFrom(self.imageOverlayLayer);
-
-                    try {
-                        await axios.delete(self.url + '/structures/' + this.structure.id);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                undo() {
-                    console.log('Undoing', 'image');
                 },
                 cancel() {
                     this.overlay.removeFrom(self.imageOverlayLayer);
                 },
                 getCoordinates() {
                     return this.getLatLngs();
-                },
-                getDestination() {
-                    return null;
                 },
                 transformHandler(e) {
                     this.setLatLngs(e.target.getLatLngs());
@@ -146,8 +121,6 @@ let Image = {
                     let latLngY = self.map.containerPointToLatLng(pointY);
 
                     return latLngC.distanceTo(latLngX);
-                },
-                addMarkers() {
                 }
             }
         });

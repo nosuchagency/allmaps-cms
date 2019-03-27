@@ -5,23 +5,33 @@
                    width="60%">
             <el-form :model="form"
                      status-icon
-                     label-width="120px">
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Structure" name="structure">
                         <br>
                         <el-form-item :label="$t('structures.attributes.name')"
-                                      :class="{'is-error' : has('name')}">
+                                      :class="{'is-error' : form.errors.has('name')}">
                             <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                     </el-tab-pane>
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                <el-button type="text"
+
+                <el-button v-if="!confirmDelete"
+                           type="text"
                            size="small"
                            class="btn-remove"
-                           @click="removeItem">
+                           @click="confirmDelete = true">
                     Delete
+                </el-button>
+                <el-button v-else
+                           type="text"
+                           size="small"
+                           class="btn-remove"
+                           @click="remove">
+                    Are you sure?
                 </el-button>
                 <el-button type="text"
                            size="small"
@@ -31,8 +41,7 @@
                 </el-button>
                 <el-button type="success"
                            size="small"
-                           :loading="busy"
-                           @click="updateItem">
+                           @click="update">
                     Confirm
                 </el-button>
             </span>
@@ -41,10 +50,9 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
+    import Form from '../../../utils/Form';
 
     export default {
-        mixins: [form],
         props: {
             visible: Boolean,
             structure: Object,
@@ -53,35 +61,25 @@
         data() {
             return {
                 currentTab: 'structure',
-                form: {
+                confirmDelete: false,
+                form: new Form({
                     name: this.structure.name,
-                }
+                })
             }
         },
         methods: {
-            async updateItem() {
-                this.startProcessing();
-
-                try {
-                    const {data: structure} = await this.$axios.put(this.url + '/structures/' + this.structure.id, this.form);
-                    this.$emit('structure-modal:update', structure);
-                    this.closeModal();
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                } finally {
-                    this.finishProcessing();
-                }
+            update() {
+                this.form.put(this.url + '/structures/' + this.structure.id)
+                    .then(response => {
+                        this.$emit('structure-modal:update', response);
+                        this.closeModal();
+                    })
+                    .catch(error => console.log(error));
             },
-            async removeItem() {
-                try {
-
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            remove() {
+                this.form.delete(this.url + '/structures/' + this.structure.id)
+                    .then(response => this.$emit('structure-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('structure-modal:close');

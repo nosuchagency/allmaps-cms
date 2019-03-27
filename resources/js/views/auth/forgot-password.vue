@@ -8,9 +8,10 @@
                 <el-form :model="form"
                          autoComplete="on"
                          label-position="left"
-                         @submit.native.prevent>
+                         @submit.native.prevent
+                         @keydown.native="form.errors.clear($event.target.name)">
                     <el-form-item class="last-field"
-                                  :class="{'is-error' : has('email')}">
+                                  :class="{'is-error' : form.errors.has('email')}">
                         <span class="svg-container">
                             <i class="fa fa-user"></i>
                         </span>
@@ -21,7 +22,7 @@
                                   autoComplete="on"
                                   placeholder="email">
                         </el-input>
-                        <div class="el-form-item__error" v-if="has('email')">
+                        <div class="el-form-item__error" v-if="form.errors.has('email')">
                             {{get('email')}}
                         </div>
                     </el-form-item>
@@ -44,35 +45,30 @@
 </template>
 
 <script>
-    import form from '../../mixins/form';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form],
         data() {
             return {
-                form: {
+                busy: false,
+                form: new Form({
                     email: ''
-                },
+                }),
                 result: null
             }
         },
         methods: {
-            async submit() {
-                this.startProcessing();
-                try {
-                    const response = await this.$axios.post('/password/email', this.form);
-                    this.result = response.data;
-                    this.form.email = '';
-                } catch (error) {
-                    this.result = error.response.data;
+            submit() {
+                this.busy = true;
 
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                } finally {
-                    this.finishProcessing();
-                }
-            },
+                this.form.post('/password/email')
+                    .then(response => {
+                        this.result = response.data;
+                        this.form.email = '';
+                        this.busy = false;
+                    })
+                    .catch(error => this.busy = false);
+            }
         }
     }
 </script>

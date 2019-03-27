@@ -1,4 +1,3 @@
-import axios from 'axios';
 import shared from './Shared';
 
 let Rectangle = {
@@ -48,37 +47,8 @@ let Rectangle = {
                         self.startEditing(e.target);
                     }
                 },
-                click(latlng) {
-                    console.log('Nothing to do at the moment! Everything is handled by the leaflet transform plug-in!', latlng);
-                },
-                async save() {
-                    try {
-                        let coordinates = this.getCoordinates();
-                        let url = self.url + '/structures/' + this.structure.id;
-                        const {data: structure} = await axios.put(url, {coordinates});
-                        this.structure = structure;
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                async remove() {
-                    try {
-                        await axios.delete(self.url + '/structures/' + this.structure.id);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                undo() {
-                    console.log('Undoing', 'rectangle');
-                },
-                cancel() {
-                    console.log('Cancelling', 'rectangle');
-                },
                 getCoordinates() {
                     return this.getLatLngs();
-                },
-                getDestination() {
-                    return null;
                 },
                 transformHandler(e) {
                     this.setLatLngs(e.target.getLatLngs());
@@ -101,9 +71,6 @@ let Rectangle = {
                         self.map.containerPointToLatLng(southWest),
                         self.map.containerPointToLatLng(northWest)
                     ];
-                },
-                addMarkers() {
-
                 }
             }
         });

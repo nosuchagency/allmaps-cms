@@ -1,7 +1,7 @@
 <template>
     <div class="structure-toolbar"
-         :class="{'is-active' : !!currentStructure}">
-        <template v-if="currentStructure">
+         :class="{'is-active' : !!structure}">
+        <template v-if="structure">
             <div class="structure-details">
                 <el-button size="mini"
                            type="primary"
@@ -9,15 +9,15 @@
                     Edit
                 </el-button>
                 <span class="structure-name">
-                    {{currentStructure.getName()}}
+                    {{structure.getName()}}
                 </span>
                 <span class="structure-color">
                     <i class="fa fa-square"
-                       :style="{color : currentStructure.getColor(), opacity : currentStructure.getOpacity()}">
+                       :style="{color : structure.getColor(), opacity : structure.getOpacity()}">
                     </i>
                 </span>
                 <span class="structure-shape">
-                    {{currentStructure.getShape()}}
+                    {{structure.getShape()}}
                 </span>
             </div>
             <div class="structure-actions">
@@ -30,23 +30,24 @@
                 <el-button size="mini"
                            type="success"
                            @click="saveStructure()"
-                           :disabled="!saveable">
+                           :disabled="!saveable"
+                           :loading="saving">
                     Confirm
                 </el-button>
             </div>
         </template>
         <structure-modal v-if="structureModalVisible"
                          :visible="structureModalVisible"
-                         :structure="currentStructure.structure"
+                         :structure="structure.structure"
                          :url="url"
                          @structure-modal:close="closeStructureModal"
-                         @structure-modal:update="updateStructure">
+                         @structure-modal:update="updateStructure"
+                         @structure-modal:remove="removeStructure">
         </structure-modal>
     </div>
 </template>
 
 <script>
-    import Hub from '../../../events/hub';
     import structureModal from './structure-modal';
 
     export default {
@@ -54,36 +55,56 @@
             structureModal
         },
         props: {
-            currentStructure: Object,
+            structure: Object,
             url: String
         },
         data() {
             return {
-                structureModalVisible: false
+                structureModalVisible: false,
+                saving: false
             }
         },
         computed: {
             saveable() {
-                if (['image', 'rectangle', 'circle'].includes(this.currentStructure.getShape())) {
+                if (['image', 'rectangle', 'circle'].includes(this.structure.getShape())) {
                     return true;
                 }
 
-                if (this.currentStructure.getShape() === 'polygon') {
-                    return this.currentStructure.getCoordinates()[0].length >= 2;
+                if (this.structure.getShape() === 'polygon') {
+                    return this.structure.getCoordinates()[0].length >= 2;
                 }
 
-                return this.currentStructure.getCoordinates().length >= 2;
+                return this.structure.getCoordinates().length >= 2;
             }
         },
         methods: {
             updateStructure(structure) {
-                this.currentStructure.structure = structure;
+                this.structure.structure = structure;
+                this.$emit('structure:saved')
             },
-            saveStructure() {
-                Hub.$emit('structure:save');
+            async saveStructure() {
+                this.saving = true;
+
+                try {
+                    let coordinates = this.structure.getCoordinates();
+                    let markers = this.structure.getMarkers();
+                    const {data} = await this.$axios.put(this.url + '/structures/' + this.structure.getId(), {
+                        coordinates,
+                        markers
+                    });
+                    this.updateStructure(data);
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    this.saving = false;
+                }
             },
             cancelStructure() {
-                Hub.$emit('structure:cancel');
+                this.$emit('structure:cancelled');
+            },
+            removeStructure() {
+                this.closeStructureModal();
+                this.$emit('structure:removed')
             },
             openStructureModal() {
                 this.structureModalVisible = true;

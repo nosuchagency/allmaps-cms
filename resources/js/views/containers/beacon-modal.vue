@@ -2,7 +2,9 @@
     <portal to="modals">
         <el-dialog :visible="visible"
                    :before-close="closeModal">
-            <el-form>
+            <el-form :model="form"
+                     status-icon
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Beacon" name="beacon">
                         <br>
@@ -31,7 +33,7 @@
                             type="text"
                             size="small"
                             class="btn-remove"
-                            @click="removeItem">
+                            @click="remove">
                     Remove
                 </el-button>
                 <el-button type="text"
@@ -42,7 +44,7 @@
                 </el-button>
                 <el-button type="success"
                            size="small"
-                           @click="item ? updateItem() : createItem()">
+                           @click="item ? update() : create()">
                     Confirm
                 </el-button>
             </span>
@@ -51,10 +53,9 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form],
         props: {
             visible: Boolean,
             item: Object,
@@ -63,98 +64,27 @@
         },
         data() {
             return {
-                form: {
+                form: new Form({
                     beacon: this.item
-                },
-                currentTab: 'beacon',
-                creating: false,
-                updating: false,
-                deleting: false
+                }),
+                currentTab: 'beacon'
             }
         },
         methods: {
-            async createItem() {
-                try {
-                    this.forget();
-                    const beacon = await this.create();
-                    this.$emit('beacon-modal:add', beacon)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const beacon = await this.update();
-                    this.$emit('beacon-modal:update', {id: this.item.id, beacon})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async removeItem() {
-                try {
-                    await this.remove();
-                    this.$emit('beacon-modal:remove', this.item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
             create() {
-                return new Promise(async (resolve, reject) => {
-                    this.creating = true;
-
-                    try {
-                        const response = await this.$axios.post(this.getCreateUrl(), this.form);
-                        resolve(response.data);
-                    } catch (error) {
-                        reject(error);
-                    } finally {
-                        this.creating = false;
-                    }
-                });
+                this.form.post(`/containers/${this.containerId}/beacons/${this.form.beacon.id}`)
+                    .then(response => this.$emit('beacon-modal:add', response))
+                    .catch(error => console.log(error));
             },
             update() {
-                return new Promise(async (resolve, reject) => {
-                    this.updating = true;
-
-                    try {
-                        const response = await this.$axios.put(this.getUpdateUrl(), this.form);
-                        resolve(response.data);
-                    } catch (error) {
-                        reject(error);
-                    } finally {
-                        this.updating = false;
-                    }
-                });
+                this.form.put(`/containers/${this.containerId}/beacons/${this.item.id}`)
+                    .then(response => this.$emit('beacon-modal:update', response))
+                    .catch(error => console.log(error));
             },
             remove() {
-                return new Promise(async (resolve, reject) => {
-                    this.deleting = true;
-
-                    try {
-                        await this.$axios.delete(this.getRemoveUrl());
-                        resolve(true);
-                    } catch (error) {
-                        reject(error);
-                    } finally {
-                        this.deleting = false;
-                    }
-                });
-            },
-            getCreateUrl() {
-                return '/containers/' + this.containerId + '/beacons/' + this.form.beacon.id;
-            },
-            getUpdateUrl() {
-                return '/containers/' + this.containerId + '/beacons/' + this.item.id;
-            },
-            getRemoveUrl() {
-                return '/containers/' + this.containerId + '/beacons/' + this.item.id;
+                this.form.delete(`/containers/${this.containerId}/beacons/${this.item.id}`)
+                    .then(response => this.$emit('beacon-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('beacon-modal:close');

@@ -246,13 +246,13 @@
                 this.item.beacons.push(beacon);
                 this.closeBeaconModal();
             },
-            updateBeacon(data) {
-                let index = _.findIndex(this.item.beacons, {id: data.id});
-                this.item.beacons.splice(index, 1, data.beacon);
+            updateBeacon(beacon) {
+                let index = this.item.beacons.findIndex(({id}) => id === beacon.id);
+                this.item.beacons.splice(index, 1, beacon);
                 this.closeBeaconModal();
             },
             removeBeacon(beacon) {
-                let index = _.findIndex(this.item.beacons, {id: beacon.id});
+                let index = this.item.beacons.findIndex(({id}) => id === beacon.id);
                 this.item.beacons.splice(index, 1);
                 this.closeBeaconModal();
             },

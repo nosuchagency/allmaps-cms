@@ -1,7 +1,7 @@
 <template>
     <div class="location-toolbar"
-         :class="{'is-active' : !!currentLocation}">
-        <template v-if="currentLocation">
+         :class="{'is-active' : !!location}">
+        <template v-if="location">
             <div class="location-details">
                 <el-button size="mini"
                            type="primary"
@@ -9,11 +9,14 @@
                     Edit
                 </el-button>
                 <span class="location-name">
-                    {{currentLocation.getName()}}
+                    {{location.getName()}}
                 </span>
                 <span class="location-type">
-                    {{currentLocation.getType()}}
+                    {{location.getType()}}
                 </span>
+            </div>
+            <div class="location-state">
+                {{location.hasUnsavedChanges() ? 'Unsaved changes' : ''}}
             </div>
             <div class="location-actions">
                 <el-button size="mini"
@@ -25,23 +28,24 @@
                 <el-button size="mini"
                            type="success"
                            @click="saveLocation()"
-                           :disabled="!saveable">
+                           :disabled="!saveable"
+                           :loading="saving">
                     Confirm
                 </el-button>
             </div>
         </template>
         <location-modal v-if="locationModalVisible"
                         :visible="locationModalVisible"
-                        :location="currentLocation.location"
+                        :location="location.location"
                         :url="url"
                         @location-modal:close="closeLocationModal"
-                        @location-modal:update="updateLocation">
+                        @location-modal:update="updateLocation"
+                        @location-modal:remove="removeLocation">
         </location-modal>
     </div>
 </template>
 
 <script>
-    import Hub from '../../../events/hub';
     import locationModal from './location-modal';
 
     export default {
@@ -49,32 +53,48 @@
             locationModal
         },
         props: {
-            currentLocation: Object,
+            location: Object,
             url: String
         },
         data() {
             return {
-                locationModalVisible: false
+                locationModalVisible: false,
+                saving: false
             }
         },
         computed: {
             saveable() {
-                if (!this.currentLocation.isArea()) {
+                if (!this.location.isArea()) {
                     return true;
                 }
 
-                return this.currentLocation.getCoordinates()[0].length >= 2;
+                return this.location.getCoordinates()[0].length >= 2;
             }
         },
         methods: {
-            updateLocation(location) {
-                this.currentLocation.location = location;
+            async saveLocation() {
+                this.saving = true;
+
+                try {
+                    let coordinates = this.location.getCoordinates();
+                    const {data} = await this.$axios.put(this.url + '/locations/' + this.location.getId(), {coordinates});
+                    this.updateLocation(data);
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    this.saving = false;
+                }
             },
-            saveLocation() {
-                Hub.$emit('location:save');
+            updateLocation(location) {
+                this.location.location = location;
+                this.$emit('location:saved')
             },
             cancelLocation() {
-                Hub.$emit('location:cancel');
+                this.$emit('location:cancelled');
+            },
+            removeLocation() {
+                this.closeLocationModal();
+                this.$emit('location:removed')
             },
             openLocationModal() {
                 this.locationModalVisible = true;
@@ -98,6 +118,7 @@
         z-index: 801;
         display: flex;
         align-items: center;
+        justify-content: space-between;
 
         &.is-active {
             height: 56px;
@@ -106,7 +127,6 @@
     }
 
     .location-actions {
-        margin-left: auto;
         margin-right: 25px;
         display: flex;
         align-items: center;

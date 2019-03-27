@@ -6,7 +6,7 @@
                     <div class="title-icon-wrapper">
                         <i class="fa fa-map-marked-alt title-icon"></i>
                         <template v-if="item">
-                            <router-link :to="'/places/' + item.place.id">
+                            <router-link :to="'/places/' + placeId">
                                 {{ item.place.name }}
                             </router-link>
                             <i class="fa fa-caret-right" style="margin: 0 10px;"></i>
@@ -16,20 +16,14 @@
                     </div>
                 </template>
                 <template slot="right">
-                    <poi-select :url="getFloorUrl()"
-                                @poi:add="addLocation">
-                    </poi-select>
-                    <poi-select :url="getFloorUrl()"
-                                @poi:add="addLocation"
-                                type="area"
-                                label="POI Area">
-                    </poi-select>
-                    <fixture-select :url="getFloorUrl()"
-                                    @fixture:add="addLocation">
-                    </fixture-select>
-                    <beacon-select :url="getFloorUrl()"
-                                   @beacon:add="addLocation">
-                    </beacon-select>
+                    <template v-for="location in locationVariants">
+                        <location-select :title="location.title"
+                                         :url="location.url"
+                                         :identifier="location.identifier"
+                                         :floor-url="getFloorUrl()"
+                                         @location:add="locationCreated">
+                        </location-select>
+                    </template>
                 </template>
             </toolbar>
         </template>
@@ -39,11 +33,13 @@
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
             <div v-else>
-                <location-toolbar :current-location="currentLocation"
+                <location-toolbar :location="currentLocation"
+                                  @location:saved="locationSaved"
+                                  @location:cancelled="locationCancelled"
+                                  @location:removed="locationRemoved"
                                   :url="getFloorUrl()">
                 </location-toolbar>
-                <floor-map :url="getFloorUrl()"
-                           :lat="item.place.lat"
+                <floor-map :lat="item.place.lat"
                            :lng="item.place.lng"
                            :current-location="currentLocation"
                            :current-location-copy="currentLocationCopy"
@@ -62,17 +58,13 @@
     import locationToolbar from './location-toolbar';
     import Hub from '../../../events/hub';
     import resource from 'js/mixins/resource';
-    import poiSelect from './poi-select';
-    import fixtureSelect from './fixture-select';
-    import beaconSelect from './beacon-select';
+    import locationSelect from './location-select';
 
     export default {
         mixins: [resource],
         components: {
             floorMap,
-            poiSelect,
-            fixtureSelect,
-            beaconSelect,
+            locationSelect,
             locationToolbar
         },
         data() {
@@ -82,7 +74,13 @@
                 buildingId: null,
                 floorId: null,
                 currentLocation: null,
-                currentLocationCopy: null
+                currentLocationCopy: null,
+                locationVariants: [
+                    {title: 'Beacon', url: '/beacons', identifier: 'beacon_id'},
+                    {title: 'Poi Point', url: '/pois', identifier: 'poi_id'},
+                    {title: 'Poi Area', url: '/pois', identifier: 'poi_id'},
+                    {title: 'Fixture', url: '/fixtures', identifier: 'fixture_id'},
+                ]
             }
         },
         methods: {
@@ -100,8 +98,17 @@
                     this.$nextTick(() => callback(location))
                 }
             },
-            addLocation(location) {
-                Hub.$emit('location:add', location);
+            locationCreated(location) {
+                Hub.$emit('location:created', location);
+            },
+            locationSaved() {
+                Hub.$emit('location:saved');
+            },
+            locationCancelled() {
+                Hub.$emit('location:cancelled');
+            },
+            locationRemoved() {
+                Hub.$emit('location:removed');
             },
             getFloorUrl() {
                 return '/places/' + this.placeId + '/buildings/' + this.buildingId + '/floors/' + this.floorId;

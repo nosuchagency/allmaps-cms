@@ -4,20 +4,21 @@
                    :before-close="closeModal">
             <el-form :model="form"
                      status-icon
-                     label-width="120px">
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Map Component" name="map_component">
                         <br>
                         <el-row :gutter="25">
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.name')"
-                                              :class="{'is-error' : has('name')}">
+                                              :class="{'is-error' : form.errors.has('name')}">
                                     <el-input v-model="form.name" autofocus></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.type')"
-                                              :class="{'is-error' : has('type')}">
+                                              :class="{'is-error' : form.errors.has('type')}">
                                     <el-select v-model="form.type">
                                         <el-option v-for="item in ['plan', 'wall', 'room', 'decor']"
                                                    :key="item"
@@ -29,7 +30,7 @@
                             </el-col>
                             <el-col :span="24">
                                 <el-form-item :label="$t('map-components.attributes.description')"
-                                              :class="{'is-error' : has('description')}">
+                                              :class="{'is-error' : form.errors.has('description')}">
                                     <el-input v-model="form.description"
                                               type="textarea"
                                               :rows="3">
@@ -43,7 +44,7 @@
                         <el-row :gutter="25">
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.shape')"
-                                              :class="{'is-error' : has('shape')}">
+                                              :class="{'is-error' : form.errors.has('shape')}">
                                     <el-select v-model="form.shape"
                                                :disabled="!!item">
                                         <el-option
@@ -57,7 +58,7 @@
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.curved')"
-                                              :class="{'is-error' : has('curved')}"
+                                              :class="{'is-error' : form.errors.has('curved')}"
                                               v-if="form.shape === 'polyline' || form.shape === 'polygon'">
                                     <el-switch v-model="form.curved"></el-switch>
                                 </el-form-item>
@@ -67,7 +68,7 @@
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.color')"
                                               v-if="form.shape !== 'image'"
-                                              :class="{'is-error' : has('color')}">
+                                              :class="{'is-error' : form.errors.has('color')}">
                                     <el-color-picker v-model="form.color"
                                                      :show-alpha="false"
                                                      :color-format="'hex'">
@@ -76,7 +77,7 @@
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.opacity')"
-                                              :class="{'is-error' : has('opacity')}"
+                                              :class="{'is-error' : form.errors.has('opacity')}"
                                               v-if="form.shape === 'polygon' || form.shape === 'circle'  || form.shape === 'rectangle'">
                                     <el-slider v-model="opacity"
                                                :step="10"
@@ -89,19 +90,19 @@
                                 :gutter="25">
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.width')"
-                                              :class="{'is-error' : has('width')}">
+                                              :class="{'is-error' : form.errors.has('width')}">
                                     <el-input v-model.number="form.width"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.height')"
-                                              :class="{'is-error' : has('height')}">
+                                              :class="{'is-error' : form.errors.has('height')}">
                                     <el-input v-model.number="form.height"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.image')"
-                                              :class="{'is-error' : has('image')}">
+                                              :class="{'is-error' : form.errors.has('image')}">
                                     <image-upload @image-uploaded="setImage"
                                                   @image-removed="setImage"
                                                   :image="form.image">
@@ -112,7 +113,7 @@
                         <el-row :gutter="25">
                             <el-col :span="12">
                                 <el-form-item :label="$t('map-components.attributes.thickness')"
-                                              :class="{'is-error' : has('weight')}"
+                                              :class="{'is-error' : form.errors.has('weight')}"
                                               v-if="form.shape !== 'image'">
                                     <el-input-number v-model="form.weight"
                                                      :min="1"
@@ -125,7 +126,7 @@
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
                         <el-form-item :label="$t('map-components.attributes.category')"
-                                      :class="{'is-error' : has('category')}">
+                                      :class="{'is-error' : form.errors.has('category')}">
                             <fetch-items url="/categories">
                                 <el-select v-model="form.category"
                                            slot-scope="{items, loading}"
@@ -141,7 +142,7 @@
                             </fetch-items>
                         </el-form-item>
                         <el-form-item :label="$t('map-components.attributes.tags')"
-                                      :class="{'is-error' : has('tags')}">
+                                      :class="{'is-error' : form.errors.has('tags')}">
                             <fetch-items url="/tags">
                                 <el-select v-model="form.tags"
                                            slot-scope="{items, loading}"
@@ -164,7 +165,7 @@
                            type="text"
                            size="small"
                            class="btn-remove"
-                           @click="removeItem">
+                           @click="remove">
                     Delete
                 </el-button>
                 <el-button type="text"
@@ -175,8 +176,7 @@
                 </el-button>
                 <el-button type="success"
                            size="small"
-                           @click="item ? updateItem() : createItem()"
-                           :loading="creating || updating || deleting">
+                           @click="item ? update() : create()">
                     Confirm
                 </el-button>
             </span>
@@ -185,12 +185,10 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
-    import resource from 'js/mixins/resource';
+    import Form from '../../utils/Form';
     import imageUpload from 'js/components/image-upload';
 
     export default {
-        mixins: [form, resource],
         props: {
             visible: Boolean,
             item: Object
@@ -202,7 +200,7 @@
             return {
                 currentTab: 'map_component',
                 resource: 'map-components',
-                form: {
+                form: new Form({
                     name: this.item ? this.item.name : '',
                     type: this.item ? this.item.type : 'plan',
                     description: this.item ? this.item.description : '',
@@ -216,44 +214,24 @@
                     image: this.item ? this.item.image : null,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
-                }
+                })
             }
         },
         methods: {
-            async createItem() {
-                try {
-                    this.forget();
-                    const item = await this.create();
-                    this.$emit('upsert-modal:add', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            create() {
+                this.form.post(`/${this.resource}`)
+                    .then(response => this.$emit('upsert-modal:add', response))
+                    .catch(error => console.log(error));
             },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const item = await this.update();
-                    this.$emit('upsert-modal:update', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            update() {
+                this.form.put(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:update', response))
+                    .catch(error => console.log(error));
             },
-            async removeItem() {
-                try {
-                    this.forget();
-                    const item = await this.remove();
-                    this.$emit('upsert-modal:remove', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
-            },
-            async fetch() {
+            remove() {
+                this.form.delete(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('upsert-modal:close');

@@ -273,9 +273,9 @@
                 this.item.buildings.push(building);
                 this.closeBuildingModal();
             },
-            updateBuilding(data) {
-                let index = _.findIndex(this.item.buildings, {id: data.id});
-                this.item.buildings.splice(index, 1, data.building);
+            updateBuilding(building) {
+                let index = _.findIndex(this.item.buildings, {id: building.id});
+                this.item.buildings.splice(index, 1, building);
                 this.closeBuildingModal();
             },
             removeBuilding(building) {

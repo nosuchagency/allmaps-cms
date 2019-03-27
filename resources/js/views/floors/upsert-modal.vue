@@ -4,16 +4,17 @@
                    :before-close="closeModal">
             <el-form :model="form"
                      status-icon
-                     label-width="120px">
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Floor" name="floor">
                         <br>
                         <el-form-item :label="$t('floors.attributes.name')"
-                                      :class="{'is-error' : has('name')}">
+                                      :class="{'is-error' : form.errors.has('name')}">
                             <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('floors.attributes.level')"
-                                      :class="{'is-error' : has('level')}">
+                                      :class="{'is-error' : form.errors.has('level')}">
                             <el-input v-model="form.level">
                             </el-input>
                         </el-form-item>
@@ -46,11 +47,9 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
-    import resource from 'js/mixins/resource';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form, resource],
         props: {
             visible: Boolean,
             placeId: Number,
@@ -61,75 +60,27 @@
             return {
                 currentTab: 'floor',
                 resource: 'floors',
-                form: this.getForm()
+                form: new Form({
+                    name: this.item ? this.item.name : '',
+                    level: this.item ? this.item.level : ''
+                })
             }
         },
         methods: {
-            getForm() {
-                return {
-                    name: this.item ? this.item.name : '',
-                    level: this.item ? this.item.level : ''
-                }
+            create() {
+                this.form.post(`/places/${this.placeId}/buildings/${this.buildingId}/${this.resource}`)
+                    .then(response => this.$emit('floor-modal:add', response))
+                    .catch(error => console.log(error));
             },
-            async createItem() {
-                try {
-                    this.forget();
-                    const floor = await this.create();
-                    this.$emit('floor-modal:add', {placeId: this.placeId, buildingId: this.buildingId, floor})
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            update() {
+                this.form.put(`/places/${this.placeId}/buildings/${this.buildingId}/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('floor-modal:update', response))
+                    .catch(error => console.log(error));
             },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const floor = await this.update();
-                    this.$emit('floor-modal:update', {placeId: this.placeId, buildingId: this.buildingId, floor})
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
-            },
-            async removeItem() {
-                try {
-                    await this.remove();
-                    this.$emit('floor-modal:remove', {
-                        placeId: this.placeId,
-                        buildingId: this.buildingId,
-                        floor: this.item
-                    })
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
-            },
-            async fetch() {
-                if (this.id) {
-                    try {
-                        this.item = await this.read();
-                        this.form = this.getForm();
-                    } catch (error) {
-                        console.log(error);
-                    }
-                } else {
-                    this.form = this.getForm();
-                }
-            },
-            getReadUrl() {
-                return '/places/' + this.placeId + '/buildings/' + this.buildingId + '/floors/' + this.item.id;
-            },
-            getCreateUrl() {
-                return '/places/' + this.placeId + '/buildings/' + this.buildingId + '/floors';
-            },
-            getUpdateUrl() {
-                return this.getReadUrl();
-            },
-            getRemoveUrl() {
-                return this.getReadUrl();
+            remove() {
+                this.form.delete(`/places/${this.placeId}/buildings/${this.buildingId}/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('floor-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('floor-modal:close');

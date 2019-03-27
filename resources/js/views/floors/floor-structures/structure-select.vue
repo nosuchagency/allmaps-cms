@@ -1,12 +1,12 @@
 <template>
-    <el-select v-model="mapComponent"
+    <el-select v-model="component"
                class="component-select"
                :placeholder="type"
                size="small"
-               @change="selectMapComponent"
+               @change="createStructure"
                :no-data-text="'No ' + type + 's'">
         <el-option
-                v-for="item in mapComponentOptions"
+                v-for="item in components"
                 :key="item.id"
                 :label="item.name"
                 :value="item">
@@ -24,18 +24,24 @@
 <script>
     export default {
         props: {
+            floorUrl: String,
             type: String,
-            mapComponentOptions: Array
+            components: Array
         },
         data() {
             return {
-                mapComponent: null
+                component: null
             }
         },
         methods: {
-            selectMapComponent(component) {
-                this.mapComponent = null;
-                this.$emit('map-component:select', component);
+            async createStructure(component) {
+                try {
+                    this.component = null;
+                    const {data} = await this.$axios.post(this.floorUrl + '/structures', {map_component_id: component.id});
+                    this.$emit('structure:add', data);
+                } catch (error) {
+                    console.log(error);
+                }
             }
         }
     }

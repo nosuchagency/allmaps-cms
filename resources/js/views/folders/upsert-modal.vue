@@ -4,19 +4,20 @@
                    :before-close="closeModal">
             <el-form :model="form"
                      status-icon
-                     label-width="120px">
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Folder" name="folder">
                         <br>
                         <el-form-item :label="$t('folders.attributes.name')"
-                                      :class="{'is-error' : has('name')}">
+                                      :class="{'is-error' : form.errors.has('name')}">
                             <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
                         <el-form-item :label="$t('folders.attributes.category')"
-                                      :class="{'is-error' : has('category')}">
+                                      :class="{'is-error' : form.errors.has('category')}">
                             <fetch-items url="/categories">
                                 <el-select v-model="form.category"
                                            slot-scope="{items, loading}"
@@ -32,7 +33,7 @@
                             </fetch-items>
                         </el-form-item>
                         <el-form-item :label="$t('folders.attributes.tags')"
-                                      :class="{'is-error' : has('tags')}">
+                                      :class="{'is-error' : form.errors.has('tags')}">
                             <fetch-items url="/tags">
                                 <el-select v-model="form.tags"
                                            slot-scope="{items, loading}"
@@ -55,7 +56,7 @@
                            type="text"
                            size="small"
                            class="btn-remove"
-                           @click="removeItem">
+                           @click="remove">
                     Delete
                 </el-button>
                 <el-button type="text"
@@ -66,8 +67,7 @@
                 </el-button>
                 <el-button type="success"
                            size="small"
-                           @click="item ? updateItem() : createItem()"
-                           :loading="creating || updating">
+                           @click="item ? update() : create()">
                     Confirm
                 </el-button>
             </span>
@@ -76,11 +76,9 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
-    import resource from 'js/mixins/resource';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form, resource],
         props: {
             visible: Boolean,
             item: Object,
@@ -90,7 +88,7 @@
             return {
                 currentTab: 'folder',
                 resource: 'folders',
-                form: {
+                form: new Form({
                     name: this.item ? this.item.name : '',
                     address: this.item ? this.item.address : '',
                     postcode: this.item ? this.item.postcode : '',
@@ -99,98 +97,31 @@
                     lng: this.item && this.item.lng ? this.item.lng : 12.393955,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
-                }
+                })
             }
         },
         methods: {
-            async createItem() {
-                try {
-                    this.forget();
-                    const item = await this.create();
-                    this.$emit('upsert-modal:add', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            create() {
+                this.form.post(`/containers/${this.containerId}/${this.resource}`)
+                    .then(response => this.$emit('upsert-modal:add', response))
+                    .catch(error => console.log(error));
             },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const item = await this.update();
-                    this.$emit('upsert-modal:update', item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            update() {
+                this.form.put(`/containers/${this.containerId}/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:update', response))
+                    .catch(error => console.log(error));
             },
-            async removeItem() {
-                try {
-                    await this.remove();
-                    this.$emit('upsert-modal:remove', this.item)
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
-            },
-            async fetch() {
-            },
-            getReadUrl() {
-                return '/containers/' + this.containerId + '/folders/' + this.item.id;
-            },
-            getCreateUrl() {
-                return '/containers/' + this.containerId + '/folders';
-            },
-            getUpdateUrl() {
-                return this.getReadUrl();
-            },
-            getRemoveUrl() {
-                return this.getReadUrl();
+            remove() {
+                this.form.delete(`/containers/${this.containerId}/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('upsert-modal:close');
-            },
-            setupMap() {
-                this.map = new L.Map('map', {
-                    center: new L.LatLng(this.form.lat, this.form.lng),
-                    zoom: 10
-                });
-
-                this.marker = new L.Marker({lat: this.form.lat, lng: this.form.lng}, {draggable: true})
-                    .addTo(this.map)
-                    .on('drag', this.markerDrag)
-                    .on('dragend', this.markerDragEnd);
-
-                L.gridLayer.googleMutant({type: 'roadmap'}).addTo(this.map);
-
-                this.map.zoomControl.setPosition('bottomleft');
-
-                this.map.on('click', this.setLocation);
-            },
-            setLocation(e) {
-                this.marker.setLatLng(e.latlng);
-                this.form.lat = e.latlng.lat;
-                this.form.lng = e.latlng.lng;
-            },
-            markerDrag(e) {
-                this.marker.setLatLng(e.latlng);
-            },
-            markerDragEnd(e) {
-                let latLng = e.target.getLatLng();
-                this.marker.setLatLng(latLng);
-                this.form.lat = latLng.lat;
-                this.form.lng = latLng.lng;
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    #map {
-        height: 300px;
-        width: 100%;
-        cursor: crosshair;
-    }
 </style>

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import shared from './Shared';
 
 let PoiPoint = {
@@ -9,6 +8,7 @@ let PoiPoint = {
             ...shared, ...{
                 initialize(location) {
                     this.location = location;
+                    this.unsavedChanges = false;
 
                     let coordinates = location.coordinates || self.map.getCenter();
 
@@ -23,17 +23,24 @@ let PoiPoint = {
                 },
                 startEditing() {
                     this.dragging.enable();
+                    this.on('dragend', this.dragEndHandler)
                 },
                 stopEditing() {
-
+                    this.off('dragend', this.dragEndHandler)
+                },
+                dragEndHandler() {
+                    this.unsavedChanges = true;
                 },
                 componentClicked(e) {
-                    if (!self.currentLocation) {
+                    if (!self.currentLocation || !self.currentLocation.hasUnsavedChanges()) {
+
+                        if (self.currentLocation) {
+                            self.cancelLocation();
+                        }
+
                         L.DomEvent.stopPropagation(e);
                         self.startEditing(e.target);
                     }
-                },
-                click(latlng) {
                 },
                 getIcon() {
                     return new L.Icon({
@@ -41,41 +48,11 @@ let PoiPoint = {
                         iconSize: [20, 20]
                     });
                 },
-                async save() {
+                save() {
                     this.dragging.disable();
-
-                    try {
-                        let coordinates = this.getCoordinates();
-                        const {data: location} = await axios.put(self.url + '/locations/' + this.location.id, {coordinates});
-                        this.location = location;
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                async remove() {
-                    try {
-                        await axios.delete(self.url + '/locations/' + this.location.id);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                },
-                undo() {
-                    console.log('Undoing', 'poi point');
-                },
-                cancel() {
-                    console.log('cancelling!');
                 },
                 getCoordinates() {
                     return this.getLatLng();
-                },
-                getDestination() {
-                    return null;
-                },
-                addMarkers() {
-
-                },
-                isArea() {
-                    return false;
                 }
             }
         });

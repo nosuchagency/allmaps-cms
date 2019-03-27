@@ -9,7 +9,7 @@
                          autoComplete="on"
                          label-position="left"
                          @submit.native.prevent>
-                    <el-form-item :class="{'is-error' : has('email')}">
+                    <el-form-item :class="{'is-error' : form.errors.has('email')}">
                         <span class="svg-container">
                             <i class="fa fa-user"></i>
                         </span>
@@ -20,11 +20,11 @@
                                   autoComplete="on"
                                   placeholder="email">
                         </el-input>
-                        <div class="el-form-item__error" v-if="has('email')">
-                            {{get('email')}}
+                        <div class="el-form-item__error" v-if="form.errors.has('email')">
+                            {{form.errors.get('email')}}
                         </div>
                     </el-form-item>
-                    <el-form-item :class="{'is-error' : has('password')}">
+                    <el-form-item :class="{'is-error' : form.errors.has('password')}">
                         <span class="svg-container">
                             <i class="fa fa-lock"></i>
                         </span>
@@ -34,12 +34,12 @@
                                   autoComplete="on"
                                   placeholder="password">
                         </el-input>
-                        <div class="el-form-item__error" v-if="has('password')">
-                            {{get('password')}}
+                        <div class="el-form-item__error" v-if="form.errors.has('password')">
+                            {{form.errors.get('password')}}
                         </div>
                     </el-form-item>
                     <el-form-item class="last-field"
-                                  :class="{'is-error' : has('password_confirmation')}">
+                                  :class="{'is-error' : form.errors.has('password_confirmation')}">
                         <span class="svg-container">
                             <i class="fa fa-lock"></i>
                         </span>
@@ -50,8 +50,8 @@
                                   autoComplete="on"
                                   placeholder="confirm password">
                         </el-input>
-                        <div class="el-form-item__error" v-if="has('password_confirmation')">
-                            {{get('password_confirmation')}}
+                        <div class="el-form-item__error" v-if="form.errors.has('password_confirmation')">
+                            {{form.errors.get('password_confirmation')}}
                         </div>
                     </el-form-item>
                     <div class="message" v-if="result" :class="{'error' : !result.status}">
@@ -73,43 +73,39 @@
 </template>
 
 <script>
-    import form from '../../mixins/form';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form],
         props: {
             token: String
         },
         data() {
             return {
-                form: {
+                busy: false,
+                form: new Form({
                     email: this.$route.query.email,
                     password: '',
                     password_confirmation: '',
                     token: this.token
-                },
+                }),
                 result: null
             }
         },
         methods: {
             async submit() {
-                this.startProcessing();
-                try {
-                    const response = await this.$axios.post('/password/reset', this.form);
-                    this.result = response.data;
+                this.busy = true;
 
-                    setTimeout(() => {
-                        window.location.href = '/dashboard';
-                    }, 1000);
-                } catch (error) {
-                    this.result = error.response.data;
+                this.form.post('/password/reset')
+                    .then(response => {
+                        this.result = response.data;
+                        this.form.email = '';
+                        this.busy = false;
 
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                } finally {
-                    this.finishProcessing();
-                }
+                        setTimeout(() => {
+                            window.location.href = '/dashboard';
+                        }, 1000);
+                    })
+                    .catch(error => this.busy = false);
             },
         }
     }

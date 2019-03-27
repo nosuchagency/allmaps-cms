@@ -59,7 +59,7 @@
         data() {
             return {
                 popup: null,
-                popupText : '',
+                popupText: '',
 
                 ruler: null,
 
@@ -107,11 +107,11 @@
         },
         methods: {
             activateEventListeners() {
-                Hub.$on('location:add', (location) => this.addLocation(location, true));
+                Hub.$on('location:created', (location) => this.addLocation(location, true));
                 Hub.$on('location:undo', this.undoLocation);
-                Hub.$on('location:remove', this.removeLocation);
-                Hub.$on('location:cancel', this.cancelLocation);
-                Hub.$on('location:save', this.saveLocation);
+                Hub.$on('location:removed', this.removeLocation);
+                Hub.$on('location:cancelled', this.cancelLocation);
+                Hub.$on('location:saved', this.saveLocation);
             }
         },
         computed: {

@@ -2,6 +2,9 @@ export default {
     getStructure() {
         return this.structure;
     },
+    getId() {
+        return this.structure.id;
+    },
     getName() {
         return this.structure.name;
     },
@@ -41,5 +44,28 @@ export default {
         let curved = turf.bezierSpline(line);
 
         return curved.geometry.coordinates;
+    },
+    save() {
+    },
+    remove() {
+        console.log('Removing!');
+    },
+    undo() {
+        console.log('Undoing!');
+    },
+    cancel() {
+        console.log('Cancelling!');
+    },
+    startEditing() {
+    },
+    stopEditing() {
+    },
+    click(latlng) {
+        console.log(latlng);
+    },
+    addMarkers() {
+    },
+    getDestination() {
+        return null;
     }
 }

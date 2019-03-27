@@ -5,16 +5,17 @@
                    width="60%">
             <el-form :model="form"
                      status-icon
-                     label-width="120px">
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Location" name="location">
                         <br>
                         <el-form-item :label="$t('locations.attributes.name')"
-                                      :class="{'is-error' : has('name')}">
+                                      :class="{'is-error' : form.errors.has('name')}">
                             <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.type')"
-                                      :class="{'is-error' : has('type')}">
+                                      :class="{'is-error' : form.errors.has('type')}">
                             <el-select v-model="form.type"
                                        :disabled="true">
                                 <el-option v-for="item in ['poi', 'beacon', 'fixture']"
@@ -27,13 +28,13 @@
                         <el-row :gutter="25">
                             <el-col :span="12">
                                 <el-form-item :label="$t('locations.attributes.zoom_from')"
-                                              :class="{'is-error' : has('zoom_from')}">
+                                              :class="{'is-error' : form.errors.has('zoom_from')}">
                                     <el-input v-model="form.zoom_from"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('locations.attributes.zoom_to')"
-                                              :class="{'is-error' : has('zoom_to')}">
+                                              :class="{'is-error' : form.errors.has('zoom_to')}">
                                     <el-input v-model="form.zoom_to"></el-input>
                                 </el-form-item>
                             </el-col>
@@ -42,23 +43,23 @@
                     <el-tab-pane label="Details" name="details">
                         <br>
                         <el-form-item :label="$t('locations.attributes.title')"
-                                      :class="{'is-error' : has('title')}">
+                                      :class="{'is-error' : form.errors.has('title')}">
                             <el-input v-model="form.title"></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.subtitle')"
-                                      :class="{'is-error' : has('subtitle')}">
+                                      :class="{'is-error' : form.errors.has('subtitle')}">
                             <el-input v-model="form.subtitle">
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.image')"
-                                      :class="{'is-error' : has('image')}">
+                                      :class="{'is-error' : form.errors.has('image')}">
                             <image-upload @image-uploaded="setImage"
                                           @image-removed="setImage"
                                           :image="form.image">
                             </image-upload>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.description')"
-                                      :class="{'is-error' : has('description')}">
+                                      :class="{'is-error' : form.errors.has('description')}">
                             <el-input v-model="form.description"
                                       type="textarea"
                                       :rows="3">
@@ -68,41 +69,41 @@
                     <el-tab-pane label="Contact" name="contact">
                         <br>
                         <el-form-item :label="$t('locations.attributes.contact_name')"
-                                      :class="{'is-error' : has('contact_name')}">
+                                      :class="{'is-error' : form.errors.has('contact_name')}">
                             <el-input v-model="form.contact_name">
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.company')"
-                                      :class="{'is-error' : has('company')}">
+                                      :class="{'is-error' : form.errors.has('company')}">
                             <el-input v-model="form.company">
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.address')"
-                                      :class="{'is-error' : has('address')}">
+                                      :class="{'is-error' : form.errors.has('address')}">
                             <el-input v-model="form.address">
                             </el-input>
                         </el-form-item>
                         <el-row :gutter="25">
                             <el-col :span="12">
                                 <el-form-item :label="$t('locations.attributes.city')"
-                                              :class="{'is-error' : has('city')}">
+                                              :class="{'is-error' : form.errors.has('city')}">
                                     <el-input v-model="form.city"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('locations.attributes.postcode')"
-                                              :class="{'is-error' : has('postcode')}">
+                                              :class="{'is-error' : form.errors.has('postcode')}">
                                     <el-input v-model="form.postcode"></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-form-item :label="$t('locations.attributes.phone')"
-                                      :class="{'is-error' : has('phone')}">
+                                      :class="{'is-error' : form.errors.has('phone')}">
                             <el-input v-model="form.phone">
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.email')"
-                                      :class="{'is-error' : has('email')}">
+                                      :class="{'is-error' : form.errors.has('email')}">
                             <el-input v-model="form.email">
                             </el-input>
                         </el-form-item>
@@ -114,7 +115,7 @@
                             <span class="searchable-name">Internal Search</span>
                         </div>
                         <el-form-item label="Text"
-                                      :class="{'is-error' : has('search_text')}">
+                                      :class="{'is-error' : form.errors.has('search_text')}">
                             <el-input v-model="form.search_text"></el-input>
                         </el-form-item>
                         <br>
@@ -142,7 +143,7 @@
                         <br>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('monday_from')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('monday_from')}">
                                     <span slot="label" style="font-weight: bold;">Monday</span>
                                     <el-time-select v-model="form.monday_from"
                                                     placeholder="From"
@@ -151,7 +152,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('monday_to')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('monday_to')}">
                                     <el-time-select v-model="form.monday_to"
                                                     placeholder="To"
                                                     :picker-options="pickerOptions">
@@ -161,7 +162,7 @@
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('tuesday_from')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('tuesday_from')}">
                                     <span slot="label" style="font-weight: bold;">Tuesday</span>
                                     <el-time-select v-model="form.tuesday_from"
                                                     placeholder="From"
@@ -170,7 +171,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('tuesday_to')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('tuesday_to')}">
                                     <el-time-select v-model="form.tuesday_to"
                                                     placeholder="To"
                                                     :picker-options="pickerOptions">
@@ -180,7 +181,7 @@
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('wednesday_from')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('wednesday_from')}">
                                     <span slot="label" style="font-weight: bold;">Wednesday</span>
                                     <el-time-select v-model="form.wednesday_from"
                                                     placeholder="From"
@@ -189,7 +190,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('wednesday_to')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('wednesday_to')}">
                                     <el-time-select v-model="form.wednesday_to"
                                                     placeholder="To"
                                                     :picker-options="pickerOptions">
@@ -199,7 +200,7 @@
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('thursday_from')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('thursday_from')}">
                                     <span slot="label" style="font-weight: bold;">Thursday</span>
                                     <el-time-select v-model="form.thursday_from"
                                                     placeholder="From"
@@ -208,7 +209,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('thursday_to')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('thursday_to')}">
                                     <el-time-select v-model="form.thursday_to"
                                                     placeholder="To"
                                                     :picker-options="pickerOptions">
@@ -218,7 +219,7 @@
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('friday_from')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('friday_from')}">
                                     <span slot="label" style="font-weight: bold;">Friday</span>
                                     <el-time-select v-model="form.friday_from"
                                                     placeholder="From"
@@ -227,7 +228,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('friday_to')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('friday_to')}">
                                     <el-time-select v-model="form.friday_to"
                                                     placeholder="To"
                                                     :picker-options="pickerOptions">
@@ -237,7 +238,7 @@
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('saturday_from')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('saturday_from')}">
                                     <span slot="label" style="font-weight: bold;">Saturday</span>
                                     <el-time-select v-model="form.saturday_from"
                                                     placeholder="From"
@@ -246,7 +247,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('saturday_to')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('saturday_to')}">
                                     <el-time-select v-model="form.saturday_to"
                                                     placeholder="To"
                                                     :picker-options="pickerOptions">
@@ -256,7 +257,7 @@
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('sunday_from')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('sunday_from')}">
                                     <span slot="label" style="font-weight: bold;">Sunday</span>
                                     <el-time-select v-model="form.sunday_from"
                                                     placeholder="From"
@@ -265,7 +266,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :class="{'is-error' : has('sunday_to')}">
+                                <el-form-item :class="{'is-error' : form.errors.has('sunday_to')}">
                                     <el-time-select v-model="form.sunday_to"
                                                     placeholder="To"
                                                     :picker-options="pickerOptions">
@@ -279,7 +280,7 @@
                         <el-row :gutter="25">
                             <el-col :span="12">
                                 <el-form-item label="Date from"
-                                              :class="{'is-error' : has('publish_at')}">
+                                              :class="{'is-error' : form.errors.has('publish_at')}">
                                     <el-date-picker v-model="form.publish_at"
                                                     type="date"
                                                     format="dd-MM-yyyy">
@@ -288,7 +289,7 @@
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item label="Date to"
-                                              :class="{'is-error' : has('unpublish_at')}">
+                                              :class="{'is-error' : form.errors.has('unpublish_at')}">
                                     <el-date-picker v-model="form.unpublish_at"
                                                     type="date"
                                                     format="dd-MM-yyyy">
@@ -300,11 +301,19 @@
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                <el-button type="text"
+                <el-button v-if="!confirmDelete"
+                           type="text"
                            size="small"
                            class="btn-remove"
-                           @click="removeItem">
+                           @click="confirmDelete = true">
                     Delete
+                </el-button>
+                <el-button v-else
+                           type="text"
+                           size="small"
+                           class="btn-remove"
+                           @click="remove">
+                    Are you sure?
                 </el-button>
                 <el-button type="text"
                            size="small"
@@ -314,8 +323,7 @@
                 </el-button>
                 <el-button type="success"
                            size="small"
-                           :loading="busy"
-                           @click="updateItem">
+                           @click="update">
                     Confirm
                 </el-button>
             </span>
@@ -324,11 +332,10 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
+    import Form from '../../../utils/Form';
     import imageUpload from 'js/components/image-upload';
 
     export default {
-        mixins: [form],
         components: {
             imageUpload
         },
@@ -340,12 +347,8 @@
         data() {
             return {
                 currentTab: 'location',
-                pigs: [
-                    {'label': 'Test1', 'active': false},
-                    {'label': 'Test2', 'active': false},
-                    {'label': 'Test3', 'active': false},
-                ],
-                form: {
+                confirmDelete: false,
+                form: new Form({
                     name: this.location.name,
                     type: this.location.type,
                     zoom_from: this.location.zoom_from,
@@ -384,33 +387,22 @@
                     activated_at: this.location.activated_at,
                     publish_at: this.location.publish_at,
                     unpublish_at: this.location.unpublish_at
-                }
+                })
             }
         },
         methods: {
-            async updateItem() {
-                this.startProcessing();
-
-                try {
-                    const {data: location} = await this.$axios.put(this.url + '/locations/' + this.location.id, this.form);
-                    this.$emit('location-modal:update', location);
-                    this.closeModal();
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                } finally {
-                    this.finishProcessing();
-                }
+            update() {
+                this.form.put(this.url + '/locations/' + this.location.id)
+                    .then(response => {
+                        this.$emit('location-modal:update', response);
+                        this.closeModal();
+                    })
+                    .catch(error => console.log(error));
             },
-            async removeItem() {
-                try {
-
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                }
+            remove() {
+                this.form.delete(this.url + '/locations/' + this.location.id)
+                    .then(response => this.$emit('location-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('location-modal:close');

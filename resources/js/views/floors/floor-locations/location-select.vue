@@ -1,17 +1,17 @@
 <template>
-    <div class="fixture-select">
+    <div class="location-select">
         <el-button size="small"
                    type="primary"
                    @click="showModal = true">
-            Fixture
+            {{title}}
         </el-button>
         <portal to="modals" v-if="showModal">
             <el-dialog :visible.sync="showModal">
                 <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Fixture" name="fixture">
+                    <el-tab-pane :label="title" name="main">
                         <br>
-                        <fetch-items url="/fixtures">
-                            <el-select v-model="fixture"
+                        <fetch-items :url="url">
+                            <el-select v-model="location"
                                        slot-scope="{items, loading}"
                                        placeholder="Select"
                                        clearable
@@ -30,16 +30,14 @@
                 <span slot="footer">
                     <el-button type="text"
                                size="small"
-                               class="btn-cancel"
                                @click="showModal = false">
                         Cancel
                     </el-button>
                     <el-button type="success"
                                size="small"
-                               @click="createFixture"
-                               :loading="busy"
-                               :disabled="!fixture">
-                        Add Fixture
+                               @click="createLocation"
+                               :disabled="!location">
+                        Add {{title}}
                     </el-button>
                 </span>
             </el-dialog>
@@ -48,18 +46,19 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
-
     export default {
-        mixins: [form],
         props: {
-            url: String
+            url: String,
+            title: String,
+            floorUrl: String,
+            identifier: String
         },
         data() {
             return {
-                currentTab: 'fixture',
+                busy: false,
+                currentTab: 'main',
                 showModal: false,
-                fixture: null
+                location: null
             }
         },
         watch: {
@@ -70,20 +69,20 @@
             }
         },
         methods: {
-            async createFixture() {
-                this.startProcessing();
+            async createLocation() {
+                this.busy = true;
 
                 try {
-                    const {data: location} = await this.$axios.post(this.url + '/locations', {fixture_id: this.fixture.id});
-                    this.$emit('fixture:add', location);
+                    const {data} = await this.$axios.post(this.floorUrl + '/locations', {[this.identifier]: this.location.id});
+                    this.$emit('location:add', data);
                     this.showModal = false;
-                    this.fixture = null;
+                    this.location = null;
                 } catch ({response}) {
                     if (response.data.errors) {
                         this.setErrors(response.data.errors);
                     }
                 } finally {
-                    this.finishProcessing()
+                    this.busy = false;
                 }
             }
         }
@@ -91,8 +90,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .fixture-select {
+    .location-select {
         margin-right: 7px;
     }
-
 </style>
