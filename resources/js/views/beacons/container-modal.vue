@@ -14,7 +14,8 @@
                                            size="small"
                                            filterable
                                            value-key="id"
-                                           placeholder="Choose Container">
+                                           placeholder="Choose Container"
+                                           ref="select">
                                     <el-option v-for="item in $lodash.differenceWith(items, containers, (one, two) => {
                                                     return item ? (item.id !== one.id && one.id === two.id) : one.id === two.id;
                                                 })"
@@ -80,6 +81,9 @@
                     container: this.item
                 })
             }
+        },
+        mounted() {
+            setTimeout(() => this.$refs.select.focus(), 500);
         },
         methods: {
             create() {

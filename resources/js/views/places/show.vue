@@ -154,7 +154,7 @@
                                                icon="el-icon-picture-outline"
                                                circle
                                                v-if="$auth.user().permissions.includes('floors.read')"
-                                               @click="$router.push('/places/' + item.id + '/buildings/' + building.id + '/floors/' + scope.row.id + '/structures')">
+                                               @click="$router.push(`/places/${item.id}/buildings/${building.id}/floors/${scope.row.id}/structures`)">
                                     </el-button>
                                 </el-tooltip>
                                 <el-tooltip effect="dark"
@@ -164,7 +164,7 @@
                                                size="small"
                                                circle
                                                v-if="$auth.user().permissions.includes('floors.read')"
-                                               @click="$router.push('/places/' + item.id + '/buildings/' + building.id + '/floors/' + scope.row.id + '/locations')">
+                                               @click="$router.push(`/places/${item.id}/buildings/${building.id}/floors/${scope.row.id}/locations`)">
                                         <i class="fa fa-location-arrow"></i>
                                     </el-button>
                                 </el-tooltip>
