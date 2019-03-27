@@ -15,6 +15,7 @@ export default class Form {
         }
 
         this.errors = new Errors();
+        this.busy = false;
     }
 
 
@@ -100,6 +101,7 @@ export default class Form {
      */
     submit(requestType, url) {
         return new Promise((resolve, reject) => {
+            this.busy = true;
             axios[requestType](url, this.data())
                 .then(response => {
                     this.onSuccess(response.data);
@@ -108,7 +110,10 @@ export default class Form {
                 .catch(error => {
                     this.onFail(error.response.data.errors);
                     reject(error.response.data.errors);
-                });
+                })
+                .finally(() => {
+                    this.busy = false;
+                })
         });
     }
 

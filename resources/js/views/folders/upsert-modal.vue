@@ -67,6 +67,7 @@
                 </el-button>
                 <el-button type="success"
                            size="small"
+                           :loading="form.busy"
                            @click="item ? update() : create()">
                     Confirm
                 </el-button>

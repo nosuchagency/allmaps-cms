@@ -96,17 +96,18 @@
                     Cancel
             </el-button>
             <el-button type="success"
-        size="small"
-        @click="item ? update() : create()">
-            Confirm
+                       size="small"
+                       :loading="form.busy"
+                       @click="item ? update() : create()">
+                    Confirm
             </el-button>
             </span>
-            </el-dialog>
-            </portal>
-            </template>
+        </el-dialog>
+    </portal>
+</template>
 
-            <script>
-        import Form from '../../utils/Form';
+<script>
+    import Form from '../../utils/Form';
 
     export default {
         props: {

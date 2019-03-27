@@ -26,7 +26,7 @@
                            type="text"
                            size="small"
                            class="btn-remove"
-                           @click="removeItem">
+                           @click="remove">
                     Delete
                 </el-button>
                 <el-button type="text"
@@ -37,8 +37,8 @@
                 </el-button>
                 <el-button type="success"
                            size="small"
-                           @click="item ? updateItem() : createItem()"
-                           :loading="creating || updating">
+                           :loading="form.busy"
+                           @click="item ? update() : create()">
                     Confirm
                 </el-button>
             </span>
@@ -69,17 +69,29 @@
         methods: {
             create() {
                 this.form.post(`/places/${this.placeId}/buildings/${this.buildingId}/${this.resource}`)
-                    .then(response => this.$emit('floor-modal:add', response))
+                    .then(response => this.$emit('floor-modal:add', {
+                        placeId: this.placeId,
+                        buildingId: this.buildingId,
+                        floor: response
+                    }))
                     .catch(error => console.log(error));
             },
             update() {
                 this.form.put(`/places/${this.placeId}/buildings/${this.buildingId}/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('floor-modal:update', response))
+                    .then(response => this.$emit('floor-modal:update', {
+                        placeId: this.placeId,
+                        buildingId: this.buildingId,
+                        floor: response
+                    }))
                     .catch(error => console.log(error));
             },
             remove() {
                 this.form.delete(`/places/${this.placeId}/buildings/${this.buildingId}/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('floor-modal:remove', response))
+                    .then(response => this.$emit('floor-modal:remove', {
+                        placeId: this.placeId,
+                        buildingId: this.buildingId,
+                        floor: this.item
+                    }))
                     .catch(error => console.log(error));
             },
             closeModal() {
