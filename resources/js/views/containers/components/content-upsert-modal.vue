@@ -11,9 +11,8 @@
             </template>
             <content-type :item="item"
                           :type="type"
-                          :errors="errors"
-
-                          @sync-form="form = $event">
+                          :form="form"
+                          @sync-fields="syncFields">
             </content-type>
             <div slot="footer"
                  class="dialog-footer">
@@ -21,7 +20,7 @@
                            type="text"
                            size="small"
                            class="btn-remove"
-                           @click="removeItem">
+                           @click="remove">
                     Remove
                 </el-button>
                 <el-button size="small"
@@ -29,18 +28,9 @@
                     Cancel
                 </el-button>
                 <el-button type="success"
-                           v-if="item"
                            size="small"
-                           @click="submit(true)"
-                           :loading="busy">
+                           @click="item ? update() : create()">
                     Confirm
-                </el-button>
-                <el-button type="success"
-                           v-if="!item"
-                           size="small"
-                           @click="submit()"
-                           :loading="busy">
-                    Create
                 </el-button>
             </div>
         </el-dialog>
@@ -49,10 +39,9 @@
 
 <script>
     import contentType from './content-type';
-    import form from 'js/mixins/form';
+    import Form from '../../../utils/Form';
 
     export default {
-        mixins: [form],
         props: {
             visible: Boolean,
             type: String,
@@ -64,71 +53,52 @@
         },
         data() {
             return {
-                form: null,
-                errors: null
+                form: new Form({})
             };
         },
         methods: {
-            async submit(updating = false) {
-                this.startProcessing();
-
-                try {
-                    if (updating) {
-                        const response = await this.$axios.put('/containers/' + this.folder.container.id + '/folders/' + this.folder.id + this.getResource(), this.form);
-                        this.$emit('content-updated', response.data);
-                    } else {
-                        const response = await this.$axios.post('/containers/' + this.folder.container.id + '/folders/' + this.folder.id + this.getResource(), this.form);
-                        this.$emit('content-created', response.data);
-                    }
-                    this.closeModal();
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                } finally {
-                    this.finishProcessing();
-                }
+            create() {
+                this.form.post(`/containers/${this.folder.container.id}/folders/${this.folder.id}/${this.getResource()}`)
+                    .then(response => this.$emit('content-modal:add', response))
+                    .catch(error => console.log(error));
             },
-            async removeItem() {
-                this.startProcessing();
-
-                try {
-                    await this.$axios.delete('/containers/' + this.folder.container_id + '/folders/' + this.folder.id + this.getResource());
-                    this.$emit('content-removed', this.item);
-                    this.closeModal();
-                } catch (error) {
-                    console.log(error);
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                } finally {
-                    this.finishProcessing();
-                }
+            update() {
+                this.form.put(`/containers/${this.folder.container.id}/folders/${this.folder.id}/${this.getResource()}`)
+                    .then(response => this.$emit('content-modal:update', response))
+                    .catch(error => console.log(error));
+            },
+            remove() {
+                this.form.delete(`/containers/${this.folder.container.id}/folders/${this.folder.id}/${this.getResource()}`)
+                    .then(response => this.$emit('content-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('close-content-modal');
+                this.$emit('content-modal:close');
+            },
+            syncFields(fields) {
+                this.form = new Form(fields);
             },
             getResource() {
                 let resource = '';
 
                 switch (this.type) {
                     case 'image':
-                        resource = '/images';
+                        resource = 'images';
                         break;
                     case 'video':
-                        resource = '/videos';
+                        resource = 'videos';
                         break;
                     case 'file':
-                        resource = '/files';
+                        resource = 'files';
                         break;
                     case 'gallery':
-                        resource = '/galleries';
+                        resource = 'galleries';
                         break;
                     case 'text':
-                        resource = '/texts';
+                        resource = 'texts';
                         break;
                     case 'web':
-                        resource = '/web';
+                        resource = 'web';
                         break;
                 }
 

@@ -76,12 +76,11 @@
 
 <script>
     import resource from 'js/mixins/resource';
-    import form from 'js/mixins/form';
     import upsertModal from './upsert-modal';
     import permissionsCard from "./permissions/permissions-card";
 
     export default {
-        mixins: [resource, form],
+        mixins: [resource],
         components: {
             permissionsCard,
             upsertModal

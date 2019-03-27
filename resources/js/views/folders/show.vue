@@ -44,7 +44,7 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              :container-id="$route.params.containerId"
+                              :container-id="item.container.id"
                               @upsert-modal:close="closeUpsertModal"
                               @upsert-modal:update="updateItem"
                               @upsert-modal:remove="removeItem">
@@ -56,12 +56,11 @@
 
 <script>
     import resource from 'js/mixins/resource';
-    import form from 'js/mixins/form';
     import contentsTable from '../containers/components/contents-table.vue';
     import upsertModal from './upsert-modal';
 
     export default {
-        mixins: [resource, form],
+        mixins: [resource],
         components: {
             contentsTable,
             upsertModal
@@ -88,16 +87,7 @@
                 this.upsertModalVisible = false;
             },
             getReadUrl() {
-                return '/containers/' + this.$route.params.containerId + '/folders/' + this.$route.params.id;
-            },
-            getCreateUrl() {
-                return '/containers/' + this.$route.params.containerId + '/folders';
-            },
-            getUpdateUrl() {
-                return this.getReadUrl();
-            },
-            getRemoveUrl() {
-                return this.getReadUrl();
+                return `/containers/${this.$route.params.containerId}/${this.resource}/${this.$route.params.id}`;
             }
         }
     };
