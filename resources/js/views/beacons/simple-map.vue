@@ -40,7 +40,7 @@
 
                 this.marker = new L.Marker({lat: this.lat, lng: this.lng}, {icon})
                     .addTo(this.map)
-                    .bindPopup('Latitude: ' + this.lat + ', ' + 'Longitude: ' + this.lng);
+                    .bindPopup('Latitude: ' + this.lat + '<br>' + 'Longitude: ' + this.lng);
 
                 L.gridLayer
                     .googleMutant({

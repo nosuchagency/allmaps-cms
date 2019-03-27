@@ -40,8 +40,9 @@
                                 <label>Location</label>
                             </div>
                         </template>
-                        <simple-map v-if="item.lat && item.lng"
-                                    :lat="item.lat" :lng="item.lng">
+                        <simple-map v-if="item.locations.length > 0"
+                                    :lat="this.item.locations[0].coordinates.lat"
+                                    :lng="this.item.locations[0].coordinates.lng">
                         </simple-map>
                         <div class="no-location" v-else>
                             <label>The beacon does not have a location yet</label>
