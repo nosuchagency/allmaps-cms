@@ -2,14 +2,18 @@
     <portal to="modals">
         <el-dialog :visible="visible"
                    :before-close="closeModal"
-                    width="60%">
-            <el-form>
+                   width="60%">
+            <el-form :model="form"
+                     status-icon
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Rule" name="rule">
+                        <br>
                         <el-row :gutter="25">
                             <el-col :span="12">
                                 <el-form-item label="Beacon Distance"
-                                              :class="{'is-error' : has('distance')}">
+                                              :class="{'is-error' : form.errors.has('distance')}">
                                     <el-select v-model="form.distance">
                                         <el-option v-for="item in distances"
                                                    :key="item.value"
@@ -21,7 +25,7 @@
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item label="Weekday(s)"
-                                              :class="{'is-error' : has('weekday')}">
+                                              :class="{'is-error' : form.errors.has('weekday')}">
                                     <el-select v-model="form.weekday">
                                         <el-option v-for="item in weekdays"
                                                    :key="item.value"
@@ -34,6 +38,7 @@
                         </el-row>
                     </el-tab-pane>
                     <el-tab-pane label="Time Restriction" name="time">
+                        <br>
                         <el-row :gutter="25">
                             <el-col>
                                 <el-form-item label="Enable">
@@ -43,7 +48,7 @@
                             <el-col :span="12">
                                 <el-form-item v-if="form.time_restricted"
                                               label="Time from"
-                                              :class="{'is-error' : has('time_from')}">
+                                              :class="{'is-error' : form.errors.has('time_from')}">
                                     <el-time-select v-model="form.time_from"
                                                     :picker-options="{
                                                         start: '00:00',
@@ -56,7 +61,7 @@
                             <el-col :span="12">
                                 <el-form-item v-if="form.time_restricted"
                                               label="Time to"
-                                              :class="{'is-error' : has('time_to')}">
+                                              :class="{'is-error' : form.errors.has('time_to')}">
                                     <el-time-select v-model="form.time_to"
                                                     :picker-options="{
                                                         start: '00:00',
@@ -70,6 +75,7 @@
                         </el-row>
                     </el-tab-pane>
                     <el-tab-pane label="Date Restriction" name="date">
+                        <br>
                         <el-row :gutter="25">
                             <el-col>
                                 <el-form-item label="Enable">
@@ -79,7 +85,7 @@
                             <el-col :span="12">
                                 <el-form-item v-if="form.date_restricted"
                                               label="Date from"
-                                              :class="{'is-error' : has('date_from')}">
+                                              :class="{'is-error' : form.errors.has('date_from')}">
                                     <el-date-picker v-model="form.date_from"
                                                     type="date"
                                                     format="dd-MM-yyyy">
@@ -89,7 +95,7 @@
                             <el-col :span="12">
                                 <el-form-item v-if="form.date_restricted"
                                               label="Date to"
-                                              :class="{'is-error' : has('date_to')}">
+                                              :class="{'is-error' : form.errors.has('date_to')}">
                                     <el-date-picker v-model="form.date_to"
                                                     type="date"
                                                     format="dd-MM-yyyy">
@@ -101,21 +107,32 @@
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                 <el-button v-if="item"
-                            type="text"
-                            size="small"
-                            class="btn-remove"
-                            @click="removeItem">
-                    Delete
-                </el-button>
+                 <template v-if="item">
+                    <el-button v-if="!confirmDelete"
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="confirmDelete = true">
+                            Delete
+                    </el-button>
+                    <el-button v-else
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="remove">
+                        Are you sure?
+                    </el-button>
+                </template>
                 <el-button type="text"
                            size="small"
+                           class="btn-cancel"
                            @click="closeModal">
                     Cancel
                 </el-button>
-                <el-button type="primary"
+                <el-button type="success"
                            size="small"
-                           @click="item ? updateItem() : createItem()">
+                           :loading="form.busy"
+                           @click="item ? update() : create()">
                     Confirm
                 </el-button>
             </span>
@@ -124,10 +141,9 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form],
         props: {
             visible: Boolean,
             item: Object,
@@ -137,6 +153,7 @@
         data() {
             return {
                 currentTab: 'rule',
+                confirmDelete: false,
                 weekdays: [
                     {label: 'All days', 'value': 'all'},
                     {label: 'Weekdays', 'value': 'weekdays'},
@@ -154,13 +171,7 @@
                     {label: 'Medium', 'value': 'medium'},
                     {label: 'Far', 'value': 'far'},
                 ],
-                form: this.getForm(),
-                deleting: false
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                form: new Form({
                     distance: this.item ? this.item.distance : 'close',
                     weekday: this.item ? this.item.weekday : 'all',
                     time_from: this.item ? this.item.time_from : null,
@@ -169,94 +180,36 @@
                     date_to: this.item ? this.item.date_to : null,
                     time_restricted: this.item ? !!this.item.time_restricted : false,
                     date_restricted: this.item ? !!this.item.date_restricted : false,
-                }
-            },
-            async createItem() {
-                try {
-                    this.forget();
-                    const rule = await this.create();
-                    this.$emit('rule-modal:add', {beaconId: this.beaconId, containerId: this.containerId, rule})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const rule = await this.update();
-                    this.$emit('rule-modal:update', {beaconId: this.beaconId, containerId: this.containerId, rule})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async removeItem() {
-                try {
-                    await this.remove();
-                    this.$emit('rule-modal:remove', {
-                        beaconId: this.beaconId,
-                        containerId: this.containerId,
-                        rule: this.item
-                    })
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
+                })
+            }
+        },
+        methods: {
             create() {
-                return new Promise(async (resolve, reject) => {
-                    this.creating = true;
-
-                    try {
-                        const response = await this.$axios.post(this.getCreateUrl(), this.form);
-                        resolve(response.data);
-                    } catch (error) {
-                        reject(error);
-                    } finally {
-                        this.creating = false;
-                    }
-                });
+                this.form.post(`/containers/${this.containerId}/beacons/${this.beaconId}/rules`)
+                    .then(response => this.$emit('rule-modal:add', {
+                        rule: response,
+                        containerId: this.containerId,
+                        beaconId: this.beaconId
+                    }))
+                    .catch(error => console.log(error));
             },
             update() {
-                return new Promise(async (resolve, reject) => {
-                    this.updating = true;
-
-                    try {
-                        const response = await this.$axios.put(this.getUpdateUrl(), this.form);
-                        resolve(response.data);
-                    } catch (error) {
-                        reject(error);
-                    } finally {
-                        this.updating = false;
-                    }
-                });
+                this.form.put(`/containers/${this.containerId}/beacons/${this.beaconId}/rules/${this.item.id}`)
+                    .then(response => this.$emit('rule-modal:update', {
+                        rule: response,
+                        containerId: this.containerId,
+                        beaconId: this.beaconId
+                    }))
+                    .catch(error => console.log(error));
             },
             remove() {
-                return new Promise(async (resolve, reject) => {
-                    this.deleting = true;
-
-                    try {
-                        await this.$axios.delete(this.getRemoveUrl());
-                        resolve(true);
-                    } catch (error) {
-                        reject(error);
-                    } finally {
-                        this.deleting = false;
-                    }
-                });
-            },
-            getCreateUrl() {
-                return '/containers/' + this.containerId + '/beacons/' + this.beaconId + '/rules';
-            },
-            getUpdateUrl() {
-                return '/containers/' + this.containerId + '/beacons/' + this.beaconId + '/rules/' + this.item.id;
-            },
-            getRemoveUrl() {
-                return '/containers/' + this.containerId + '/beacons/' + this.beaconId + '/rules/' + this.item.id;
+                this.form.delete(`/containers/${this.containerId}/beacons/${this.beaconId}/rules/${this.item.id}`)
+                    .then(response => this.$emit('rule-modal:remove', {
+                        rule: response,
+                        containerId: this.containerId,
+                        beaconId: this.beaconId
+                    }))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('rule-modal:close')
@@ -267,26 +220,8 @@
 
 <style lang="scss" scoped>
     .el-dialog {
-        /deep/ &__header {
-            display: none;
-        }
-
-        /deep/ &__footer {
-            padding: 20px;
-            border-top: 1px solid #dfdfdf;
-        }
-
         /deep/ .el-date-editor {
             width: 100%;
-        }
-
-        .btn-remove {
-            float: left;
-            color: #FF0000;
-
-            &:hover {
-                color: #990000;
-            }
         }
     }
 </style>

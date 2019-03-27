@@ -1,0 +1,177 @@
+<template>
+    <portal to="modals">
+        <el-dialog :visible="visible"
+                   :before-close="closeModal">
+            <el-form :model="form"
+                     status-icon
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
+                <el-tabs v-model="currentTab">
+                    <el-tab-pane label="Fixture" name="fixture">
+                        <br>
+                        <el-form-item :label="$t('fixtures.attributes.name')"
+                                      :class="{'is-error' : form.errors.has('name')}">
+                            <el-input v-model="form.name" autofocus></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$t('fixtures.attributes.description')"
+                                      :class="{'is-error' : form.errors.has('description')}">
+                            <el-input v-model="form.description"
+                                      type="textarea"
+                                      :rows="3">
+                            </el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="Image" name="image">
+                        <br>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :label="$t('fixtures.attributes.width')"
+                                              :class="{'is-error' : form.errors.has('width')}">
+                                    <el-input v-model.number="form.width"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :label="$t('fixtures.attributes.height')"
+                                              :class="{'is-error' : form.errors.has('height')}">
+                                    <el-input v-model.number="form.height"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :label="$t('fixtures.attributes.image')"
+                                              :class="{'is-error' : form.errors.has('image')}">
+                                    <image-upload @image-uploaded="setImage"
+                                                  @image-removed="setImage"
+                                                  :image="form.image">
+                                    </image-upload>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-tab-pane>
+                    <el-tab-pane label="Taxonomy" name="taxonomies">
+                        <br>
+                        <el-form-item :label="$t('fixtures.attributes.category')"
+                                      :class="{'is-error' : form.errors.has('category')}">
+                            <fetch-items url="/categories">
+                                <el-select v-model="form.category"
+                                           slot-scope="{items, loading}"
+                                           placeholder="Select"
+                                           clearable
+                                           value-key="id">
+                                    <el-option v-for="item in items"
+                                               :key="item.id"
+                                               :label="item.name"
+                                               :value="item">
+                                    </el-option>
+                                </el-select>
+                            </fetch-items>
+                        </el-form-item>
+                        <el-form-item :label="$t('fixtures.attributes.tags')"
+                                      :class="{'is-error' : form.errors.has('tags')}">
+                            <fetch-items url="/tags">
+                                <el-select v-model="form.tags"
+                                           slot-scope="{items, loading}"
+                                           placeholder="Select"
+                                           multiple
+                                           value-key="id">
+                                    <el-option v-for="item in items"
+                                               :key="item.id"
+                                               :label="item.name"
+                                               :value="item">
+                                    </el-option>
+                                </el-select>
+                            </fetch-items>
+                        </el-form-item>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-form>
+            <span slot="footer">
+                <template v-if="item">
+                    <el-button v-if="!confirmDelete"
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="confirmDelete = true">
+                            Delete
+                    </el-button>
+                    <el-button v-else
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="remove">
+                        Are you sure?
+                    </el-button>
+                </template>
+                <el-button type="text"
+                           size="small"
+                           class="btn-cancel"
+                           @click="closeModal">
+                    Cancel
+                </el-button>
+                <el-button type="success"
+                           size="small"
+                           :loading="form.busy"
+                           @click="item ? update() : create()">
+                    Confirm
+                </el-button>
+            </span>
+        </el-dialog>
+    </portal>
+</template>
+
+<script>
+    import Form from '../../utils/Form';
+    import imageUpload from 'js/components/image-upload';
+
+    export default {
+        props: {
+            visible: Boolean,
+            item: Object
+        },
+        components: {
+            imageUpload
+        },
+        data() {
+            return {
+                currentTab: 'fixture',
+                resource: 'fixtures',
+                confirmDelete: false,
+                form: new Form({
+                    name: this.item ? this.item.name : '',
+                    description: this.item ? this.item.description : '',
+                    image: this.item ? this.item.image : '',
+                    width: this.item ? this.item.width : 0,
+                    height: this.item ? this.item.height : 0,
+                    category: this.item ? this.item.category : '',
+                    tags: this.item ? this.item.tags : [],
+                })
+            }
+        },
+        methods: {
+            setImage(image = null) {
+                this.form.image = image;
+            },
+            create() {
+                this.form.post(`/${this.resource}`)
+                    .then(response => this.$emit('upsert-modal:add', response))
+                    .catch(error => console.log(error));
+            },
+            update() {
+                this.form.put(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:update', response))
+                    .catch(error => console.log(error));
+            },
+            remove() {
+                this.form.delete(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .catch(error => console.log(error));
+            },
+            closeModal() {
+                this.$emit('upsert-modal:close');
+            }
+        }
+    }
+</script>
+
+<style lang="scss" scoped>
+
+</style>

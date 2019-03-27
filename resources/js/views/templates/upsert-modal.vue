@@ -5,27 +5,28 @@
                    width="70%">
             <el-form :model="form"
                      status-icon
-                     label-width="120px">
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Template" name="template">
                         <br>
                         <el-form-item :label="$t('templates.attributes.name')"
-                                      :class="{'is-error' : has('name')}">
-                            <el-input v-model="form.name"></el-input>
+                                      :class="{'is-error' : form.errors.has('name')}">
+                            <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('templates.attributes.description')"
-                                      :class="{'is-error' : has('description')}">
+                                      :class="{'is-error' : form.errors.has('description')}">
                             <el-input v-model="form.description"
                                       type="textarea"
                                       :rows="3">
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="$t('templates.attributes.activated')"
-                                      :class="{'is-error' : has('activated')}">
+                                      :class="{'is-error' : form.errors.has('activated')}">
                             <el-switch v-model="form.activated"></el-switch>
                         </el-form-item>
                         <el-form-item :label="$t('templates.attributes.layout')"
-                                      :class="{'is-error' : has('layout')}">
+                                      :class="{'is-error' : form.errors.has('layout')}">
                             <fetch-items url="/layouts">
                                 <el-select v-model="form.layout"
                                            slot-scope="{items, loading}"
@@ -48,7 +49,7 @@
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
                         <el-form-item :label="$t('templates.attributes.category')"
-                                      :class="{'is-error' : has('category')}">
+                                      :class="{'is-error' : form.errors.has('category')}">
                             <fetch-items url="/categories">
                                 <el-select v-model="form.category"
                                            slot-scope="{items, loading}"
@@ -64,7 +65,7 @@
                             </fetch-items>
                         </el-form-item>
                         <el-form-item :label="$t('templates.attributes.tags')"
-                                      :class="{'is-error' : has('tags')}">
+                                      :class="{'is-error' : form.errors.has('tags')}">
                             <fetch-items url="/tags">
                                 <el-select v-model="form.tags"
                                            slot-scope="{items, loading}"
@@ -83,22 +84,32 @@
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                <el-button v-if="item"
-                           type="text"
-                           size="small"
-                           class="btn-remove"
-                           @click="removeItem">
-                    Delete
-                </el-button>
+                <template v-if="item">
+                    <el-button v-if="!confirmDelete"
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="confirmDelete = true">
+                            Delete
+                    </el-button>
+                    <el-button v-else
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="remove">
+                        Are you sure?
+                    </el-button>
+                </template>
                 <el-button type="text"
                            size="small"
+                           class="btn-cancel"
                            @click="closeModal">
                     Cancel
                 </el-button>
-                <el-button type="primary"
+                <el-button type="success"
                            size="small"
-                           @click="item ? updateItem() : createItem()"
-                           :loading="creating || updating || deleting">
+                           :loading="form.busy"
+                           @click="item ? update() : create()">
                     Confirm
                 </el-button>
             </span>
@@ -107,11 +118,9 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
-    import resource from 'js/mixins/resource';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form, resource],
         props: {
             visible: Boolean,
             item: Object
@@ -120,12 +129,8 @@
             return {
                 currentTab: 'template',
                 resource: 'templates',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                confirmDelete: false,
+                form: new Form({
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     content: this.item ? this.item.content : '',
@@ -133,42 +138,24 @@
                     layout: this.item ? this.item.layout : null,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
-                }
+                })
+            }
+        },
+        methods: {
+            create() {
+                this.form.post(`/${this.resource}`)
+                    .then(response => this.$emit('upsert-modal:add', response))
+                    .catch(error => console.log(error));
             },
-            async createItem() {
-                try {
-                    this.forget();
-                    const item = await this.create();
-                    this.$emit('upsert-modal:add', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
+            update() {
+                this.form.put(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:update', response))
+                    .catch(error => console.log(error));
             },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const item = await this.update();
-                    this.$emit('upsert-modal:update', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async removeItem() {
-                try {
-                    this.forget();
-                    const item = await this.remove();
-                    this.$emit('upsert-modal:remove', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async fetch() {
+            remove() {
+                this.form.delete(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('upsert-modal:close');
@@ -178,23 +165,5 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-dialog {
-        /deep/ &__header {
-            display: none;
-        }
 
-        /deep/ &__footer {
-            padding: 20px;
-            border-top: 1px solid #dfdfdf;
-        }
-
-        .btn-remove {
-            float: left;
-            color: #FF0000;
-
-            &:hover {
-                color: #990000;
-            }
-        }
-    }
 </style>

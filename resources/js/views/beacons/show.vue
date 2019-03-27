@@ -176,14 +176,12 @@
 </template>
 
 <script>
-    import resource from 'js/mixins/resource';
     import upsertModal from './upsert-modal';
     import containerModal from './container-modal';
     import ruleModal from '../rules/upsert-modal';
     import simpleMap from './simple-map';
 
     export default {
-        mixins: [resource],
         components: {
             upsertModal,
             containerModal,
@@ -201,7 +199,18 @@
                 item: null
             };
         },
+        created() {
+            this.fetch();
+        },
         methods: {
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             updateItem(item) {
                 this.item = item;
                 this.closeUpsertModal();
@@ -222,6 +231,21 @@
             closeContainerModal() {
                 this.containerModalVisible = false;
             },
+            addContainer(container) {
+                this.item.containers.push(container);
+                this.closeContainerModal();
+            },
+            updateContainer(container) {
+                let index = this.item.containers.findIndex(({id}) => id === container.id);
+                this.item.containers.splice(index, 1, container);
+                this.closeContainerModal();
+            },
+            removeContainer(container) {
+                let index = this.item.containers.findIndex(({id}) => id === container.id);
+                this.item.containers.splice(index, 1);
+
+                this.closeContainerModal();
+            },
             openRuleModal(container, item = null) {
                 this.selectedContainer = container;
                 this.selectedRule = item;
@@ -230,34 +254,20 @@
             closeRuleModal() {
                 this.ruleModalVisible = false;
             },
-            addContainer(container) {
-                this.item.containers.push(container);
-                this.closeContainerModal();
-            },
-            updateContainer(data) {
-                let index = _.findIndex(this.item.containers, {id: data.id});
-                this.item.containers.splice(index, 1, data.container);
-                this.closeContainerModal();
-            },
-            removeContainer(container) {
-                let index = _.findIndex(this.item.containers, {id: container.id});
-                this.item.containers.splice(index, 1);
-                this.closeContainerModal();
-            },
             addRule(data) {
-                let container = _.find(this.item.containers, {id: data.containerId});
+                let container = this.item.containers.find(({id}) => id === data.containerId);
                 container.rules.push(data.rule);
                 this.closeRuleModal();
             },
             updateRule(data) {
-                let container = _.find(this.item.containers, {id: data.containerId});
-                let ruleIndex = _.findIndex(container.rules, {id: data.rule.id});
+                let container = this.item.containers.find(({id}) => id === data.containerId);
+                let ruleIndex = container.rules.findIndex(({id}) => id === data.rule.id);
                 container.rules.splice(ruleIndex, 1, data.rule);
                 this.closeRuleModal();
             },
             removeRule(data) {
-                let container = _.find(this.item.containers, {id: data.containerId});
-                let ruleIndex = _.findIndex(container.rules, {id: data.rule.id});
+                let container = this.item.containers.find(({id}) => id === data.containerId);
+                let ruleIndex = container.rules.findIndex(({id}) => id === data.rule.id);
                 container.rules.splice(ruleIndex, 1);
                 this.closeRuleModal();
             }

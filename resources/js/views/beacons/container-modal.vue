@@ -2,7 +2,9 @@
     <portal to="modals">
         <el-dialog :visible="visible"
                    :before-close="closeModal">
-            <el-form>
+            <el-form :model="form"
+                     status-icon
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Container" name="container">
                         <br>
@@ -12,7 +14,8 @@
                                            size="small"
                                            filterable
                                            value-key="id"
-                                           placeholder="Choose Container">
+                                           placeholder="Choose Container"
+                                           ref="select">
                                     <el-option v-for="item in $lodash.differenceWith(items, containers, (one, two) => {
                                                     return item ? (item.id !== one.id && one.id === two.id) : one.id === two.id;
                                                 })"
@@ -27,21 +30,32 @@
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                 <el-button v-if="item"
-                            type="text"
-                            size="small"
-                            class="btn-remove"
-                            @click="removeItem">
-                    Remove
-                </el-button>
+                 <template v-if="item">
+                    <el-button v-if="!confirmDelete"
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="confirmDelete = true">
+                            Delete
+                    </el-button>
+                    <el-button v-else
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="remove">
+                        Are you sure?
+                    </el-button>
+                </template>
                 <el-button type="text"
                            size="small"
+                           class="btn-cancel"
                            @click="closeModal">
                     Cancel
                 </el-button>
-                <el-button type="primary"
+                <el-button type="success"
                            size="small"
-                           @click="item ? updateItem() : createItem()">
+                           :loading="form.busy"
+                           @click="item ? update() : create()">
                     Confirm
                 </el-button>
             </span>
@@ -50,110 +64,42 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form],
         props: {
             visible: Boolean,
             item: Object,
             beaconId: Number,
-            containers : Array
+            containers: Array
         },
         data() {
             return {
-                form: {
-                    container: this.item
-                },
                 currentTab: 'container',
-                creating: false,
-                updating: false,
-                deleting: false
+                confirmDelete: false,
+                form: new Form({
+                    container: this.item
+                })
             }
         },
+        mounted() {
+            setTimeout(() => this.$refs.select.focus(), 500);
+        },
         methods: {
-            async createItem() {
-                try {
-                    this.forget();
-                    const container = await this.create();
-                    this.$emit('container-modal:add', container)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const container = await this.update();
-                    this.$emit('container-modal:update', {id: this.item.id, container})
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async removeItem() {
-                try {
-                    await this.remove();
-                    this.$emit('container-modal:remove', this.item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
             create() {
-                return new Promise(async (resolve, reject) => {
-                    this.creating = true;
-
-                    try {
-                        const response = await this.$axios.post(this.getCreateUrl(), this.form);
-                        resolve(response.data);
-                    } catch (error) {
-                        reject(error);
-                    } finally {
-                        this.creating = false;
-                    }
-                });
+                this.form.post(`/beacons/${this.beaconId}/containers/${this.form.container.id}`)
+                    .then(response => this.$emit('container-modal:add', response))
+                    .catch(error => console.log(error));
             },
             update() {
-                return new Promise(async (resolve, reject) => {
-                    this.updating = true;
-
-                    try {
-                        const response = await this.$axios.put(this.getUpdateUrl(), this.form);
-                        resolve(response.data);
-                    } catch (error) {
-                        reject(error);
-                    } finally {
-                        this.updating = false;
-                    }
-                });
+                this.form.put(`/beacons/${this.beaconId}/containers/${this.item.id}`)
+                    .then(response => this.$emit('container-modal:update', response))
+                    .catch(error => console.log(error));
             },
             remove() {
-                return new Promise(async (resolve, reject) => {
-                    this.deleting = true;
-
-                    try {
-                        await this.$axios.delete(this.getRemoveUrl());
-                        resolve(true);
-                    } catch (error) {
-                        reject(error);
-                    } finally {
-                        this.deleting = false;
-                    }
-                });
-            },
-            getCreateUrl() {
-                return '/beacons/' + this.beaconId + '/containers/' + this.form.container.id;
-            },
-            getUpdateUrl() {
-                return '/beacons/' + this.beaconId + '/containers/' + this.item.id;
-            },
-            getRemoveUrl() {
-                return '/beacons/' + this.beaconId + '/containers/' + this.item.id;
+                this.form.delete(`/beacons/${this.beaconId}/containers/${this.item.id}`)
+                    .then(response => this.$emit('container-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('container-modal:close');
@@ -163,24 +109,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-dialog {
-        /deep/ &__header {
-            display: none;
-        }
 
-        /deep/ &__footer {
-            padding: 20px;
-            border-top: 1px solid #dfdfdf;
-        }
-
-        .btn-remove {
-            float: left;
-            color: #FF0000;
-
-            &:hover {
-                color: #990000;
-            }
-        }
-    }
 </style>
 

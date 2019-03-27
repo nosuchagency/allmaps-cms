@@ -16,8 +16,8 @@
             async fetch() {
                 try {
                     this.loading = true;
-                    const response = await this.$axios.get(this.url);
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(this.url);
+                    this.items = data;
                 } catch (error) {
                     console.log(error);
                 } finally {

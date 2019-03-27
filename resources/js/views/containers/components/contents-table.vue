@@ -71,10 +71,10 @@
         <content-upsert-modal :visible="contentModalActive"
                               :type="contentType"
                               :item="selectedContent"
-                              @content-created="addContent"
-                              @content-removed="removeContent"
-                              @content-updated="updateContent"
-                              @close-content-modal="closeContentModal"
+                              @content-modal:add="addContent"
+                              @content-modal:remove="removeContent"
+                              @content-modal:update="updateContent"
+                              @content-modal:close="closeContentModal"
                               :folder="folder">
         </content-upsert-modal>
     </div>
@@ -99,7 +99,7 @@
                     {type: 'image', icon: 'image'},
                     {type: 'web', icon: 'link'},
                 ],
-                contents: this.folder.contents.slice(0),
+                contents: this.folder.contents.splice(0),
                 contentType: null,
                 selectedContent: null,
                 contentModalActive: false
@@ -117,18 +117,21 @@
         methods: {
             addContent(content) {
                 this.contents.push(content);
+                this.closeContentModal();
             },
             updateContent(content) {
-                let index = this.contents.findIndex(item => item.id == content.id);
+                let index = this.contents.findIndex(item => item.id === content.id);
                 this.contents.splice(index, 1, content);
+                this.closeContentModal();
             },
             removeContent(content) {
-                let index = this.contents.findIndex(item => item.id == content.id);
+                let index = this.contents.findIndex(item => item.id === content.id);
                 this.contents.splice(index, 1);
+                this.closeContentModal();
             },
             openContentModal(contentType, id = null) {
                 this.contentType = contentType;
-                this.selectedContent = id ? this.contents.find(item => item.id == id) : null;
+                this.selectedContent = id ? this.contents.find(item => item.id === id) : null;
                 this.contentModalActive = true;
             },
             closeContentModal() {

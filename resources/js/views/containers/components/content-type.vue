@@ -1,14 +1,14 @@
 <script>
     export default {
-        props: ['item', 'type', 'errors'],
+        props: ['item', 'type', 'form'],
         render(createElement) {
             return createElement(this.type + '-content', {
                 props: {
                     item: this.item,
-                    inputErrors: this.errors
+                    form: this.form
                 },
                 on: {
-                    'sync-form': (value) => this.$emit('sync-form', value)
+                    'sync-fields': (value) => this.$emit('sync-fields', value)
                 }
             })
         }

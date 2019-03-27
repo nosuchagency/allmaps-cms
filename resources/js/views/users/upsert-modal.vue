@@ -4,29 +4,29 @@
                    :before-close="closeModal">
             <el-form :model="form"
                      status-icon
-                     label-width="120px">
+                     label-width="120px"
+                     @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="User" name="user">
                         <br>
                         <el-form-item :label="$t('users.attributes.name')"
-                                      :class="{'is-error' : has('name')}">
-                            <el-input v-model="form.name">
-                            </el-input>
+                                      :class="{'is-error' : form.errors.has('name')}">
+                            <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('users.attributes.email')"
-                                      :class="{'is-error' : has('email')}">
+                                      :class="{'is-error' : form.errors.has('email')}">
                             <el-input v-model="form.email">
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="$t('users.attributes.password')"
-                                      :class="{'is-error' : has('password')}">
+                                      :class="{'is-error' : form.errors.has('password')}">
                             <el-input v-model="form.password"
                                       :placeholder="$t('users.password_placeholder')"
                                       type="password">
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="$t('users.attributes.role')"
-                                      :class="{'is-error' : has('role')}">
+                                      :class="{'is-error' : form.errors.has('role')}">
                             <fetch-items url="/roles">
                                 <el-select slot-scope="{items, loading}"
                                            v-model="form.role"
@@ -41,13 +41,13 @@
                         </el-form-item>
                         <el-form-item label="Invitation">
                             <el-switch v-model="form.send_invitation" label="Send invitation email"
-                                         border></el-switch>
+                                       border></el-switch>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
                         <el-form-item :label="$t('users.attributes.category')"
-                                      :class="{'is-error' : has('category')}">
+                                      :class="{'is-error' : form.errors.has('category')}">
                             <fetch-items url="/categories">
                                 <el-select v-model="form.category"
                                            slot-scope="{items, loading}"
@@ -63,7 +63,7 @@
                             </fetch-items>
                         </el-form-item>
                         <el-form-item :label="$t('users.attributes.tags')"
-                                      :class="{'is-error' : has('tags')}">
+                                      :class="{'is-error' : form.errors.has('tags')}">
                             <fetch-items url="/tags">
                                 <el-select v-model="form.tags"
                                            slot-scope="{items, loading}"
@@ -82,35 +82,43 @@
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                <el-button v-if="item"
-                           type="text"
-                           size="small"
-                           class="btn-remove"
-                           @click="removeItem">
-                    Delete
-                </el-button>
+                <template v-if="item">
+                    <el-button v-if="!confirmDelete"
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="confirmDelete = true">
+                            Delete
+                    </el-button>
+                    <el-button v-else
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="remove">
+                        Are you sure?
+                    </el-button>
+                </template>
                 <el-button type="text"
                            size="small"
+                           class="btn-cancel"
                            @click="closeModal">
                     Cancel
-                </el-button>
-                <el-button type="primary"
-                           size="small"
-                           @click="item ? updateItem() : createItem()"
-                           :loading="creating || updating || deleting">
+            </el-button>
+            <el-button type="success"
+                       size="small"
+                       :loading="form.busy"
+                       @click="item ? update() : create()">
                     Confirm
-                </el-button>
+            </el-button>
             </span>
         </el-dialog>
     </portal>
 </template>
 
 <script>
-    import form from 'js/mixins/form';
-    import resource from 'js/mixins/resource';
+    import Form from '../../utils/Form';
 
     export default {
-        mixins: [form, resource],
         props: {
             visible: Boolean,
             item: Object
@@ -119,12 +127,8 @@
             return {
                 currentTab: 'user',
                 resource: 'users',
-                form: this.getForm()
-            }
-        },
-        methods: {
-            getForm() {
-                return {
+                confirmDelete: false,
+                form: new Form({
                     name: this.item ? this.item.name : '',
                     email: this.item ? this.item.email : '',
                     password: '',
@@ -132,42 +136,24 @@
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     send_invitation: false
-                }
+                })
+            }
+        },
+        methods: {
+            create() {
+                this.form.post(`/${this.resource}`)
+                    .then(response => this.$emit('upsert-modal:add', response))
+                    .catch(error => console.log(error));
             },
-            async createItem() {
-                try {
-                    this.forget();
-                    const item = await this.create();
-                    this.$emit('upsert-modal:add', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
+            update() {
+                this.form.put(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:update', response))
+                    .catch(error => console.log(error));
             },
-            async updateItem() {
-                try {
-                    this.forget();
-                    const item = await this.update();
-                    this.$emit('upsert-modal:update', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async removeItem() {
-                try {
-                    this.forget();
-                    const item = await this.remove();
-                    this.$emit('upsert-modal:remove', item)
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                }
-            },
-            async fetch() {
+            remove() {
+                this.form.delete(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('upsert-modal:close');
@@ -177,23 +163,5 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-dialog {
-        /deep/ &__header {
-            display: none;
-        }
 
-        /deep/ &__footer {
-            padding: 20px;
-            border-top: 1px solid #dfdfdf;
-        }
-
-        .btn-remove {
-            float: left;
-            color: #FF0000;
-
-            &:hover {
-                color: #990000;
-            }
-        }
-    }
 </style>

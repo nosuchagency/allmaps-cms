@@ -8,7 +8,7 @@ return [
         'id' => 'ID',
         'name' => 'Name',
         'address' => 'Address',
-        'zipcode' => 'Zipcode',
+        'postcode' => 'Postal Code',
         'city' => 'City',
         'image' => 'Image',
         'lat' => 'Latitude',

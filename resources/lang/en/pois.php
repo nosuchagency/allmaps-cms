@@ -7,7 +7,7 @@ return [
     'attributes' => [
         'id' => 'ID',
         'name' => 'Name',
-        'internal_name' => 'Internal Name',
+        'description' => 'Description',
         'image' => 'Image',
         'type' => 'Type',
         'color' => 'Color',

@@ -46,7 +46,7 @@
                 </permissions-card>
                 <permissions-card :role="item"
                                   :advanced="item.advanced_locations"
-                                  :permissions="['beacons', 'pois', 'findables']"
+                                  :permissions="['beacons', 'pois', 'searchables']"
                                   title="Locations"
                                   icon="map-pin">
                 </permissions-card>
@@ -75,13 +75,10 @@
 </template>
 
 <script>
-    import resource from 'js/mixins/resource';
-    import form from 'js/mixins/form';
     import upsertModal from './upsert-modal';
     import permissionsCard from "./permissions/permissions-card";
 
     export default {
-        mixins: [resource, form],
         components: {
             permissionsCard,
             upsertModal
@@ -93,7 +90,18 @@
                 item: null
             };
         },
+        created() {
+            this.fetch();
+        },
         methods: {
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             updateItem(item) {
                 this.item = item;
                 this.closeUpsertModal();

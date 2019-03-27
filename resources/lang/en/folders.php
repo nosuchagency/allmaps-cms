@@ -6,6 +6,8 @@ return [
 
     'attributes' => [
         'id' => 'ID',
-        'name' => 'Name'
+        'name' => 'Name',
+        'category' => 'Category',
+        'tags' => 'Tags'
     ],
 ];

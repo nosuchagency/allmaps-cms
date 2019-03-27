@@ -1,30 +1,29 @@
 <template>
-    <el-form :model="form">
+    <el-form :model="fields"
+             status-icon
+             label-width="120px"
+             @keydown.native="form.errors.clear($event.target.name)">
         <el-tabs v-model="currentTab">
             <el-tab-pane label="Video" name="video">
                 <el-form-item label="Title"
-                              :class="{'is-error' : has('title')}">
-                    <el-input v-model="form.title"
-                              @input="syncForm">
+                              :class="{'is-error' : form.errors.has('title')}">
+                    <el-input v-model="fields.title">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="YouTube URL"
-                              :class="{'is-error' : has('yt_url')}">
-                    <el-input v-model="form.yt_url"
-                              @input="syncForm">
+                              :class="{'is-error' : form.errors.has('yt_url')}">
+                    <el-input v-model="fields.yt_url">
                     </el-input>
                 </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="Taxonomy" name="taxonomies">
-
                 <el-form-item :label="$t('places.attributes.category')"
-                              :class="{'is-error' : has('category')}">
+                              :class="{'is-error' : form.errors.has('category')}">
                     <fetch-items url="/categories">
-                        <el-select v-model="form.category"
+                        <el-select v-model="fields.category"
                                    slot-scope="{items, loading}"
                                    placeholder="Select"
                                    clearable
-                                   @change="syncForm"
                                    value-key="id">
                             <el-option v-for="item in items"
                                        :key="item.id"
@@ -35,13 +34,12 @@
                     </fetch-items>
                 </el-form-item>
                 <el-form-item :label="$t('beacons.attributes.tags')"
-                              :class="{'is-error' : has('tags')}">
+                              :class="{'is-error' : form.errors.has('tags')}">
                     <fetch-items url="/tags">
-                        <el-select v-model="form.tags"
+                        <el-select v-model="fields.tags"
                                    slot-scope="{items, loading}"
                                    placeholder="Select"
                                    multiple
-                                   @change="syncForm"
                                    value-key="id">
                             <el-option v-for="item in items"
                                        :key="item.id"
@@ -57,36 +55,31 @@
 </template>
 
 <script>
-    import form from 'js/mixins/form';
-
     export default {
-        mixins: [form],
         props: {
-            item: {
-                default: null,
-                type: Object
-            },
-            inputErrors: {
-                type: Object
-            }
+            item: Object,
+            form: Object
         },
         data() {
             return {
-                form: this.getForm(),
+                fields: this.getFields(),
                 currentTab: 'video',
             };
         },
         watch: {
-            inputErrors(errors) {
-                this.errors = errors;
+            fields: {
+                handler(fields) {
+                    this.syncFields();
+                },
+                deep: true
             }
         },
         mounted() {
-            this.form = this.getForm();
-            this.syncForm();
+            this.fields = this.getFields();
+            this.syncFields();
         },
         methods: {
-            getForm() {
+            getFields() {
                 return {
                     title: this.item ? this.item.title : '',
                     yt_url: this.item ? this.item.yt_url : '',
@@ -94,8 +87,8 @@
                     tags: this.item ? this.item.tags : []
                 };
             },
-            syncForm() {
-                this.$emit('sync-form', this.form);
+            syncFields() {
+                this.$emit('sync-fields', this.fields);
             }
         }
     };

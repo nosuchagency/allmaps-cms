@@ -6,7 +6,7 @@
                     <div class="title-icon-wrapper">
                         <i class="fa fa-map-marked-alt title-icon"></i>
                         <template v-if="item">
-                            <router-link :to="'/places/' + item.place.id">
+                            <router-link :to="'/places/' + placeId">
                                 {{ item.place.name }}
                             </router-link>
                             <i class="fa fa-caret-right" style="margin: 0 10px;"></i>
@@ -16,29 +16,14 @@
                     </div>
                 </template>
                 <template slot="right">
-                    <poi-select></poi-select>
-                    <findable-select></findable-select>
-                    <beacon-select></beacon-select>
-                    <el-tooltip effect="dark"
-                                content="Reposition Map"
-                                placement="top-start">
-                        <el-button type="primary"
-                                   size="small"
-                                   @click="repositionMap"
-                                   circle>
-                            <i class="fa fa-bullseye"></i>
-                        </el-button>
-                    </el-tooltip>
-                    <el-tooltip effect="dark"
-                                content="Toggle plan visibility"
-                                placement="top-start">
-                        <el-button @click="togglePlan"
-                                   :type="togglePlanButtonType"
-                                   size="small"
-                                   icon="el-icon-picture-outline"
-                                   circle>
-                        </el-button>
-                    </el-tooltip>
+                    <template v-for="location in locationVariants">
+                        <location-select :title="location.title"
+                                         :url="location.url"
+                                         :identifier="location.identifier"
+                                         :floor-url="getFloorUrl()"
+                                         @location:add="locationCreated">
+                        </location-select>
+                    </template>
                 </template>
             </toolbar>
         </template>
@@ -48,9 +33,20 @@
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
             <div v-else>
-                <floor-map :place="item.place"
-                           :building="item.building"
-                           :floor="item">
+                <location-toolbar :location="currentLocation"
+                                  @location:saved="locationSaved"
+                                  @location:cancelled="locationCancelled"
+                                  @location:removed="locationRemoved"
+                                  :url="getFloorUrl()">
+                </location-toolbar>
+                <floor-map :lat="item.place.lat"
+                           :lng="item.place.lng"
+                           :current-location="currentLocation"
+                           :current-location-copy="currentLocationCopy"
+                           :structures="item.structures"
+                           :locations="item.locations"
+                           @location:set="setCurrentLocation"
+                           @location-copy:set="setCurrentLocationCopy">
                 </floor-map>
             </div>
         </template>
@@ -58,68 +54,82 @@
 </template>
 
 <script>
-    import floorMap from './locations-map.vue';
+    import floorMap from './floor-map';
+    import locationToolbar from './location-toolbar';
     import Hub from '../../../events/hub';
-    import {mapGetters} from 'vuex';
-    import resource from 'js/mixins/resource';
-    import form from 'js/mixins/form';
-    import poiSelect from './poi-select';
-    import findableSelect from './findable-select';
-    import beaconSelect from './beacon-select';
+    import locationSelect from './location-select';
 
     export default {
-        mixins: [resource, form],
         components: {
             floorMap,
-            poiSelect,
-            findableSelect,
-            beaconSelect
+            locationSelect,
+            locationToolbar
         },
         data() {
             return {
-                item: null
+                item: null,
+                placeId: null,
+                buildingId: null,
+                floorId: null,
+                currentLocation: null,
+                currentLocationCopy: null,
+                locationVariants: [
+                    {title: 'Beacon', url: '/beacons?inuse=false', identifier: 'beacon_id'},
+                    {title: 'Poi Point', url: '/pois', identifier: 'poi_id'},
+                    {title: 'Poi Area', url: '/pois', identifier: 'poi_id'},
+                    {title: 'Fixture', url: '/fixtures', identifier: 'fixture_id'}
+                ]
             }
         },
-        computed: {
-            togglePlanButtonType() {
-                return this.planActive ? 'primary' : 'default';
-            },
-            ...mapGetters('location', ['planActive'])
+        created() {
+            this.fetch();
         },
         methods: {
-            repositionMap() {
-                Hub.$emit('repositionMap');
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(this.getReadUrl());
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
             },
-            togglePlan() {
-                this.$store.commit('location/setPlanActive');
+            setCurrentLocation(location, callback = null) {
+                this.currentLocation = location;
+
+                if (callback && typeof callback == 'function') {
+                    this.$nextTick(() => callback(location))
+                }
+            },
+            setCurrentLocationCopy(location, callback = null) {
+                this.currentLocationCopy = location;
+
+                if (callback && typeof callback == 'function') {
+                    this.$nextTick(() => callback(location))
+                }
+            },
+            locationCreated(location) {
+                Hub.$emit('location:created', location);
+            },
+            locationSaved() {
+                Hub.$emit('location:saved');
+            },
+            locationCancelled() {
+                Hub.$emit('location:cancelled');
+            },
+            locationRemoved() {
+                Hub.$emit('location:removed');
+            },
+            getFloorUrl() {
+                return `/places/${this.placeId}/buildings/${this.buildingId}/floors/${this.floorId}`;
             },
             getReadUrl() {
-                let {placeId, buildingId, id} = this.$route.params;
-
-                return '/places/' + placeId + '/buildings/' + buildingId + '/floors/' + id + '/locations';
+                ({placeId: this.placeId, buildingId: this.buildingId, id: this.floorId} = this.$route.params);
+                return this.getFloorUrl();
             }
         }
     };
 </script>
 
 <style lang="scss" scoped>
-    .secondary-toolbar {
-        transition: height 0.2s ease-in-out;
-        overflow: hidden;
-        width: 100%;
-        height: 56px;
-        background-color: #409eff;
-        position: absolute;
-        z-index: 801;
-        display: flex;
-        align-items: center;
-    }
 
-    .location-type-button {
-        font-weight: bold;
-
-        &.is-selected {
-            opacity: 0.65;
-        }
-    }
 </style>

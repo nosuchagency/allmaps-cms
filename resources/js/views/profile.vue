@@ -12,7 +12,7 @@
         </template>
         <template slot="content">
 
-            <div class="loading" v-if="!form">
+            <div class="loading" v-if="!item">
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
 
@@ -23,24 +23,21 @@
                         <span>{{$t('general.details')}}</span>
                     </div>
                     <el-form :model="form"
-                             label-width="120px">
+                             label-width="120px"
+                             @keydown.native="form.errors.clear($event.target.name)">
                         <el-form-item :label="$t('profile.name')"
-                                      :class="{'is-error' : has('name')}">
-                            <el-input v-model="form.name"
-                                      @change="update">
-                            </el-input>
+                                      :class="{'is-error' : form.errors.has('name')}">
+                            <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('profile.email')"
-                                      :class="{'is-error' : has('email')}">
-                            <el-input v-model="form.email"
-                                      @change="update">
+                                      :class="{'is-error' : form.errors.has('email')}">
+                            <el-input v-model="form.email">
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="$t('profile.locale')"
-                                      :class="{'is-error' : has('locale')}">
+                                      :class="{'is-error' : form.errors.has('locale')}">
                             <el-select v-model="form.locale"
-                                       placeholder="Select"
-                                       @change="update">
+                                       placeholder="Select">
                                 <el-option
                                         v-for="item in locales"
                                         :key="item.value"
@@ -50,21 +47,19 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item :label="$t('profile.password')"
-                                      :class="{'is-error' : has('password')}">
+                                      :class="{'is-error' : form.errors.has('password')}">
                             <el-input v-model="form.password"
                                       :placeholder="$t('profile.password_placeholder')"
-                                      @change="update"
                                       type="password">
                             </el-input>
                         </el-form-item>
                         <el-form-item :label="$t('profile.role')"
-                                      :class="{'is-error' : has('role')}">
+                                      :class="{'is-error' : form.errors.has('role')}">
                             <fetch-items url="/roles">
                                 <el-select slot-scope="{items, loading}"
                                            v-model="form.role"
                                            value-key="id"
-                                           placeholder="Select"
-                                           @change="update">
+                                           placeholder="Select">
                                     <el-option
                                             v-for="(role, index) in items.map(item => {return {'label' : item.name, 'value' : item}})"
                                             :key="index"
@@ -77,23 +72,23 @@
                     </el-form>
                 </el-card>
             </div>
-
         </template>
     </layout>
 </template>
 
 <script>
-    import resource from 'js/mixins/resource';
-    import form from 'js/mixins/form';
+    import Form from '../utils/Form';
 
     export default {
-        mixins: [resource, form],
         data() {
             return {
+                item: null,
+                resource: 'profile',
                 locales: [
                     {'label': 'English', 'value': 'en'},
                     {'label': 'Dansk', 'value': 'da'}
-                ]
+                ],
+                form: this.getForm()
             }
         },
         watch: {
@@ -101,44 +96,31 @@
                 this.$i18n.locale = val;
             }
         },
+        created() {
+            this.fetch();
+        },
         methods: {
-            fetch() {
-                this.getResource();
-            },
             getForm() {
-                return {
+                return new Form({
                     name: this.item ? this.item.name : '',
                     email: this.item ? this.item.email : '',
                     password: '',
                     role: this.item ? this.item.role : '',
                     locale: this.item ? this.item.locale : ''
-                }
+                })
             },
-            async getResource() {
-                this.startProcessing();
-                try {
-                    const response = await this.$axios.get('/profile');
-                    this.item = response.data;
-                    this.form = this.getForm();
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                } finally {
-                    this.finishProcessing();
-                }
+            fetch() {
+                this.form.get(`/${this.resource}`)
+                    .then(response => {
+                        this.item = response;
+                        this.form = this.getForm();
+                    })
+                    .catch(error => console.log(error));
             },
-            async update() {
-                this.startProcessing();
-                try {
-                    await this.$axios.put('/profile', this.form);
-                } catch (error) {
-                    if (error.response.data.errors) {
-                        this.setErrors(error.response.data.errors);
-                    }
-                } finally {
-                    this.finishProcessing();
-                }
+            update() {
+                this.form.put(`/${this.resource}`)
+                    .then(response => console.log(response))
+                    .catch(error => console.log(error));
             }
         }
     }

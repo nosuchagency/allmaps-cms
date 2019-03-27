@@ -1,27 +1,28 @@
 <template>
-    <el-form :model="form">
+    <el-form :model="fields"
+             status-icon
+             label-width="120px"
+             @keydown.native="form.errors.clear($event.target.name)">
         <el-tabs v-model="currentTab">
             <el-tab-pane label="Image" name="image">
                 <el-form-item label="Title"
-                              :class="{'is-error' : has('title')}">
-                    <el-input v-model="form.title"
-                              @input="syncForm">
+                              :class="{'is-error' : form.errors.has('title')}">
+                    <el-input v-model="fields.title">
                     </el-input>
                 </el-form-item>
                 <image-upload @image-uploaded="setImage"
                               @image-removed="setImage"
-                              :image="form.image">
+                              :image="fields.image">
                 </image-upload>
             </el-tab-pane>
             <el-tab-pane label="Taxonomy" name="taxonomies">
                 <el-form-item :label="$t('places.attributes.category')"
-                              :class="{'is-error' : has('category')}">
+                              :class="{'is-error' : form.errors.has('category')}">
                     <fetch-items url="/categories">
-                        <el-select v-model="form.category"
+                        <el-select v-model="fields.category"
                                    slot-scope="{items, loading}"
                                    placeholder="Select"
                                    clearable
-                                   @change="syncForm"
                                    value-key="id">
                             <el-option v-for="item in items"
                                        :key="item.id"
@@ -32,13 +33,12 @@
                     </fetch-items>
                 </el-form-item>
                 <el-form-item :label="$t('beacons.attributes.tags')"
-                              :class="{'is-error' : has('tags')}">
+                              :class="{'is-error' : form.errors.has('tags')}">
                     <fetch-items url="/tags">
-                        <el-select v-model="form.tags"
+                        <el-select v-model="fields.tags"
                                    slot-scope="{items, loading}"
                                    placeholder="Select"
                                    multiple
-                                   @change="syncForm"
                                    value-key="id">
                             <el-option v-for="item in items"
                                        :key="item.id"
@@ -55,39 +55,35 @@
 
 <script>
     import imageUpload from 'js/components/image-upload';
-    import form from 'js/mixins/form';
 
     export default {
-        mixins: [form],
         components: {
             imageUpload
         },
         props: {
-            item: {
-                default: null,
-                type: Object
-            },
-            inputErrors: {
-                type: Object
-            }
+            item: Object,
+            form: Object
         },
         data() {
             return {
-                form: this.getForm(),
+                fields: this.getFields(),
                 currentTab: 'image',
             };
         },
         watch: {
-            inputErrors(errors) {
-                this.errors = errors;
+            fields: {
+                handler(fields) {
+                    this.syncFields();
+                },
+                deep: true
             }
         },
         mounted() {
-            this.form = this.getForm();
-            this.syncForm();
+            this.fields = this.getFields();
+            this.syncFields();
         },
         methods: {
-            getForm() {
+            getFields() {
                 return {
                     title: this.item ? this.item.title : '',
                     image: this.item ? this.item.image : null,
@@ -96,10 +92,10 @@
                 };
             },
             setImage(image = null) {
-                this.form.image = image;
+                this.fields.image = image;
             },
-            syncForm() {
-                this.$emit('sync-form', this.form);
+            syncFields() {
+                this.$emit('sync-fields', this.fields);
             }
         }
     };

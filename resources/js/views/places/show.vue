@@ -58,7 +58,7 @@
                                 <label style="font-weight: bold; color: #666; display: block; margin-bottom: 3px; font-size: 14px;">
                                     Zip Code
                                 </label>
-                                <span style="font-size: 14px;">{{item.zipcode || '-'}}</span>
+                                <span style="font-size: 14px;">{{item.postcode || '-'}}</span>
                             </div>
                             <div style="margin-bottom: 10px;">
                                 <label style="font-weight: bold; color: #666; display: block; margin-bottom: 3px; font-size: 14px;">
@@ -137,25 +137,11 @@
                                          property="level"
                                          sortable>
                         </el-table-column>
-                        <el-table-column label="Beacons"
+                        <el-table-column label="Locations"
                                          align="center"
                                          sortable>
                             <template slot-scope="scope">
-                                <span>{{scope.row.beacons.length}}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Pois"
-                                         align="center"
-                                         sortable>
-                            <template slot-scope="scope">
-                                <span>{{scope.row.pois.length}}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Findables"
-                                         align="center"
-                                         sortable>
-                            <template slot-scope="scope">
-                                <span>{{scope.row.findables.length}}</span>
+                                <span>{{scope.row.locations.length}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column align="right">
@@ -168,7 +154,7 @@
                                                icon="el-icon-picture-outline"
                                                circle
                                                v-if="$auth.user().permissions.includes('floors.read')"
-                                               @click="$router.push('/places/' + item.id + '/buildings/' + building.id + '/floors/' + scope.row.id + '/plan')">
+                                               @click="$router.push(`/places/${item.id}/buildings/${building.id}/floors/${scope.row.id}/structures`)">
                                     </el-button>
                                 </el-tooltip>
                                 <el-tooltip effect="dark"
@@ -178,7 +164,7 @@
                                                size="small"
                                                circle
                                                v-if="$auth.user().permissions.includes('floors.read')"
-                                               @click="$router.push('/places/' + item.id + '/buildings/' + building.id + '/floors/' + scope.row.id + '/locations')">
+                                               @click="$router.push(`/places/${item.id}/buildings/${building.id}/floors/${scope.row.id}/locations`)">
                                         <i class="fa fa-location-arrow"></i>
                                     </el-button>
                                 </el-tooltip>
@@ -229,14 +215,13 @@
 
 <script>
     import multipleSelection from 'js/mixins/multiple-selection';
-    import resource from 'js/mixins/resource';
     import upsertModal from './upsert-modal';
     import buildingModal from '../buildings/upsert-modal';
     import floorModal from '../floors/upsert-modal';
     import mapLocationSelect from './map-location-select';
 
     export default {
-        mixins: [multipleSelection, resource],
+        mixins: [multipleSelection],
         components: {
             upsertModal,
             buildingModal,
@@ -254,7 +239,18 @@
                 selectedFloor: null
             };
         },
+        created() {
+            this.fetch();
+        },
         methods: {
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             updateItem(item) {
                 this.item = item;
                 this.closeUpsertModal();
@@ -287,30 +283,30 @@
                 this.item.buildings.push(building);
                 this.closeBuildingModal();
             },
-            updateBuilding(data) {
-                let index = _.findIndex(this.item.buildings, {id: data.id});
-                this.item.buildings.splice(index, 1, data.building);
+            updateBuilding(building) {
+                let index = this.item.buildings.findIndex(({id}) => id === building.id);
+                this.item.buildings.splice(index, 1, building);
                 this.closeBuildingModal();
             },
             removeBuilding(building) {
-                let index = _.findIndex(this.item.containers, {id: building.id});
+                let index = this.item.buildings.findIndex(({id}) => id === building.id);
                 this.item.buildings.splice(index, 1);
                 this.closeBuildingModal();
             },
             addFloor(data) {
-                let building = _.find(this.item.buildings, {id: data.buildingId});
+                let building = this.item.buildings.find(({id}) => id === data.buildingId);
                 building.floors.push(data.floor);
                 this.closeFloorModal();
             },
             updateFloor(data) {
-                let building = _.find(this.item.buildings, {id: data.buildingId});
-                let floorIndex = _.findIndex(building.floors, {id: data.floor.id});
+                let building = this.item.buildings.find(({id}) => id === data.buildingId);
+                let floorIndex = building.floors.findIndex(({id}) => id === data.floor.id);
                 building.floors.splice(floorIndex, 1, data.floor);
                 this.closeFloorModal();
             },
             removeFloor(data) {
-                let building = _.find(this.item.buildings, {id: data.buildingId});
-                let floorIndex = _.findIndex(building.floors, {id: data.floor.id});
+                let building = this.item.buildings.find(({id}) => id === data.buildingId);
+                let floorIndex = building.floors.findIndex(({id}) => id === data.floor.id);
                 building.floors.splice(floorIndex, 1);
                 this.closeFloorModal();
             }
@@ -322,7 +318,7 @@
                     <div class="place-popup-image" style="background-image : url(${this.item.image || 'http://www.tkp.ca/images/02/003/main.jpg'})"></div>
                     <div class="place-popup-details">
                         <span>${this.item.address || ''}</span>
-                        <span>${this.item.zipcode || ''}</span>
+                        <span>${this.item.postcode || ''}</span>
                         <span>${this.item.city || ''}</span>
                     </div>
                 </div>

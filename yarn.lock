@@ -3564,6 +3564,13 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
+leaflet-easybutton@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/leaflet-easybutton/-/leaflet-easybutton-2.4.0.tgz#3ad8ad31c9cf6d5ca7a6a1988f82eed13ff2c1af"
+  integrity sha512-O+qsQq4zTF6ds8VClnytobTH/MKalctlPpiA8L+bNKHP14J3lgJpvEd/jSpq9mHTI6qOzRAvbQX6wS6qNwThvg==
+  dependencies:
+    leaflet "^1.0.1"
+
 leaflet-imageoverlay-rotated@^0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/leaflet-imageoverlay-rotated/-/leaflet-imageoverlay-rotated-0.1.3.tgz#6a8b0805d9718ae168f66de4d5bd3f5db1487b0c"
@@ -3584,7 +3591,7 @@ leaflet.gridlayer.googlemutant@^0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/leaflet.gridlayer.googlemutant/-/leaflet.gridlayer.googlemutant-0.7.1.tgz#c178d5fab9b88edbc01f2903d2fc309fac8e562f"
 
-leaflet@^1.0.0, leaflet@^1.4.0:
+leaflet@^1.0.0, leaflet@^1.0.1, leaflet@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.4.0.tgz#d5f56eeb2aa32787c24011e8be4c77e362ae171b"
 
@@ -6738,9 +6745,10 @@ vue-hot-reload-api@^2.2.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.1.tgz#b2d3d95402a811602380783ea4f566eb875569a2"
 
-vue-i18n@^8.7.0:
-  version "8.8.1"
-  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.8.1.tgz#566e087b7131cd8439673f18ffd46da7e1afe95c"
+vue-i18n@^8.8.2:
+  version "8.8.2"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.8.2.tgz#57baa73dc8f215d68e4b8f2743724657cbb77591"
+  integrity sha512-P09ZN2S0mX1AmhSR/+wP2owP3izGVx1pSoDFcOXTLya5xvP95dG7kc9LQUnboPgSzK/JKe9FkYmoYdDTKDjPSw==
 
 vue-loader@^13.7.1:
   version "13.7.3"
