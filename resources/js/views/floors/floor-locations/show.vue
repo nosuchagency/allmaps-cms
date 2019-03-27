@@ -74,10 +74,10 @@
                 currentLocation: null,
                 currentLocationCopy: null,
                 locationVariants: [
-                    {title: 'Beacon', url: '/beacons', identifier: 'beacon_id'},
+                    {title: 'Beacon', url: '/beacons?inuse=false', identifier: 'beacon_id'},
                     {title: 'Poi Point', url: '/pois', identifier: 'poi_id'},
                     {title: 'Poi Area', url: '/pois', identifier: 'poi_id'},
-                    {title: 'Fixture', url: '/fixtures', identifier: 'fixture_id'},
+                    {title: 'Fixture', url: '/fixtures', identifier: 'fixture_id'}
                 ]
             }
         },
@@ -120,7 +120,7 @@
                 Hub.$emit('location:removed');
             },
             getFloorUrl() {
-                return '/places/' + this.placeId + '/buildings/' + this.buildingId + '/floors/' + this.floorId;
+                return `/places/${this.placeId}/buildings/${this.buildingId}/floors/${this.floorId}`;
             },
             getReadUrl() {
                 ({placeId: this.placeId, buildingId: this.buildingId, id: this.floorId} = this.$route.params);

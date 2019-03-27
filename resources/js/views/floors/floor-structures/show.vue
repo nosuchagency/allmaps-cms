@@ -125,7 +125,7 @@
                 Hub.$emit('structure:removed');
             },
             getFloorUrl() {
-                return '/places/' + this.placeId + '/buildings/' + this.buildingId + '/floors/' + this.floorId;
+                return `/places/${this.placeId}/buildings/${this.buildingId}/floors/${this.floorId}`;
             },
             getReadUrl() {
                 ({placeId: this.placeId, buildingId: this.buildingId, id: this.floorId} = this.$route.params);
