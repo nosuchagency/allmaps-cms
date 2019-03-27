@@ -1,8 +1,8 @@
 <template>
     <portal to="modals"
             v-if="visible">
-        <el-dialog :title="type"
-                   :visible="visible"
+        <el-dialog :visible="visible"
+                   :title="type"
                    @close="closeModal">
             <template slot="title">
                 <span class="capitalize">

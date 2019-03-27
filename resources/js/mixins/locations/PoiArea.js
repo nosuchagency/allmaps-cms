@@ -13,7 +13,6 @@ let PoiArea = {
                     L.Polygon.prototype.initialize.call(this, this.location.coordinates || [], location.poi);
 
                     this.activateEventListeners();
-                    console.log('Unsaved changes', this.hasUnsavedChanges());
                 },
                 activateEventListeners() {
                     this.on('click', this.componentClicked);
@@ -33,8 +32,6 @@ let PoiArea = {
                     self.addMarker(latlng);
                     this.addLatLng(latlng);
                     this.unsavedChanges = true;
-
-                    console.log('Unsaved changes', this.hasUnsavedChanges());
                 },
                 getCoordinates() {
                     return this.getLatLngs();

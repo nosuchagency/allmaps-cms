@@ -47,6 +47,14 @@
                         type: 'roadmap'
                     })
                     .addTo(this.map);
+
+                this.map.zoomControl.setPosition('bottomleft');
+
+                L.easyButton('fa-compress-arrows-alt', (btn, map) => {
+                    map.flyTo(new L.LatLng(this.lat, this.lng), 19)
+                }, 'Reposition Map', {
+                    position: 'bottomleft'
+                }).addTo(this.map);
             },
             enableScrollZoom() {
                 this.map.scrollWheelZoom.enable();

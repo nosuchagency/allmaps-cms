@@ -62,6 +62,12 @@
 
                 this.map.zoomControl.setPosition('bottomleft');
 
+                L.easyButton('fa-compress-arrows-alt', (btn, map) => {
+                    map.flyTo(new L.LatLng(this.lat, this.lng), 14)
+                }, 'Reposition Map', {
+                    position: 'bottomleft'
+                }).addTo(this.map);
+
                 if (this.interactive) {
                     this.enableInteractivity();
                 }
