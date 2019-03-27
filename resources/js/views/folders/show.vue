@@ -55,12 +55,10 @@
 </template>
 
 <script>
-    import resource from 'js/mixins/resource';
     import contentsTable from '../containers/components/contents-table.vue';
     import upsertModal from './upsert-modal';
 
     export default {
-        mixins: [resource],
         components: {
             contentsTable,
             upsertModal
@@ -72,7 +70,18 @@
                 item: null
             };
         },
+        created() {
+            this.fetch();
+        },
         methods: {
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(`/containers/${this.$route.params.containerId}/${this.resource}/${this.$route.params.id}`);
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             updateItem(item) {
                 this.item = item;
                 this.closeUpsertModal();
@@ -85,9 +94,6 @@
             },
             closeUpsertModal() {
                 this.upsertModalVisible = false;
-            },
-            getReadUrl() {
-                return `/containers/${this.$route.params.containerId}/${this.resource}/${this.$route.params.id}`;
             }
         }
     };

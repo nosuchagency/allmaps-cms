@@ -183,12 +183,12 @@
                 this.closeUpsertModal();
             },
             updateItem(item) {
-                let index = _.findIndex(this.items.data, {id: item.id});
+                let index = this.items.data.findIndex(({id}) => id === item.id);
                 this.items.data.splice(index, 1, item);
                 this.closeUpsertModal();
             },
             removeItem(item) {
-                let index = _.findIndex(this.items.data, {id: item.id});
+                let index = this.items.data.findIndex(({id}) => id === item.id);
                 this.items.data.splice(index, 1);
                 this.items.meta.total--;
                 this.closeUpsertModal();

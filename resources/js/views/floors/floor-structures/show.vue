@@ -60,13 +60,11 @@
 
 <script>
     import Hub from '../../../events/hub';
-    import resource from 'js/mixins/resource';
     import floorMap from './floor-map.vue';
     import structureToolbar from './structure-toolbar';
     import structureSelect from './structure-select';
 
     export default {
-        mixins: [resource],
         components: {
             floorMap,
             structureToolbar,
@@ -88,7 +86,18 @@
                 currentStructureCopy: null
             }
         },
+        created() {
+            this.fetch();
+        },
         methods: {
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(this.getReadUrl());
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             setCurrentStructure(structure, callback = null) {
                 this.currentStructure = structure;
 

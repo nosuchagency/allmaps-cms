@@ -215,14 +215,13 @@
 
 <script>
     import multipleSelection from 'js/mixins/multiple-selection';
-    import resource from 'js/mixins/resource';
     import upsertModal from './upsert-modal';
     import buildingModal from '../buildings/upsert-modal';
     import floorModal from '../floors/upsert-modal';
     import mapLocationSelect from './map-location-select';
 
     export default {
-        mixins: [multipleSelection, resource],
+        mixins: [multipleSelection],
         components: {
             upsertModal,
             buildingModal,
@@ -240,7 +239,18 @@
                 selectedFloor: null
             };
         },
+        created() {
+            this.fetch();
+        },
         methods: {
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             updateItem(item) {
                 this.item = item;
                 this.closeUpsertModal();
@@ -274,29 +284,29 @@
                 this.closeBuildingModal();
             },
             updateBuilding(building) {
-                let index = _.findIndex(this.item.buildings, {id: building.id});
+                let index = this.item.buildings.findIndex(({id}) => id === building.id);
                 this.item.buildings.splice(index, 1, building);
                 this.closeBuildingModal();
             },
             removeBuilding(building) {
-                let index = _.findIndex(this.item.containers, {id: building.id});
+                let index = this.item.buildings.findIndex(({id}) => id === building.id);
                 this.item.buildings.splice(index, 1);
                 this.closeBuildingModal();
             },
             addFloor(data) {
-                let building = _.find(this.item.buildings, {id: data.buildingId});
+                let building = this.item.buildings.find(({id}) => id === data.buildingId);
                 building.floors.push(data.floor);
                 this.closeFloorModal();
             },
             updateFloor(data) {
-                let building = _.find(this.item.buildings, {id: data.buildingId});
-                let floorIndex = _.findIndex(building.floors, {id: data.floor.id});
+                let building = this.item.buildings.find(({id}) => id === data.buildingId);
+                let floorIndex = building.floors.findIndex(({id}) => id === data.floor.id);
                 building.floors.splice(floorIndex, 1, data.floor);
                 this.closeFloorModal();
             },
             removeFloor(data) {
-                let building = _.find(this.item.buildings, {id: data.buildingId});
-                let floorIndex = _.findIndex(building.floors, {id: data.floor.id});
+                let building = this.item.buildings.find(({id}) => id === data.buildingId);
+                let floorIndex = building.floors.findIndex(({id}) => id === data.floor.id);
                 building.floors.splice(floorIndex, 1);
                 this.closeFloorModal();
             }

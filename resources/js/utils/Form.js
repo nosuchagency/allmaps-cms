@@ -111,9 +111,7 @@ export default class Form {
                     this.onFail(error.response.data.errors);
                     reject(error.response.data.errors);
                 })
-                .finally(() => {
-                    this.busy = false;
-                })
+                .finally(() => this.busy = false)
         });
     }
 

@@ -182,7 +182,6 @@
 </template>
 
 <script>
-    import resource from 'js/mixins/resource';
     import contentsTable from './components/contents-table';
     import foldersTable from './components/folders-table';
     import beaconModal from './beacon-modal';
@@ -192,7 +191,6 @@
     import barChart from '../../components/BarChart';
 
     export default {
-        mixins: [resource],
         components: {
             contentsTable,
             foldersTable,
@@ -213,7 +211,18 @@
                 item: null,
             };
         },
+        created() {
+            this.fetch();
+        },
         methods: {
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             updateItem(item) {
                 this.item = item;
                 this.closeUpsertModal();
@@ -257,19 +266,19 @@
                 this.closeBeaconModal();
             },
             addRule(data) {
-                let beacon = _.find(this.item.beacons, {id: data.beaconId});
+                let beacon = this.item.beacons.find(({id}) => id === data.beaconId);
                 beacon.rules.push(data.rule);
                 this.closeRuleModal();
             },
             updateRule(data) {
-                let beacon = _.find(this.item.beacons, {id: data.beaconId});
-                let ruleIndex = _.findIndex(beacon.rules, {id: data.rule.id});
+                let beacon = this.item.beacons.find(({id}) => id === data.beaconId);
+                let ruleIndex = beacon.rules.findIndex(({id}) => id === data.rule.id);
                 beacon.rules.splice(ruleIndex, 1, data.rule);
                 this.closeRuleModal();
             },
             removeRule(data) {
-                let beacon = _.find(this.item.beacons, {id: data.beaconId});
-                let ruleIndex = _.findIndex(beacon.rules, {id: data.rule.id});
+                let beacon = this.item.beacons.find(({id}) => id === data.beaconId);
+                let ruleIndex = beacon.rules.findIndex(({id}) => id === data.rule.id);
                 beacon.rules.splice(ruleIndex, 1);
                 this.closeRuleModal();
             }

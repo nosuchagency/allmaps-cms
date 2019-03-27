@@ -26,7 +26,6 @@
             </toolbar>
         </template>
         <template slot="content">
-
             <div class="loading" v-if="!item">
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
@@ -95,14 +94,12 @@
 </template>
 
 <script>
-    import resource from 'js/mixins/resource';
     import upsertModal from './upsert-modal';
     import pieChart from '../../components/PieChart';
     import resourceIcon from '../../components/resource-icon';
     import actionIcon from '../../components/action-icon';
 
     export default {
-        mixins: [resource],
         components: {
             upsertModal,
             pieChart,
@@ -116,7 +113,18 @@
                 item: null
             };
         },
+        created() {
+            this.fetch();
+        },
         methods: {
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             updateItem(item) {
                 this.item = item;
                 this.closeUpsertModal();

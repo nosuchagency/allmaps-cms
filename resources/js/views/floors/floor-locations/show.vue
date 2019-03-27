@@ -57,11 +57,9 @@
     import floorMap from './floor-map';
     import locationToolbar from './location-toolbar';
     import Hub from '../../../events/hub';
-    import resource from 'js/mixins/resource';
     import locationSelect from './location-select';
 
     export default {
-        mixins: [resource],
         components: {
             floorMap,
             locationSelect,
@@ -83,7 +81,18 @@
                 ]
             }
         },
+        created() {
+            this.fetch();
+        },
         methods: {
+            async fetch() {
+                try {
+                    const {data} = await this.$axios.get(this.getReadUrl());
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
             setCurrentLocation(location, callback = null) {
                 this.currentLocation = location;
 
