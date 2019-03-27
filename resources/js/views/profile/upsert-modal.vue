@@ -21,7 +21,7 @@
                         <el-form-item :label="$t('users.attributes.password')"
                                       :class="{'is-error' : form.errors.has('password')}">
                             <el-input v-model="form.password"
-                                      :placeholder="item ? $t('users.password_placeholder') : ''"
+                                      :placeholder="$t('users.password_placeholder')"
                                       type="password">
                             </el-input>
                         </el-form-item>
@@ -39,12 +39,17 @@
                                 </el-select>
                             </fetch-items>
                         </el-form-item>
-                        <el-form-item v-if="!item"
-                                      label="Send invitation">
-                            <el-switch v-model="form.send_invitation"
-                                       label="Send invitation email"
-                                       border>
-                            </el-switch>
+                        <el-form-item :label="$t('profile.locale')"
+                                      :class="{'is-error' : form.errors.has('locale')}">
+                            <el-select v-model="form.locale"
+                                       placeholder="Select">
+                                <el-option
+                                        v-for="item in locales"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
@@ -85,22 +90,6 @@
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                <template v-if="item">
-                    <el-button v-if="!confirmDelete"
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="confirmDelete = true">
-                            Delete
-                    </el-button>
-                    <el-button v-else
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="remove">
-                        Are you sure?
-                    </el-button>
-                </template>
                 <el-button type="text"
                            size="small"
                            class="btn-cancel"
@@ -110,7 +99,7 @@
             <el-button type="success"
                        size="small"
                        :loading="form.busy"
-                       @click="item ? update() : create()">
+                       @click="update">
                     Confirm
             </el-button>
             </span>
@@ -138,24 +127,18 @@
                     role: this.item ? this.item.role.name : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
-                    send_invitation: false
-                })
+                    locale: this.item ? this.item.locale : ''
+                }),
+                locales: [
+                    {'label': 'English', 'value': 'en'},
+                    {'label': 'Dansk', 'value': 'da'}
+                ]
             }
         },
         methods: {
-            create() {
-                this.form.post(`/${this.resource}`)
-                    .then(response => this.$emit('upsert-modal:add', response))
-                    .catch(error => console.log(error));
-            },
             update() {
                 this.form.put(`/${this.resource}/${this.item.id}`)
                     .then(response => this.$emit('upsert-modal:update', response))
-                    .catch(error => console.log(error));
-            },
-            remove() {
-                this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('upsert-modal:remove', response))
                     .catch(error => console.log(error));
             },
             closeModal() {
