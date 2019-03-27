@@ -64,13 +64,22 @@
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                <el-button v-if="item"
-                           type="text"
-                           size="small"
-                           class="btn-remove"
-                           @click="remove">
-                    Delete
-                </el-button>
+                <template v-if="item">
+                    <el-button v-if="!confirmDelete"
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="confirmDelete = true">
+                            Delete
+                    </el-button>
+                    <el-button v-else
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="remove">
+                        Are you sure?
+                    </el-button>
+                </template>
                 <el-button type="text"
                            size="small"
                            class="btn-cancel"
@@ -100,6 +109,7 @@
             return {
                 currentTab: 'layout',
                 resource: 'layouts',
+                confirmDelete: false,
                 form: new Form({
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',

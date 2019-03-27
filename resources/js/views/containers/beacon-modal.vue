@@ -29,13 +29,22 @@
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                 <el-button v-if="item"
-                            type="text"
-                            size="small"
-                            class="btn-remove"
-                            @click="remove">
-                    Remove
-                </el-button>
+                  <template v-if="item">
+                        <el-button v-if="!confirmDelete"
+                                   type="text"
+                                   size="small"
+                                   class="btn-remove"
+                                   @click="confirmDelete = true">
+                            Delete
+                        </el-button>
+                        <el-button v-else
+                                   type="text"
+                                   size="small"
+                                   class="btn-remove"
+                                   @click="remove">
+                            Are you sure?
+                        </el-button>
+                  </template>
                 <el-button type="text"
                            size="small"
                            class="btn-cancel"
@@ -65,10 +74,11 @@
         },
         data() {
             return {
+                currentTab: 'beacon',
+                confirmDelete: false,
                 form: new Form({
                     beacon: this.item
-                }),
-                currentTab: 'beacon'
+                })
             }
         },
         methods: {
