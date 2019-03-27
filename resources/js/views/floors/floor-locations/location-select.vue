@@ -2,11 +2,12 @@
     <div class="location-select">
         <el-button size="small"
                    type="primary"
-                   @click="showModal = true">
+                   @click="visible = true">
             {{title}}
         </el-button>
-        <portal to="modals" v-if="showModal">
-            <el-dialog :visible.sync="showModal">
+        <portal to="modals" v-if="visible">
+            <el-dialog :visible="visible"
+                       @close="closeModal">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane :label="title" name="main">
                         <br>
@@ -17,7 +18,8 @@
                                        clearable
                                        filterable
                                        value-key="id"
-                                       ref="select">
+                                       ref="select"
+                                       @input="setLocationId">
                                 <el-option v-for="item in items"
                                            :key="item.id"
                                            :label="item.name"
@@ -30,12 +32,13 @@
                 <span slot="footer">
                     <el-button type="text"
                                size="small"
-                               @click="showModal = false">
+                               @click="visible = false">
                         Cancel
                     </el-button>
                     <el-button type="success"
                                size="small"
-                               @click="createLocation"
+                               @click="create"
+                               :loading="form.busy"
                                :disabled="!location">
                         Add {{title}}
                     </el-button>
@@ -46,6 +49,8 @@
 </template>
 
 <script>
+    import Form from '../../../utils/Form';
+
     export default {
         props: {
             url: String,
@@ -55,36 +60,38 @@
         },
         data() {
             return {
-                busy: false,
                 currentTab: 'main',
-                showModal: false,
+                visible: false,
+                form: new Form({
+                    [this.identifier]: this.location ? this.location.id : null
+                }),
                 location: null
             }
         },
         watch: {
-            showModal(value) {
+            visible(value) {
                 if (value) {
                     setTimeout(() => this.$refs.select.focus(), 500);
                 }
             }
         },
         methods: {
-            async createLocation() {
-                this.busy = true;
-
-                try {
-                    const {data} = await this.$axios.post(this.floorUrl + '/locations', {[this.identifier]: this.location.id});
-                    this.$emit('location:add', data);
-                    this.showModal = false;
-                    this.location = null;
-                } catch ({response}) {
-                    if (response.data.errors) {
-                        this.setErrors(response.data.errors);
-                    }
-                } finally {
-                    this.busy = false;
-                }
-            }
+            setLocationId({id}) {
+                this.form[this.identifier] = id;
+            },
+            create() {
+                this.form.post(`${this.floorUrl}/locations`)
+                    .then(response => {
+                        this.$emit('location:add', response);
+                        this.visible = false;
+                        this.form[this.identifier] = null;
+                        this.location = null;
+                    })
+                    .catch(error => console.log(error));
+            },
+            closeModal() {
+                this.visible = false;
+            },
         }
     }
 </script>

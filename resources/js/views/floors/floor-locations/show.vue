@@ -75,8 +75,8 @@
                 currentLocationCopy: null,
                 locationVariants: [
                     {title: 'Beacon', url: '/beacons?inuse=false', identifier: 'beacon_id'},
-                    {title: 'Poi Point', url: '/pois', identifier: 'poi_id'},
-                    {title: 'Poi Area', url: '/pois', identifier: 'poi_id'},
+                    {title: 'Poi Point', url: '/pois?type=image', identifier: 'poi_id'},
+                    {title: 'Poi Area', url: '/pois?type=area', identifier: 'poi_id'},
                     {title: 'Fixture', url: '/fixtures', identifier: 'fixture_id'}
                 ]
             }
