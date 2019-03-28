@@ -21,7 +21,7 @@
                         <el-form-item :label="$t('users.attributes.password')"
                                       :class="{'is-error' : form.errors.has('password')}">
                             <el-input v-model="form.password"
-                                      :placeholder="$t('users.password_placeholder')"
+                                      :placeholder="item ? $t('users.password_placeholder') : ''"
                                       type="password">
                             </el-input>
                         </el-form-item>
@@ -39,9 +39,12 @@
                                 </el-select>
                             </fetch-items>
                         </el-form-item>
-                        <el-form-item label="Invitation">
-                            <el-switch v-model="form.send_invitation" label="Send invitation email"
-                                       border></el-switch>
+                        <el-form-item v-if="!item"
+                                      label="Send invitation">
+                            <el-switch v-model="form.send_invitation"
+                                       label="Send invitation email"
+                                       border>
+                            </el-switch>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
@@ -132,7 +135,7 @@
                     name: this.item ? this.item.name : '',
                     email: this.item ? this.item.email : '',
                     password: '',
-                    role: this.item ? this.item.role : '',
+                    role: this.item ? this.item.role.name : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     send_invitation: false

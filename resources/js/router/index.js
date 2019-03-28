@@ -19,7 +19,7 @@ let routes = [
     {
         path: '/profile',
         name: 'profile',
-        component: require('../views/profile'),
+        component: require('../views/profile/show'),
         meta: {
             auth: true
         }

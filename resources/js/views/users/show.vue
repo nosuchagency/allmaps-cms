@@ -120,6 +120,7 @@
             async fetch() {
                 try {
                     const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
+                    console.log(data);
                     this.item = data;
                 } catch (error) {
                     console.log(error);

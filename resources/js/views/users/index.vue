@@ -52,6 +52,9 @@
                     <el-table-column property="role"
                                      :label="$t('users.attributes.role')"
                                      sortable>
+                        <template slot-scope="scope">
+                            {{scope.row.role.name}}
+                        </template>
                     </el-table-column>
                     <el-table-column :label="$t('users.attributes.category')"
                                      align="center"
