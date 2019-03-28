@@ -48,6 +48,10 @@
                                         :key="item.value"
                                         :label="item.label"
                                         :value="item.value">
+                                    <span class="flag-icon"
+                                          :class="`flag-icon-${item.flag}`">
+                                    </span>
+                                    {{item.label}}
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -130,8 +134,8 @@
                     locale: this.item ? this.item.locale : ''
                 }),
                 locales: [
-                    {'label': 'English', 'value': 'en'},
-                    {'label': 'Dansk', 'value': 'da'}
+                    {'label': 'English', 'value': 'en', 'flag': 'gb'},
+                    {'label': 'Dansk', 'value': 'da', 'flag': 'dk'}
                 ]
             }
         },
@@ -149,5 +153,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+    .flag-icon {
+        margin-right: 5px;
+    }
 </style>

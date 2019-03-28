@@ -32,6 +32,56 @@
             </div>
 
             <div class="content" v-else>
+                <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                        <div class="title-icon-wrapper">
+                            <i class="fa fa-file-invoice title-icon"></i>
+                            <label>Content</label>
+                        </div>
+                    </div>
+                    <pie-chart :chart-data="pieChartData"
+                               :options="options"
+                               :styles="styles">
+                    </pie-chart>
+                </el-card>
+                <el-card class="box-card">
+                    <template slot="header">
+                        <div class="title-icon-wrapper">
+                            <i class="fa fa-tasks title-icon"></i>
+                            <label>Activity</label>
+                        </div>
+                    </template>
+                    <el-table :data="item.actions"
+                              :default-sort="{prop: 'name', order: 'ascending'}">
+                        <el-table-column label="User">
+                            <template slot-scope="scope">
+                                {{scope.row.causer.name}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="Action">
+                            <template slot-scope="scope">
+                                <action-icon :action="scope.row.description"></action-icon>
+                                {{scope.row.description}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="Resource">
+                            <template slot-scope="scope">
+                                <el-tooltip :content="scope.row.subject_type">
+                                    <resource-icon :resource="scope.row.subject_type"></resource-icon>
+                                </el-tooltip>
+                                {{scope.row.subject_name}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="Time">
+                            <template slot-scope="scope">
+                                {{scope.row.time}} {{scope.row.date}}
+                            </template>
+                        </el-table-column>
+                        <template slot="empty">
+                            <template>No Results</template>
+                        </template>
+                    </el-table>
+                </el-card>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
@@ -45,10 +95,16 @@
 
 <script>
     import upsertModal from './upsert-modal';
+    import pieChart from '../../components/PieChart';
+    import resourceIcon from '../../components/resource-icon';
+    import actionIcon from '../../components/action-icon';
 
     export default {
         components: {
-            upsertModal
+            upsertModal,
+            pieChart,
+            resourceIcon,
+            actionIcon
         },
         data() {
             return {
@@ -71,7 +127,6 @@
             },
             updateItem(item) {
                 this.item = item;
-                console.log('hey!');
                 this.$i18n.locale = item.locale;
                 this.closeUpsertModal();
             },
@@ -80,6 +135,46 @@
             },
             closeUpsertModal() {
                 this.upsertModalVisible = false;
+            }
+        },
+        computed: {
+            options() {
+                return {
+                    responsive: true,
+                    maintainAspectRatio: false
+                };
+            },
+            styles() {
+                return {
+                    width: '100%',
+                    height: '250px',
+                    position: 'relative'
+                };
+            },
+            pieChartData() {
+                return {
+                    labels: ['Web', 'Image', 'Video', 'File', 'Gallery', 'Text'],
+                    datasets: [
+                        {
+                            backgroundColor: [
+                                '#41B883',
+                                '#E46651',
+                                '#00D8FF',
+                                '#DD1B16',
+                                '#e5e500',
+                                '#7647a2'
+                            ],
+                            data: [
+                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'web') : 0,
+                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'image') : 0,
+                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'video') : 0,
+                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'file') : 0,
+                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'gallery') : 0,
+                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'text') : 0
+                            ]
+                        }
+                    ]
+                }
             }
         }
     }
