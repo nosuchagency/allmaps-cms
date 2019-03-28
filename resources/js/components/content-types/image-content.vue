@@ -5,9 +5,9 @@
              @keydown.native="form.errors.clear($event.target.name)">
         <el-tabs v-model="currentTab">
             <el-tab-pane label="Image" name="image">
-                <el-form-item label="Title"
-                              :class="{'is-error' : form.errors.has('title')}">
-                    <el-input v-model="fields.title">
+                <el-form-item label="Name"
+                              :class="{'is-error' : form.errors.has('name')}">
+                    <el-input v-model="fields.name">
                     </el-input>
                 </el-form-item>
                 <image-upload @image-uploaded="setImage"
@@ -85,7 +85,7 @@
         methods: {
             getFields() {
                 return {
-                    title: this.item ? this.item.title : '',
+                    name: this.item ? this.item.name : '',
                     image: this.item ? this.item.image : null,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []

@@ -6,9 +6,9 @@
         <el-tabs v-model="currentTab">
             <el-tab-pane label="Text" name="text">
                 <br>
-                <el-form-item label="Title"
-                              :class="{'is-error' : form.errors.has('title')}">
-                    <el-input v-model="fields.title">
+                <el-form-item label="Name"
+                              :class="{'is-error' : form.errors.has('name')}">
+                    <el-input v-model="fields.name">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="Text"
@@ -85,7 +85,7 @@
         methods: {
             getFields() {
                 return {
-                    title: this.item ? this.item.title : '',
+                    name: this.item ? this.item.name : '',
                     text: this.item ? this.item.text : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
