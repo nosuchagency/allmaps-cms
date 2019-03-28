@@ -41,10 +41,14 @@
                         </el-form-item>
                         <el-form-item v-if="!item"
                                       label="Send invitation">
-                            <el-switch v-model="form.send_invitation"
-                                       label="Send invitation email"
-                                       border>
-                            </el-switch>
+                            <el-checkbox v-model="form.invitation"></el-checkbox>
+                        </el-form-item>
+                        <el-form-item v-else>
+                            <el-button type="primary"
+                                       size="small"
+                                       @click="sendInvitation">
+                                Resend invitation
+                            </el-button>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
@@ -138,7 +142,7 @@
                     role: this.item ? this.item.role.name : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
-                    send_invitation: false
+                    invitation: false
                 })
             }
         },
@@ -157,6 +161,9 @@
                 this.form.delete(`/${this.resource}/${this.item.id}`)
                     .then(response => this.$emit('upsert-modal:remove', response))
                     .catch(error => console.log(error));
+            },
+            sendInvitation() {
+                console.log('send invitation');
             },
             closeModal() {
                 this.$emit('upsert-modal:close');
