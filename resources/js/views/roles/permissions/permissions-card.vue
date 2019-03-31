@@ -2,124 +2,171 @@
     <el-card class="box-card">
         <template slot="header">
             <div class="title-icon-wrapper">
-                <i class="fa title-icon" :class="'fa-' + icon"></i>
+                <i class="fa title-icon" :class="`fa-${icon}`"></i>
                 <label>{{title}}</label>
             </div>
             <div style="margin-left: auto;">
                 <span style="font-size: 14px;">Advanced</span>
-                <el-switch v-model="showAdvanced"
-                           @change="toggleAdvanced">
-                </el-switch>
+                <el-switch v-model="showAdvanced"></el-switch>
+                <el-button type="success"
+                           size="mini"
+                           style="margin-left: 10px;"
+                           :loading="form.busy"
+                           @click="savePermissions(groups)">
+                    Save
+                </el-button>
             </div>
         </template>
-        <div class="permissions-container">
-            <div class="permission-types">
-                <div class="permission-type">
-                    <span class="permission-action">All</span>
-                    <el-switch></el-switch>
-                </div>
-                <div class="permission-type">
-                    <span class="permission-action">Create</span>
-                    <el-switch></el-switch>
-                </div>
-                <div class="permission-type">
-                    <span class="permission-action">Read</span>
-                    <el-switch></el-switch>
-                </div>
-                <div class="permission-type">
-                    <span class="permission-action">Update</span>
-                    <el-switch></el-switch>
-                </div>
-                <div class="permission-type">
-                    <span class="permission-action">Delete</span>
-                    <el-switch></el-switch>
-                </div>
+        <div class="permissions-group">
+            <div class="permission">
+                <span class="permission-label">All</span>
+                <el-switch :value="isPermissionsSet(groups)"
+                           @change="togglePermissions($event, groups)">
+                </el-switch>
+            </div>
+            <div class="permission">
+                <span class="permission-label">Create</span>
+                <el-switch :value="isPermissionsSet(groups, 'create')"
+                           @change="togglePermissions($event, groups, 'create')">
+                </el-switch>
+            </div>
+            <div class="permission">
+                <span class="permission-label">Read</span>
+                <el-switch :value="isPermissionsSet(groups, 'read')"
+                           @change="togglePermissions($event, groups, 'read')">
+                </el-switch>
+            </div>
+            <div class="permission">
+                <span class="permission-label">Update</span>
+                <el-switch :value="isPermissionsSet(groups, 'update')"
+                           @change="togglePermissions($event, groups, 'update')">
+                </el-switch>
+            </div>
+            <div class="permission">
+                <span class="permission-label">Delete</span>
+                <el-switch :value="isPermissionsSet(groups, 'delete')"
+                           @change="togglePermissions($event,groups, 'delete')">
+                </el-switch>
             </div>
         </div>
-        <br v-if="showAdvanced"><br v-if="showAdvanced">
-        <template v-for="(permission, index) in permissions">
-            <div class="permissions-container" v-if="showAdvanced">
-                <div class="permission-entity">
-                    <div class="title-icon-wrapper">
-                        <resource-icon class="title-icon"
-                                       :resource="permission">
-                        </resource-icon>
-                        <label class="permission-entity-name">
-                            {{permission}}
-                        </label>
+        <template v-if="showAdvanced">
+            <template v-for="group in groups">
+                <div class="permissions-group">
+                    <div class="permissions-group-title">
+                        <icon :resource="group"></icon>
+                        <span class="title-text">{{group}}</span>
                     </div>
-                </div>
-                <div class="permission-types">
-                    <div class="permission-type">
-                        <span class="permission-action">All</span>
-                        <el-switch></el-switch>
+                    <div class="permission">
+                        <span class="permission-label">All</span>
+                        <el-switch :value="isPermissionsSet([group])"
+                                   @change="togglePermissions($event,[group])">
+                        </el-switch>
                     </div>
-                    <permission-switch v-for="item in ['create', 'read', 'update', 'delete']"
-                                       :key="item"
-                                       :permission-type="item"
-                                       :permission-name="permission + '.' + item"
-                                       :permissions="roleCopy.permissions"
-                                       :role-id="roleCopy.id"
-                                       @permissions:update="roleCopy = $event">
-                    </permission-switch>
+                    <template v-for="action in ['create', 'read', 'update', 'delete']">
+                        <div class="permission">
+                            <span class="permission-label">{{action}}</span>
+                            <el-switch v-model="permissions[getIndex(`${group}.${action}`)].possessed">
+                            </el-switch>
+                        </div>
+                    </template>
                 </div>
-                <template v-if="permissions.length !== (index + 1)">
-                    <br><br>
-                </template>
-            </div>
+            </template>
         </template>
     </el-card>
 </template>
 
 <script>
-    import permissionSwitch from './permissions-switch';
-    import resourceIcon from '../../../components/resource-icon';
+    import Form from '../../../utils/Form';
 
     export default {
-        components: {
-            permissionSwitch,
-            resourceIcon
-        },
         props: {
-            role: Object,
-            permissions: Array,
             title: String,
             icon: String,
-            advanced: Boolean,
+            role: Object,
+            groups: Array,
+            permissions: Array
         },
         data() {
             return {
-                roleCopy: this.role,
-                showAdvanced: this.advanced
+                showAdvanced: true,
+                form: new Form({
+                    name: this.role.name,
+                    permissions: this.permissions.slice()
+                })
             }
         },
         methods: {
-            toggleAdvanced(val) {
+            isPermissionsSet(groups = [], type = null) {
+                for (let permission of this.form.permissions) {
+                    let parts = permission.name.split('.');
+
+                    if (!groups.includes(parts[0])) {
+                        continue;
+                    }
+
+                    if ((type && parts[1] === type) || !type) {
+                        if (!permission.possessed) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            },
+            togglePermissions(state, groups = [], type = null) {
+                for (let permission of this.form.permissions) {
+                    let parts = permission.name.split('.');
+
+                    if (!groups.includes(parts[0])) {
+                        continue;
+                    }
+
+                    if ((type && parts[1] === type) || !type) {
+                        permission.possessed = state;
+                    }
+                }
+            },
+            getIndex(value) {
+                return this.form.permissions.findIndex(({name}) => name === value);
+            },
+            savePermissions() {
+                this.form.put(`/roles/${this.role.id}`);
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .permissions-container {
-        .permission-entity {
+    .permissions-group {
+        display: flex;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &-title {
+            color: #666;
+            flex: 100%;
             margin-bottom: 10px;
 
-            &-name {
+            .title-icon {
+                margin-right: 5px;
+            }
+
+            .title-text {
                 text-transform: capitalize;
             }
         }
 
-        .permission-types {
-            display: flex;
+        .permission {
+            color: #666;
+            margin-right: 20px;
 
-            .permission-type {
-                margin-right: 20px;
-
-                /deep/ .permission-action {
-                    text-transform: capitalize;
-                    font-size: 14px;
-                }
+            &-label {
+                text-transform: capitalize;
+                font-size: 14px;
             }
         }
     }

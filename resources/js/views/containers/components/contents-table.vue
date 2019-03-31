@@ -99,7 +99,7 @@
                     {type: 'image', icon: 'image'},
                     {type: 'web', icon: 'link'},
                 ],
-                contents: this.folder.contents.splice(0),
+                contents: this.folder.contents.slice(),
                 contentType: null,
                 selectedContent: null,
                 contentModalActive: false
