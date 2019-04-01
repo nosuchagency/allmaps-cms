@@ -59,14 +59,14 @@
                         </el-table-column>
                         <el-table-column label="Action">
                             <template slot-scope="scope">
-                                <action-icon :action="scope.row.description"></action-icon>
+                                <icon :resource="scope.row.description"></icon>
                                 {{scope.row.description}}
                             </template>
                         </el-table-column>
                         <el-table-column label="Resource">
                             <template slot-scope="scope">
                                 <el-tooltip :content="scope.row.subject_type">
-                                    <resource-icon :resource="scope.row.subject_type"></resource-icon>
+                                    <icon :resource="scope.row.subject_type"></icon>
                                 </el-tooltip>
                                 {{scope.row.subject_name}}
                             </template>
@@ -96,15 +96,11 @@
 <script>
     import upsertModal from './upsert-modal';
     import pieChart from '../../components/PieChart';
-    import resourceIcon from '../../components/resource-icon';
-    import actionIcon from '../../components/action-icon';
 
     export default {
         components: {
             upsertModal,
-            pieChart,
-            resourceIcon,
-            actionIcon
+            pieChart
         },
         data() {
             return {
@@ -120,7 +116,6 @@
             async fetch() {
                 try {
                     const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
-                    console.log(data);
                     this.item = data;
                 } catch (error) {
                     console.log(error);

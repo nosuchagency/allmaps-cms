@@ -22,6 +22,10 @@
                     case 'container':
                     case 'containers':
                         return 'archive';
+                    case 'created' :
+                        return 'plus';
+                    case 'deleted' :
+                        return 'trash-alt';
                     case 'findable':
                     case 'searchables':
                         return 'search-location';
@@ -31,6 +35,11 @@
                     case 'floor':
                     case 'floors':
                         return 'grip-lines';
+                    case 'layout':
+                    case 'layouts':
+                        return 'pen-fancy';
+                    case 'logged in' :
+                        return 'sign-in-alt';
                     case 'mapcomponent':
                     case 'map-components':
                         return 'map-signs';
@@ -46,6 +55,9 @@
                     case 'tag':
                     case 'tags':
                         return 'tags';
+                    case 'template':
+                    case 'templates':
+                        return 'mail-bulk';
                     case 'token':
                     case 'tokens':
                         return 'key';
@@ -55,6 +67,8 @@
                     case 'rule':
                     case 'rules':
                         return 'gavel';
+                    case 'updated' :
+                        return 'edit';
                     default :
                         return 'question-circle'
                 }

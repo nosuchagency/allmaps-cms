@@ -14,8 +14,6 @@ Vue.use(elementUI, {locale});
 Vue.use(wysiwyg, {});
 Vue.use(PortalVue);
 
-require('./bootstrap');
-
 require('leaflet/dist/leaflet');
 require('leaflet-path-transform');
 require('leaflet.gridlayer.googlemutant');
@@ -26,8 +24,10 @@ require('./leaflet-icon-fix');
 require('./sentry-setup');
 require('./axios-setup');
 
-require('./global-components');
 require('./global-functions');
+
+const files = require.context('./components/global', true, /\.vue$/i);
+files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)));
 
 Vue.router = router;
 Vue.config.productionTip = false;

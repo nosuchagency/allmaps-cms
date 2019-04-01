@@ -26,42 +26,18 @@
             </toolbar>
         </template>
         <template slot="content">
-
             <div class="loading" v-if="!item">
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
-
             <div class="content" v-else>
-                <permissions-card :role="item"
-                                  :advanced="item.advanced_places"
-                                  title="Places"
-                                  icon="map-marked-alt"
-                                  :permissions="['places', 'buildings', 'floors']">
-                </permissions-card>
-                <permissions-card :role="item"
-                                  :advanced="item.advanced_content"
-                                  :permissions="['containers', 'folders', 'contents']"
-                                  title="Content"
-                                  icon="archive">
-                </permissions-card>
-                <permissions-card :role="item"
-                                  :advanced="item.advanced_locations"
-                                  :permissions="['beacons', 'pois', 'searchables']"
-                                  title="Locations"
-                                  icon="map-pin">
-                </permissions-card>
-                <permissions-card :role="item"
-                                  :advanced="item.advanced_user_management"
-                                  :permissions="['users', 'roles', 'tokens']"
-                                  title="User Management"
-                                  icon="users-cog">
-                </permissions-card>
-                <permissions-card :role="item"
-                                  :advanced="item.advanced_settings"
-                                  :permissions="['categories', 'tags', 'map-components', 'layouts', 'templates']"
-                                  title="Settings"
-                                  icon="cogs">
-                </permissions-card>
+                <template v-for="permission in permissions">
+                    <permissions-card :title="permission.title"
+                                      :icon="permission.icon"
+                                      :role="item"
+                                      :permissions="item.permissions.filter(({name}) => permission.groups.includes(name.split('.')[0]))"
+                                      :groups="permission.groups">
+                    </permissions-card>
+                </template>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
@@ -76,7 +52,7 @@
 
 <script>
     import upsertModal from './upsert-modal';
-    import permissionsCard from "./permissions/permissions-card";
+    import permissionsCard from './permissions/permissions-card';
 
     export default {
         components: {
@@ -87,7 +63,23 @@
             return {
                 resource: 'roles',
                 upsertModalVisible: false,
-                item: null
+                item: null,
+                showAdvancedPlaces: false,
+                showAdvancedContent: false,
+                showAdvancedLocations: false,
+                showAdvancedUserManagement: false,
+                showAdvancedSettings: false,
+                permissions: [
+                    {title: 'Places', icon: 'map-marked-alt', groups: ['places', 'buildings', 'floors']},
+                    {title: 'Content', icon: 'archive', groups: ['containers', 'folders', 'contents']},
+                    {title: 'Locations', icon: 'map-pin', groups: ['beacons', 'pois', 'fixtures']},
+                    {title: 'User Management', icon: 'users-cog', groups: ['users', 'roles', 'tokens']},
+                    {
+                        title: 'Settings',
+                        icon: 'cog',
+                        groups: ['categories', 'tags', 'map-components', 'layouts', 'templates']
+                    }
+                ]
             };
         },
         created() {

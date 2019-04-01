@@ -26,7 +26,7 @@
     import {mapGetters} from 'vuex';
     import hamburger from './hamburger';
     import sidebarItem from './sidebar-item.vue';
-    import scrollBar from '../components/scroll-bar';
+    import scrollBar from '../components/scrollbar';
     import menuItems from './menu-items';
 
     export default {
