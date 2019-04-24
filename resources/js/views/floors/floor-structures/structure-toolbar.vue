@@ -68,10 +68,6 @@
                     return true;
                 }
 
-                if (this.structure.getShape() === 'polygon') {
-                    return this.structure.getCoordinates()[0].length >= 2;
-                }
-
                 return this.structure.getCoordinates().length >= 2;
             }
         },

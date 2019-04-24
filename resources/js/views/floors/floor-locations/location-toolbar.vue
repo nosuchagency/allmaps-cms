@@ -66,7 +66,7 @@
                     return true;
                 }
 
-                return this.location.getCoordinates()[0].length >= 2;
+                return this.location.getCoordinates().length >= 2;
             }
         },
         methods: {

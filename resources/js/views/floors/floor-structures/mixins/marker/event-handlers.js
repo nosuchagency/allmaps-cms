@@ -29,7 +29,7 @@ let markerEvents = {
         dragStartHandler(e) {
             this.map.off('click', this.mapClickHandler);
 
-            let latlngs = this.currentStructure.getLatLngs()[0];
+            let latlngs = this.currentStructure.getCoordinates();
 
             let latlng = e.target.getLatLng();
             for (let i = 0; i < latlngs.length; i++) {
@@ -39,7 +39,7 @@ let markerEvents = {
             }
         },
         dragHandler(e) {
-            let latlngs = this.currentStructure.getLatLngs()[0];
+            let latlngs = this.currentStructure.getCoordinates();
             let latlng = e.target.getLatLng();
             latlngs.splice(this.polylineLatlng, 1, latlng);
             this.currentStructure.setLatLngs(latlngs);

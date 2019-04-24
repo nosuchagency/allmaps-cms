@@ -34,10 +34,10 @@ let PoiArea = {
                     this.unsavedChanges = true;
                 },
                 getCoordinates() {
-                    return this.getLatLngs();
+                    return this.getLatLngs()[0];
                 },
                 getDestination() {
-                    let coords = this.getLatLngs()[0];
+                    let coords = this.getCoordinates();
 
                     if (coords.length > 0) {
                         return coords[coords.length - 1];
@@ -46,7 +46,7 @@ let PoiArea = {
                     return null;
                 },
                 addMarkers() {
-                    this.getLatLngs()[0].forEach(self.addMarker);
+                    this.getCoordinates().forEach(self.addMarker);
                 },
                 isArea() {
                     return true;
