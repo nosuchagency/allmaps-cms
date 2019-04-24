@@ -70,7 +70,7 @@
         },
         props: {
             visible: Boolean,
-            placeId: Number,
+            place: Object,
             item: Object
         },
         data() {
@@ -81,22 +81,23 @@
                 form: new Form({
                     name: this.item ? this.item.name : '',
                     image: this.item ? this.item.image : '',
+                    place: this.place
                 })
             }
         },
         methods: {
             create() {
-                this.form.post(`/places/${this.placeId}/${this.resource}`)
+                this.form.post(`/${this.resource}`)
                     .then(response => this.$emit('building-modal:add', response))
                     .catch(error => console.log(error));
             },
             update() {
-                this.form.put(`/places/${this.placeId}/${this.resource}/${this.item.id}`)
+                this.form.put(`/${this.resource}/${this.item.id}`)
                     .then(response => this.$emit('building-modal:update', response))
                     .catch(error => console.log(error));
             },
             remove() {
-                this.form.delete(`/places/${this.placeId}/${this.resource}/${this.item.id}`)
+                this.form.delete(`/${this.resource}/${this.item.id}`)
                     .then(response => this.$emit('building-modal:remove', response))
                     .catch(error => console.log(error));
             },

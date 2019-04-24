@@ -77,7 +77,7 @@
                     {
                         title: 'Settings',
                         icon: 'cog',
-                        groups: ['categories', 'tags', 'map-components', 'layouts', 'templates']
+                        groups: ['categories', 'tags', 'components', 'layouts', 'templates']
                     }
                 ]
             };

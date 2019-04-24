@@ -12,9 +12,9 @@
                 </template>
                 <template slot="right">
                     <el-tooltip effect="dark"
-                                :content="$t('general.actions.update', {name : $t('map-components.singular')})"
+                                :content="$t('general.actions.update', {name : $t('components.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('map-components.update')">
+                                v-if="$auth.user().permissions.includes('components.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -55,7 +55,7 @@
         },
         data() {
             return {
-                resource: 'map-components',
+                resource: 'components',
                 upsertModalVisible: false,
                 item: null
             };

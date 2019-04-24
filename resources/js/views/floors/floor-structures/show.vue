@@ -6,7 +6,7 @@
                     <div class="title-icon-wrapper">
                         <i class="fa fa-map-marked-alt title-icon"></i>
                         <template v-if="item">
-                            <router-link :to="'/places/' + placeId">
+                            <router-link :to="`/places/${item.place.id}`">
                                 {{ item.place.name }}
                             </router-link>
                             <i class="fa fa-caret-right" style="margin: 0 10px;"></i>
@@ -17,13 +17,13 @@
                 </template>
                 <template slot="right">
                     <template v-if="item">
-                        <fetch-items url="/map-components">
+                        <fetch-items url="/components">
                             <div class="map-components-container"
                                  slot-scope="{items, loading}">
                                 <structure-select v-for="type in structureTypes"
                                                   :key="type"
                                                   :type="type"
-                                                  :floor-url="getFloorUrl()"
+                                                  :floor="item"
                                                   :components="items.filter(item => item.type === type)"
                                                   @structure:add="structureCreated">
                                 </structure-select>
@@ -43,10 +43,10 @@
                                    @structure:saved="structureSaved"
                                    @structure:cancelled="structureCancelled"
                                    @structure:removed="structureRemoved"
-                                   :url="getFloorUrl()">
+                                   :floor="item">
                 </structure-toolbar>
-                <floor-map :lat="item.place.lat"
-                           :lng="item.place.lng"
+                <floor-map :latitude="item.place.latitude"
+                           :longitude="item.place.longitude"
                            :structures="item.structures"
                            :current-structure="currentStructure"
                            :current-structure-copy="currentStructureCopy"
@@ -73,9 +73,6 @@
         data() {
             return {
                 item: null,
-                placeId: null,
-                buildingId: null,
-                floorId: null,
                 structureTypes: [
                     'plan',
                     'wall',
@@ -92,7 +89,7 @@
         methods: {
             async fetch() {
                 try {
-                    const {data} = await this.$axios.get(this.getReadUrl());
+                    const {data} = await this.$axios.get(this.url());
                     this.item = data;
                 } catch (error) {
                     console.log(error);
@@ -124,12 +121,8 @@
             structureRemoved() {
                 Hub.$emit('structure:removed');
             },
-            getFloorUrl() {
-                return `/places/${this.placeId}/buildings/${this.buildingId}/floors/${this.floorId}`;
-            },
-            getReadUrl() {
-                ({placeId: this.placeId, buildingId: this.buildingId, id: this.floorId} = this.$route.params);
-                return this.getFloorUrl();
+            url() {
+                return `/floors/${this.$route.params.id}`;
             }
         }
     };

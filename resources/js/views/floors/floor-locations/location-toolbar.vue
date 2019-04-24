@@ -37,7 +37,6 @@
         <location-modal v-if="locationModalVisible"
                         :visible="locationModalVisible"
                         :location="location.location"
-                        :url="url"
                         @location-modal:close="closeLocationModal"
                         @location-modal:update="updateLocation"
                         @location-modal:remove="removeLocation">
@@ -53,8 +52,7 @@
             locationModal
         },
         props: {
-            location: Object,
-            url: String
+            location: Object
         },
         data() {
             return {
@@ -77,7 +75,7 @@
 
                 try {
                     let coordinates = this.location.getCoordinates();
-                    const {data} = await this.$axios.put(this.url + '/locations/' + this.location.getId(), {coordinates});
+                    const {data} = await this.$axios.put('/locations/' + this.location.getId(), {coordinates});
                     this.updateLocation(data);
                 } catch (error) {
                     console.log(error);

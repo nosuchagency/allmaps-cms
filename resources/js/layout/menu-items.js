@@ -87,10 +87,10 @@ let menuItems = {
                             route: 'tags'
                         },
                         {
-                            title: this.$t('menu.map_components'),
+                            title: this.$t('menu.components'),
                             children: null,
                             icon: 'map-signs',
-                            route: 'map-components'
+                            route: 'components'
                         },
                         {
                             title: this.$t('menu.searchables'),

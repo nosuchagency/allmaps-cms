@@ -8,8 +8,8 @@
 <script>
     export default {
         props: {
-            lat: Number,
-            lng: Number,
+            latitude: Number,
+            longitude: Number,
             markerPopupContent: String,
             interactive: Boolean
         },
@@ -28,7 +28,7 @@
         },
         watch: {
             lat(lat) {
-                let latlng = L.latLng(lat, this.lng);
+                let latlng = L.latLng(lat, this.longitude);
                 this.setLocation({latlng});
                 this.map.panTo(latlng);
             },
@@ -41,7 +41,7 @@
         methods: {
             setupMap() {
                 this.map = new L.Map(this.mapId, {
-                    center: new L.LatLng(this.lat, this.lng),
+                    center: new L.LatLng(this.latitude, this.longitude),
                     scrollWheelZoom: false,
                     zoom: 14
                 });
@@ -49,7 +49,7 @@
                 this.map.on('focus', this.enableScrollZoom);
                 this.map.on('blur', this.disableScrollZoom);
 
-                this.marker = new L.Marker({lat: this.lat, lng: this.lng})
+                this.marker = new L.Marker({lat: this.latitude, lng: this.longitude})
                     .addTo(this.map);
 
                 if (this.markerPopupContent) {
@@ -63,7 +63,7 @@
                 this.map.zoomControl.setPosition('bottomleft');
 
                 L.easyButton('fa-compress-arrows-alt', (btn, map) => {
-                    map.flyTo(new L.LatLng(this.lat, this.lng), 14)
+                    map.flyTo(new L.LatLng(this.latitude, this.longitude), 14)
                 }, 'Reposition Map', {
                     position: 'bottomleft'
                 }).addTo(this.map);

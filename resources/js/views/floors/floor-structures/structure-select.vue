@@ -24,7 +24,7 @@
 <script>
     export default {
         props: {
-            floorUrl: String,
+            floor: Object,
             type: String,
             components: Array
         },
@@ -37,7 +37,10 @@
             async createStructure(component) {
                 try {
                     this.component = null;
-                    const {data} = await this.$axios.post(this.floorUrl + '/structures', {map_component_id: component.id});
+                    const {data} = await this.$axios.post('/structures', {
+                        component: component,
+                        floor: this.floor
+                    });
                     this.$emit('structure:add', data);
                 } catch (error) {
                     console.log(error);

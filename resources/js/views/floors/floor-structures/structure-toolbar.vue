@@ -39,7 +39,6 @@
         <structure-modal v-if="structureModalVisible"
                          :visible="structureModalVisible"
                          :structure="structure.structure"
-                         :url="url"
                          @structure-modal:close="closeStructureModal"
                          @structure-modal:update="updateStructure"
                          @structure-modal:remove="removeStructure">
@@ -55,8 +54,7 @@
             structureModal
         },
         props: {
-            structure: Object,
-            url: String
+            structure: Object
         },
         data() {
             return {
@@ -88,7 +86,7 @@
                 try {
                     let coordinates = this.structure.getCoordinates();
                     let markers = this.structure.getMarkers();
-                    const {data} = await this.$axios.put(this.url + '/structures/' + this.structure.getId(), {
+                    const {data} = await this.$axios.put('/structures/' + this.structure.getId(), {
                         coordinates,
                         markers
                     });

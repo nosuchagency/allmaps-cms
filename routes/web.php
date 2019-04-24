@@ -11,5 +11,6 @@
 |
 */
 
-Route::get('/{any}', 'CatchAllController@index')
-    ->where('any', '.*');
+Route::get('/player/{containerId}', ['as' => 'player.show', 'uses' => 'PlayerController@show']);
+
+Route::get('/{any}', 'CatchAllController@index')->where('any', '.*');

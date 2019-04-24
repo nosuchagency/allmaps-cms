@@ -61,8 +61,7 @@
     export default {
         props: {
             visible: Boolean,
-            placeId: Number,
-            buildingId: Number,
+            building: Object,
             item: Object
         },
         data() {
@@ -72,36 +71,25 @@
                 confirmDelete: false,
                 form: new Form({
                     name: this.item ? this.item.name : '',
-                    level: this.item ? this.item.level : ''
+                    level: this.item ? this.item.level : '',
+                    building: this.building
                 })
             }
         },
         methods: {
             create() {
-                this.form.post(`/places/${this.placeId}/buildings/${this.buildingId}/${this.resource}`)
-                    .then(response => this.$emit('floor-modal:add', {
-                        placeId: this.placeId,
-                        buildingId: this.buildingId,
-                        floor: response
-                    }))
+                this.form.post(`/${this.resource}`)
+                    .then(response => this.$emit('floor-modal:add', response))
                     .catch(error => console.log(error));
             },
             update() {
-                this.form.put(`/places/${this.placeId}/buildings/${this.buildingId}/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('floor-modal:update', {
-                        placeId: this.placeId,
-                        buildingId: this.buildingId,
-                        floor: response
-                    }))
+                this.form.put(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('floor-modal:update', response))
                     .catch(error => console.log(error));
             },
             remove() {
-                this.form.delete(`/places/${this.placeId}/buildings/${this.buildingId}/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('floor-modal:remove', {
-                        placeId: this.placeId,
-                        buildingId: this.buildingId,
-                        floor: this.item
-                    }))
+                this.form.delete(`/${this.resource}/${this.item.id}`)
+                    .then(response => this.$emit('floor-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {

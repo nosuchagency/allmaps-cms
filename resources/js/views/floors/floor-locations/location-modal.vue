@@ -341,8 +341,7 @@
         },
         props: {
             visible: Boolean,
-            location: Object,
-            url: String
+            location: Object
         },
         data() {
             return {
@@ -392,7 +391,7 @@
         },
         methods: {
             update() {
-                this.form.put(this.url + '/locations/' + this.location.id)
+                this.form.put('/locations/' + this.location.id)
                     .then(response => {
                         this.$emit('location-modal:update', response);
                         this.closeModal();
@@ -400,7 +399,7 @@
                     .catch(error => console.log(error));
             },
             remove() {
-                this.form.delete(this.url + '/locations/' + this.location.id)
+                this.form.delete('/locations/' + this.location.id)
                     .then(response => this.$emit('location-modal:remove', response))
                     .catch(error => console.log(error));
             },

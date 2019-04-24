@@ -41,7 +41,7 @@
                     case 'logged in' :
                         return 'sign-in-alt';
                     case 'mapcomponent':
-                    case 'map-components':
+                    case 'components':
                         return 'map-signs';
                     case 'poi':
                     case 'pois':

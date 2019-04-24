@@ -7,7 +7,7 @@ let mapSetup = {
     methods: {
         setupMap() {
             this.map = new L.Map('map', {
-                center: new L.LatLng(this.lat, this.lng),
+                center: new L.LatLng(this.latitude, this.longitude),
                 zoom: 19,
             });
 
@@ -28,7 +28,7 @@ let mapSetup = {
             this.map.on('click', this.mapClickHandler);
 
             L.easyButton('fa-compress-arrows-alt', (btn, map) => {
-                map.flyTo(new L.LatLng(this.lat, this.lng), 19)
+                map.flyTo(new L.LatLng(this.latitude, this.longitude), 19)
             }, 'Reposition Map', {
                 position: 'bottomleft'
             }).addTo(this.map);

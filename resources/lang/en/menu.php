@@ -15,7 +15,7 @@ return [
     'settings' => 'Settings',
     'categories' => 'Categories',
     'tags' => 'Tags',
-    'map_components' => 'Map Components',
+    'components' => 'Map Components',
     'searchables' => 'Searchables',
     'map-settings' => 'Map Settings',
     'email_layouts' => 'Email Layouts',
