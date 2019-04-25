@@ -12,17 +12,27 @@
             <content-type :item="item"
                           :type="type"
                           :form="form"
+                          :folder="folder"
                           @sync-fields="syncFields">
             </content-type>
             <div slot="footer"
                  class="dialog-footer">
-                <el-button v-if="item"
-                           type="text"
-                           size="small"
-                           class="btn-remove"
-                           @click="remove">
-                    Remove
-                </el-button>
+                <template v-if="item">
+                    <el-button v-if="!confirmDelete"
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="confirmDelete = true">
+                        Delete
+                    </el-button>
+                    <el-button v-else
+                               type="text"
+                               size="small"
+                               class="btn-remove"
+                               @click="remove">
+                        Are you sure?
+                    </el-button>
+                </template>
                 <el-button size="small"
                            @click="closeModal()">
                     Cancel
@@ -54,22 +64,24 @@
         },
         data() {
             return {
-                form: new Form({})
+                resource: 'contents',
+                confirmDelete: false,
+                form: new Form({}),
             };
         },
         methods: {
             create() {
-                this.form.post(`/containers/${this.folder.container.id}/folders/${this.folder.id}/${this.getResource()}`)
+                this.form.post(`/${this.resource}`)
                     .then(response => this.$emit('content-modal:add', response))
                     .catch(error => console.log(error));
             },
             update() {
-                this.form.put(`/containers/${this.folder.container.id}/folders/${this.folder.id}/${this.getResource()}`)
+                this.form.put(`/${this.resource}/${this.item.id}`)
                     .then(response => this.$emit('content-modal:update', response))
                     .catch(error => console.log(error));
             },
             remove() {
-                this.form.delete(`/containers/${this.folder.container.id}/folders/${this.folder.id}/${this.getResource()}`)
+                this.form.delete(`/${this.resource}/${this.item.id}`)
                     .then(response => this.$emit('content-modal:remove', response))
                     .catch(error => console.log(error));
             },
@@ -78,32 +90,6 @@
             },
             syncFields(fields) {
                 this.form = new Form(fields);
-            },
-            getResource() {
-                let resource = '';
-
-                switch (this.type) {
-                    case 'image':
-                        resource = 'images';
-                        break;
-                    case 'video':
-                        resource = 'videos';
-                        break;
-                    case 'file':
-                        resource = 'files';
-                        break;
-                    case 'gallery':
-                        resource = 'galleries';
-                        break;
-                    case 'text':
-                        resource = 'texts';
-                        break;
-                    case 'web':
-                        resource = 'web';
-                        break;
-                }
-
-                return resource + (this.item ? '/' + this.item.id : '');
             }
         }
     };

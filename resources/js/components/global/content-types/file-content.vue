@@ -53,7 +53,8 @@
     export default {
         props: {
             item: Object,
-            form: Object
+            form: Object,
+            folder: Object
         },
         data() {
             return {
@@ -77,8 +78,10 @@
             getFields() {
                 return {
                     name: this.item ? this.item.name : '',
+                    type : 'file',
                     category: this.item ? this.item.category : '',
-                    tags: this.item ? this.item.tags : []
+                    tags: this.item ? this.item.tags : [],
+                    folder: this.folder
                 };
             },
             syncFields() {

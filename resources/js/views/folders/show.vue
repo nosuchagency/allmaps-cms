@@ -44,7 +44,6 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              :container-id="item.container.id"
                               @upsert-modal:close="closeUpsertModal"
                               @upsert-modal:update="updateItem"
                               @upsert-modal:remove="removeItem">
@@ -76,7 +75,7 @@
         methods: {
             async fetch() {
                 try {
-                    const {data} = await this.$axios.get(`/containers/${this.$route.params.containerId}/${this.resource}/${this.$route.params.id}`);
+                    const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
                     this.item = data;
                 } catch (error) {
                     console.log(error);
@@ -87,7 +86,7 @@
                 this.closeUpsertModal();
             },
             removeItem() {
-                this.$router.push('/' + this.resource);
+                this.$router.push(`/containers/${this.$route.params.containerId}`);
             },
             openUpsertModal() {
                 this.upsertModalVisible = true;
