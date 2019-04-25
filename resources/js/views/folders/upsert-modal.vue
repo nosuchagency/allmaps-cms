@@ -52,7 +52,7 @@
                 </el-tabs>
             </el-form>
             <span slot="footer">
-                <template v-if="item">
+                <template v-if="item && !item.primary">
                     <el-button v-if="!confirmDelete"
                                type="text"
                                size="small"
