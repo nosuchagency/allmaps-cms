@@ -92,7 +92,7 @@
         props: {
             visible: Boolean,
             item: Object,
-            containerId: Number
+            container: Object
         },
         data() {
             return {
@@ -107,23 +107,24 @@
                     latitude: this.item && this.item.latitude ? this.item.latitude : 55.663874,
                     longitude: this.item && this.item.longitude ? this.item.longitude : 12.393955,
                     category: this.item ? this.item.category : '',
-                    tags: this.item ? this.item.tags : []
+                    tags: this.item ? this.item.tags : [],
+                    container: this.container
                 })
             }
         },
         methods: {
             create() {
-                this.form.post(`/containers/${this.containerId}/${this.resource}`)
+                this.form.post(`/${this.resource}`)
                     .then(response => this.$emit('upsert-modal:add', response))
                     .catch(error => console.log(error));
             },
             update() {
-                this.form.put(`/containers/${this.containerId}/${this.resource}/${this.item.id}`)
+                this.form.put(`/${this.resource}/${this.item.id}`)
                     .then(response => this.$emit('upsert-modal:update', response))
                     .catch(error => console.log(error));
             },
             remove() {
-                this.form.delete(`/containers/${this.containerId}/${this.resource}/${this.item.id}`)
+                this.form.delete(`/${this.resource}/${this.item.id}`)
                     .then(response => this.$emit('upsert-modal:remove', response))
                     .catch(error => console.log(error));
             },

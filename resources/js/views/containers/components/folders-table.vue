@@ -43,7 +43,7 @@
             <folder-modal v-if="folderModalVisible"
                           :visible="folderModalVisible"
                           :item="selectedFolder"
-                          :container-id="item.id"
+                          :container="item"
                           @upsert-modal:close="closeFolderModal"
                           @upsert-modal:add="addFolder">
             </folder-modal>

@@ -19,58 +19,58 @@
                             :sm="12"
                             :lg="6"
                             class="card-panel-col">
-                        <a href="/servers">
+                        <router-link to="/places">
                             <div class='card-panel'>
                                 <div class="card-panel-icon-wrapper icon-building">
-                                    <i class="fa fa-building"
+                                    <i class="fa fa-map-marked-alt"
                                        aria-hidden="true"></i>
                                 </div>
                                 <div class="card-panel-description">
                                     <div class="card-panel-text">Places</div>
                                 </div>
                             </div>
-                        </a>
+                        </router-link>
                     </el-col>
                     <el-col :xs="24"
                             :sm="12"
                             :lg="6"
                             class="card-panel-col">
-                        <a href="/floors">
+                        <router-link to="/containers">
                             <div class="card-panel">
                                 <div class="card-panel-icon-wrapper icon-site">
-                                    <i class="fa fa-at"
+                                    <i class="fa fa-archive"
                                        aria-hidden="true"></i>
                                 </div>
                                 <div class="card-panel-description">
-                                    <div class="card-panel-text">Floors</div>
+                                    <div class="card-panel-text">Content</div>
                                 </div>
                             </div>
-                        </a>
+                        </router-link>
                     </el-col>
                     <el-col :xs="24"
                             :sm="12"
                             :lg="6"
                             class="card-panel-col">
-                        <a href="/locations">
+                        <router-link to="/fixtures">
                             <div class="card-panel">
                                 <div class="card-panel-icon-wrapper icon-error">
-                                    <i class="fa fa-bug"
+                                    <i class="fa fa-couch"
                                        aria-hidden="true"></i>
                                 </div>
                                 <div class="card-panel-description">
-                                    <div class="card-panel-text">Locations</div>
+                                    <div class="card-panel-text">Fixtures</div>
                                 </div>
                             </div>
-                        </a>
+                        </router-link>
                     </el-col>
                     <el-col :xs="24"
                             :sm="12"
                             :lg="6"
                             class="card-panel-col">
-                        <a href="/beacons">
+                        <router-link to="/beacons">
                             <div class="card-panel">
                                 <div class="card-panel-icon-wrapper icon-monitor">
-                                    <i class="fa fa-eye"
+                                    <i class="fa fa-wifi"
                                        aria-hidden="true"></i>
                                 </div>
                                 <div class="card-panel-description">
@@ -79,7 +79,7 @@
                                 </span>
                                 </div>
                             </div>
-                        </a>
+                        </router-link>
                     </el-col>
                 </el-row>
             </div>
