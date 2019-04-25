@@ -38,8 +38,8 @@
         ],
         props: {
             url: String,
-            lat: Number,
-            lng: Number,
+            latitude: Number,
+            longitude: Number,
             structures: Array,
             currentStructure: Object,
             currentStructureCopy: Object

@@ -5,8 +5,8 @@
 <script>
     export default {
         props: {
-            lat: Number,
-            lng: Number
+            latitude: Number,
+            longitude: Number
         },
         data() {
             return {
@@ -25,7 +25,7 @@
         methods: {
             setupMap() {
                 this.map = new L.Map('map', {
-                    center: new L.LatLng(this.lat, this.lng),
+                    center: new L.LatLng(this.latitude, this.longitude),
                     scrollWheelZoom: false,
                     zoom: 19
                 });
@@ -38,9 +38,9 @@
                     iconSize: [20, 20]
                 });
 
-                this.marker = new L.Marker({lat: this.lat, lng: this.lng}, {icon})
+                this.marker = new L.Marker({lat: this.latitude, lng: this.longitude}, {icon})
                     .addTo(this.map)
-                    .bindPopup('Latitude: ' + this.lat + '<br>' + 'Longitude: ' + this.lng);
+                    .bindPopup('Latitude: ' + this.latitude + '<br>' + 'Longitude: ' + this.longitude);
 
                 L.gridLayer
                     .googleMutant({
@@ -51,7 +51,7 @@
                 this.map.zoomControl.setPosition('bottomleft');
 
                 L.easyButton('fa-compress-arrows-alt', (btn, map) => {
-                    map.flyTo(new L.LatLng(this.lat, this.lng), 19)
+                    map.flyTo(new L.LatLng(this.latitude, this.longitude), 19)
                 }, 'Reposition Map', {
                     position: 'bottomleft'
                 }).addTo(this.map);

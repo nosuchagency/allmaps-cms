@@ -7,17 +7,17 @@
                      label-width="120px"
                      @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Map Component" name="map_component">
+                    <el-tab-pane label="Map Component" name="component">
                         <br>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.name')"
+                                <el-form-item :label="$t('components.attributes.name')"
                                               :class="{'is-error' : form.errors.has('name')}">
                                     <el-input v-model="form.name" autofocus></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.type')"
+                                <el-form-item :label="$t('components.attributes.type')"
                                               :class="{'is-error' : form.errors.has('type')}">
                                     <el-select v-model="form.type">
                                         <el-option v-for="item in ['plan', 'wall', 'room', 'decor']"
@@ -29,7 +29,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="24">
-                                <el-form-item :label="$t('map-components.attributes.description')"
+                                <el-form-item :label="$t('components.attributes.description')"
                                               :class="{'is-error' : form.errors.has('description')}">
                                     <el-input v-model="form.description"
                                               type="textarea"
@@ -43,7 +43,7 @@
                         <br>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.shape')"
+                                <el-form-item :label="$t('components.attributes.shape')"
                                               :class="{'is-error' : form.errors.has('shape')}">
                                     <el-select v-model="form.shape"
                                                :disabled="!!item">
@@ -57,7 +57,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.curved')"
+                                <el-form-item :label="$t('components.attributes.curved')"
                                               :class="{'is-error' : form.errors.has('curved')}"
                                               v-if="form.shape === 'polyline' || form.shape === 'polygon'">
                                     <el-switch v-model="form.curved"></el-switch>
@@ -66,7 +66,7 @@
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.color')"
+                                <el-form-item :label="$t('components.attributes.color')"
                                               v-if="form.shape !== 'image'"
                                               :class="{'is-error' : form.errors.has('color')}">
                                     <el-color-picker v-model="form.color"
@@ -76,7 +76,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.opacity')"
+                                <el-form-item :label="$t('components.attributes.opacity')"
                                               :class="{'is-error' : form.errors.has('opacity')}"
                                               v-if="form.shape === 'polygon' || form.shape === 'circle'  || form.shape === 'rectangle'">
                                     <el-slider v-model="opacity"
@@ -89,19 +89,19 @@
                         <el-row v-if="form.shape === 'image'"
                                 :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.width')"
+                                <el-form-item :label="$t('components.attributes.width')"
                                               :class="{'is-error' : form.errors.has('width')}">
                                     <el-input v-model.number="form.width"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.height')"
+                                <el-form-item :label="$t('components.attributes.height')"
                                               :class="{'is-error' : form.errors.has('height')}">
                                     <el-input v-model.number="form.height"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.image')"
+                                <el-form-item :label="$t('components.attributes.image')"
                                               :class="{'is-error' : form.errors.has('image')}">
                                     <image-upload @image-uploaded="setImage"
                                                   @image-removed="setImage"
@@ -112,7 +112,7 @@
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :label="$t('map-components.attributes.thickness')"
+                                <el-form-item :label="$t('components.attributes.thickness')"
                                               :class="{'is-error' : form.errors.has('weight')}"
                                               v-if="form.shape !== 'image'">
                                     <el-input-number v-model="form.weight"
@@ -125,7 +125,7 @@
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
-                        <el-form-item :label="$t('map-components.attributes.category')"
+                        <el-form-item :label="$t('components.attributes.category')"
                                       :class="{'is-error' : form.errors.has('category')}">
                             <fetch-items url="/categories">
                                 <el-select v-model="form.category"
@@ -141,7 +141,7 @@
                                 </el-select>
                             </fetch-items>
                         </el-form-item>
-                        <el-form-item :label="$t('map-components.attributes.tags')"
+                        <el-form-item :label="$t('components.attributes.tags')"
                                       :class="{'is-error' : form.errors.has('tags')}">
                             <fetch-items url="/tags">
                                 <el-select v-model="form.tags"
@@ -208,8 +208,8 @@
         },
         data() {
             return {
-                currentTab: 'map_component',
-                resource: 'map-components',
+                currentTab: 'component',
+                resource: 'components',
                 confirmDelete: false,
                 form: new Form({
                     name: this.item ? this.item.name : '',

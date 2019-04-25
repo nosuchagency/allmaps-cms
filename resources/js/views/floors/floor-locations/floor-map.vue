@@ -49,8 +49,8 @@
         ],
         props: {
             url: String,
-            lat: Number,
-            lng: Number,
+            latitude: Number,
+            longitude: Number,
             currentLocation: Object,
             currentLocationCopy: Object,
             structures: Array,

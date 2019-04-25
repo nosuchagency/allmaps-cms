@@ -6,7 +6,7 @@
                     <div class="title-icon-wrapper">
                         <i class="fa fa-map-marked-alt title-icon"></i>
                         <template v-if="item">
-                            <router-link :to="'/places/' + placeId">
+                            <router-link :to="`/places/${item.place.id}`">
                                 {{ item.place.name }}
                             </router-link>
                             <i class="fa fa-caret-right" style="margin: 0 10px;"></i>
@@ -15,12 +15,12 @@
                         </template>
                     </div>
                 </template>
-                <template slot="right">
+                <template slot="right" v-if="item">
                     <template v-for="location in locationVariants">
                         <location-select :title="location.title"
                                          :url="location.url"
                                          :identifier="location.identifier"
-                                         :floor-url="getFloorUrl()"
+                                         :floor="item"
                                          @location:add="locationCreated">
                         </location-select>
                     </template>
@@ -36,11 +36,10 @@
                 <location-toolbar :location="currentLocation"
                                   @location:saved="locationSaved"
                                   @location:cancelled="locationCancelled"
-                                  @location:removed="locationRemoved"
-                                  :url="getFloorUrl()">
+                                  @location:removed="locationRemoved">
                 </location-toolbar>
-                <floor-map :lat="item.place.lat"
-                           :lng="item.place.lng"
+                <floor-map :latitude="item.place.latitude"
+                           :longitude="item.place.longitude"
                            :current-location="currentLocation"
                            :current-location-copy="currentLocationCopy"
                            :structures="item.structures"
@@ -68,16 +67,13 @@
         data() {
             return {
                 item: null,
-                placeId: null,
-                buildingId: null,
-                floorId: null,
                 currentLocation: null,
                 currentLocationCopy: null,
                 locationVariants: [
-                    {title: 'Beacon', url: '/beacons?inuse=false', identifier: 'beacon_id'},
-                    {title: 'Poi Point', url: '/pois?type=image', identifier: 'poi_id'},
-                    {title: 'Poi Area', url: '/pois?type=area', identifier: 'poi_id'},
-                    {title: 'Fixture', url: '/fixtures', identifier: 'fixture_id'}
+                    {title: 'Beacon', url: '/beacons?inuse=false', identifier: 'beacon'},
+                    {title: 'Poi Point', url: '/pois?type=image', identifier: 'poi'},
+                    {title: 'Poi Area', url: '/pois?type=area', identifier: 'poi'},
+                    {title: 'Fixture', url: '/fixtures', identifier: 'fixture'}
                 ]
             }
         },
@@ -87,7 +83,7 @@
         methods: {
             async fetch() {
                 try {
-                    const {data} = await this.$axios.get(this.getReadUrl());
+                    const {data} = await this.$axios.get(this.url());
                     this.item = data;
                 } catch (error) {
                     console.log(error);
@@ -119,12 +115,8 @@
             locationRemoved() {
                 Hub.$emit('location:removed');
             },
-            getFloorUrl() {
-                return `/places/${this.placeId}/buildings/${this.buildingId}/floors/${this.floorId}`;
-            },
-            getReadUrl() {
-                ({placeId: this.placeId, buildingId: this.buildingId, id: this.floorId} = this.$route.params);
-                return this.getFloorUrl();
+            url() {
+                return `/floors/${this.$route.params.id}`;
             }
         }
     };

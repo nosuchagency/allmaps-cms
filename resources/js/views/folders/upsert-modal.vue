@@ -104,8 +104,8 @@
                     address: this.item ? this.item.address : '',
                     postcode: this.item ? this.item.postcode : '',
                     city: this.item ? this.item.city : '',
-                    lat: this.item && this.item.lat ? this.item.lat : 55.663874,
-                    lng: this.item && this.item.lng ? this.item.lng : 12.393955,
+                    latitude: this.item && this.item.latitude ? this.item.latitude : 55.663874,
+                    longitude: this.item && this.item.longitude ? this.item.longitude : 12.393955,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 })

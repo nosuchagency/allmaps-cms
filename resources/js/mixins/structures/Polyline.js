@@ -49,7 +49,7 @@ let Polyline = {
                     return null;
                 },
                 addMarkers() {
-                    this.getMarkers().forEach(self.addMarker);
+                    this.getCoordinates().forEach(self.addMarker);
                 }
             }
         });

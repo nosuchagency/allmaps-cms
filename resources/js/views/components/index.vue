@@ -5,14 +5,14 @@
                 <template slot="left">
                     <div class="title-icon-wrapper">
                         <i class="fa fa-map-signs title-icon"></i>
-                        <label>{{$t('map-components.plural')}}</label>
+                        <label>{{$t('components.plural')}}</label>
                     </div>
                 </template>
                 <template slot="right">
                     <el-tooltip effect="dark"
-                                :content="$t('general.actions.create', {name : $t('map-components.singular')})"
+                                :content="$t('general.actions.create', {name : $t('components.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('map-components.create')">
+                                v-if="$auth.user().permissions.includes('components.create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -40,23 +40,23 @@
                                      align="center">
                     </el-table-column>
                     <el-table-column property="name"
-                                     :label="$t('map-components.attributes.name')"
+                                     :label="$t('components.attributes.name')"
                                      sortable>
                     </el-table-column>
                     <el-table-column property="type"
-                                     :label="$t('map-components.attributes.type')"
+                                     :label="$t('components.attributes.type')"
                                      sortable>
                     </el-table-column>
                     <el-table-column property="shape"
-                                     :label="$t('map-components.attributes.shape')"
+                                     :label="$t('components.attributes.shape')"
                                      sortable>
                     </el-table-column>
                     <el-table-column property="weight"
-                                     :label="$t('map-components.attributes.thickness')"
+                                     :label="$t('components.attributes.thickness')"
                                      sortable>
                     </el-table-column>
                     <el-table-column property="color"
-                                     :label="$t('map-components.attributes.color')"
+                                     :label="$t('components.attributes.color')"
                                      sortable>
                     </el-table-column>
                     <el-table-column :label="$t('containers.attributes.category')"
@@ -77,7 +77,7 @@
                     <el-table-column align="right">
                         <template slot-scope="scope">
                             <el-tooltip effect="dark"
-                                        :content="$t('general.actions.edit', {name : $t('map-components.singular')})"
+                                        :content="$t('general.actions.edit', {name : $t('components.singular')})"
                                         placement="top-start">
                                 <el-button type="primary"
                                            size="small"
@@ -146,7 +146,7 @@
                 confirmDeleteVisible: false,
                 items: null,
                 loading: false,
-                resource: 'map-components',
+                resource: 'components',
                 searchQuery: '',
                 selectedCategory: '',
                 selectedTags: [],
@@ -218,7 +218,7 @@
         },
         computed: {
             text() {
-                let name = this.selectedItems.length > 1 ? this.$t('map-components.plural') : this.$t('map-components.singular');
+                let name = this.selectedItems.length > 1 ? this.$t('components.plural') : this.$t('components.singular');
 
                 return this.$t('general.actions.delete', {name});
             },

@@ -48,18 +48,20 @@ export default class Form {
      * Send a GET request to the given URL.
      * .
      * @param {string} url
+     * @param {object} headers
      */
-    get(url) {
-        return this.submit('get', url);
+    get(url, headers = null) {
+        return this.submit('get', url, headers);
     }
 
     /**
      * Send a POST request to the given URL.
      * .
      * @param {string} url
+     * @param {object} headers
      */
-    post(url) {
-        return this.submit('post', url);
+    post(url, headers = null) {
+        return this.submit('post', url, headers);
     }
 
 
@@ -67,9 +69,10 @@ export default class Form {
      * Send a PUT request to the given URL.
      * .
      * @param {string} url
+     * @param {object} headers
      */
-    put(url) {
-        return this.submit('put', url);
+    put(url, headers = null) {
+        return this.submit('put', url, headers);
     }
 
 
@@ -77,9 +80,10 @@ export default class Form {
      * Send a PATCH request to the given URL.
      * .
      * @param {string} url
+     * @param {object} headers
      */
-    patch(url) {
-        return this.submit('patch', url);
+    patch(url, headers = null) {
+        return this.submit('patch', url, headers);
     }
 
 
@@ -87,9 +91,10 @@ export default class Form {
      * Send a DELETE request to the given URL.
      * .
      * @param {string} url
+     * @param {object} headers
      */
-    delete(url) {
-        return this.submit('delete', url);
+    delete(url, headers = null) {
+        return this.submit('delete', url, headers);
     }
 
 
@@ -98,11 +103,12 @@ export default class Form {
      *
      * @param {string} requestType
      * @param {string} url
+     * @param {object} headers
      */
-    submit(requestType, url) {
+    submit(requestType, url, headers) {
         return new Promise((resolve, reject) => {
             this.busy = true;
-            axios[requestType](url, this.data())
+            axios[requestType](url, this.data(), headers)
                 .then(response => {
                     this.onSuccess(response.data);
                     resolve(response.data);

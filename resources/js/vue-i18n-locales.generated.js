@@ -216,7 +216,7 @@ export default {
             "settings": "Settings",
             "categories": "Categories",
             "tags": "Tags",
-            "map_components": "Map Components",
+            "components": "Map Components",
             "searchables": "Searchables",
             "map-settings": "Map Settings",
             "email_layouts": "Email Layouts",
@@ -245,6 +245,27 @@ export default {
                 "category": "Category",
                 "tags": "Tags",
                 "beacons": "Beacons"
+            }
+        },
+        "components": {
+            "singular": "Map Component",
+            "plural": "Map Components",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "type": "Type",
+                "description": "Description",
+                "shape": "Shape",
+                "color": "Color",
+                "opacity": "Opacity",
+                "weight": "Weight",
+                "curved": "Curved",
+                "image": "Image",
+                "thickness": "Thickness",
+                "width": "Width",
+                "height": "Height",
+                "category": "Category",
+                "tags": "Tags"
             }
         },
         "places": {
@@ -282,27 +303,6 @@ export default {
             "password": "Password",
             "password_placeholder": "Only fill out if changing password",
             "role": "Role"
-        },
-        "map-components": {
-            "singular": "Map Component",
-            "plural": "Map Components",
-            "attributes": {
-                "id": "ID",
-                "name": "Name",
-                "type": "Type",
-                "description": "Description",
-                "shape": "Shape",
-                "color": "Color",
-                "opacity": "Opacity",
-                "weight": "Weight",
-                "curved": "Curved",
-                "image": "Image",
-                "thickness": "Thickness",
-                "width": "Width",
-                "height": "Height",
-                "category": "Category",
-                "tags": "Tags"
-            }
         },
         "layouts": {
             "singular": "Layout",

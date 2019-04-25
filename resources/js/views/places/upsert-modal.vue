@@ -84,8 +84,8 @@
                     <el-tab-pane label="Location" name="location">
                         <br>
                         <map-location-select v-if="mapInitialized"
-                                             :lat="form.lat"
-                                             :lng="form.lng"
+                                             :latitude="form.latitude"
+                                             :longitude="form.longitude"
                                              :interactive="true"
                                              @map:selection="setLatLng">
                         </map-location-select>
@@ -151,8 +151,8 @@
                     postcode: this.item ? this.item.postcode : '',
                     city: this.item ? this.item.city : '',
                     image: this.item ? this.item.image : '',
-                    lat: this.item && this.item.lat ? this.item.lat : 55.663874,
-                    lng: this.item && this.item.lng ? this.item.lng : 12.393955,
+                    latitude: this.item && this.item.latitude ? this.item.latitude : 55.663874,
+                    longitude: this.item && this.item.longitude ? this.item.longitude : 12.393955,
                     activated: this.item ? this.item.activated : false,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
@@ -185,8 +185,8 @@
                 }
             },
             setLatLng(latLng) {
-                this.form.lat = latLng.lat;
-                this.form.lng = latLng.lng;
+                this.form.latitude = latLng.lat;
+                this.form.longitude = latLng.lng;
             },
             setImage(image = null) {
                 this.form.image = image;

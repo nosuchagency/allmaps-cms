@@ -15,7 +15,7 @@
                                 v-if="$auth.user().permissions.includes('places.update')">
                         <el-button type="primary"
                                    size="small"
-                                   @click="openUpsertModal()"
+                                   @click="upsertModalVisible = true"
                                    circle>
                             <i class="fa fa-edit"></i>
                         </el-button>
@@ -68,8 +68,8 @@
                             </div>
                         </el-col>
                         <el-col :span="12">
-                            <map-location-select :lat="item.lat"
-                                                 :lng="item.lng"
+                            <map-location-select :latitude="item.latitude"
+                                                 :longitude="item.longitude"
                                                  :marker-popup-content="placePopupContent">
                             </map-location-select>
                         </el-col>
@@ -89,125 +89,32 @@
                                     v-if="$auth.user().permissions.includes('buildings.create')">>
                             <el-button type="primary"
                                        size="small"
-                                       @click="openBuildingModal()"
+                                       @click="buildingModalVisible = true"
                                        circle>
                                 <i class="fa fa-plus"></i>
                             </el-button>
                         </el-tooltip>
                     </div>
                 </el-card>
-
-                <el-card class="box-card"
-                         v-for="building in item.buildings"
-                         :key="building.id">
-                    <template slot="header">
-                        <div class="title-icon-wrapper">
-                            <i class="fa fa-building title-icon"></i>
-                            <label>{{building.name}}</label>
-                        </div>
-                        <el-tooltip effect="dark"
-                                    :content="$t('general.actions.edit', {name : $t('buildings.singular')})"
-                                    placement="top-start"
-                                    style="margin-left: auto;">
-                            <el-button type="primary"
-                                       size="small"
-                                       @click="openBuildingModal(building)"
-                                       circle>
-                                <i class="fa fa-edit"></i>
-                            </el-button>
-                        </el-tooltip>
-                        <el-tooltip effect="dark"
-                                    content="Add Floor"
-                                    placement="top-start">
-                            <el-button type="primary"
-                                       size="small"
-                                       @click="openFloorModal(building)"
-                                       circle>
-                                <i class="fa fa-plus"></i>
-                            </el-button>
-                        </el-tooltip>
-                    </template>
-                    <el-table :data="building.floors"
-                              size="small">
-                        <el-table-column label="Name"
-                                         property="name"
-                                         sortable>
-                        </el-table-column>
-                        <el-table-column label="Level"
-                                         property="level"
-                                         sortable>
-                        </el-table-column>
-                        <el-table-column label="Locations"
-                                         align="center"
-                                         sortable>
-                            <template slot-scope="scope">
-                                <span>{{scope.row.locations.length}}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column align="right">
-                            <template slot-scope="scope">
-                                <el-tooltip effect="dark"
-                                            :content="$t('buildings.map_plan')"
-                                            placement="top-start">
-                                    <el-button type="warning"
-                                               size="small"
-                                               icon="el-icon-picture-outline"
-                                               circle
-                                               v-if="$auth.user().permissions.includes('floors.read')"
-                                               @click="$router.push(`/places/${item.id}/buildings/${building.id}/floors/${scope.row.id}/structures`)">
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip effect="dark"
-                                            content="Map Locations"
-                                            placement="top-start">
-                                    <el-button type="warning"
-                                               size="small"
-                                               circle
-                                               v-if="$auth.user().permissions.includes('floors.read')"
-                                               @click="$router.push(`/places/${item.id}/buildings/${building.id}/floors/${scope.row.id}/locations`)">
-                                        <i class="fa fa-location-arrow"></i>
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip effect="dark"
-                                            content="Edit Floor"
-                                            placement="top-start">
-                                    <el-button type="primary"
-                                               size="small"
-                                               @click="openFloorModal(building, scope.row)"
-                                               circle>
-                                        <i class="fa fa-edit"></i>
-                                    </el-button>
-                                </el-tooltip>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-card>
+                <building-card v-for="building in item.buildings"
+                               :building="building"
+                               :key="building.id"
+                               @building-card:remove="removeBuilding"
+                               @building-card:update="updateBuilding">
+                </building-card>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
+                              @upsert-modal:close="upsertModalVisible = false"
                               @upsert-modal:update="updateItem"
                               @upsert-modal:remove="removeItem">
                 </upsert-modal>
                 <building-modal v-if="buildingModalVisible"
                                 :visible="buildingModalVisible"
-                                :place-id="item.id"
-                                :item="selectedBuilding"
-                                @building-modal:close="closeBuildingModal"
-                                @building-modal:add="addBuilding"
-                                @building-modal:update="updateBuilding"
-                                @building-modal:remove="removeBuilding">
+                                :place="item"
+                                @building-modal:close="buildingModalVisible = false"
+                                @building-modal:add="addBuilding">
                 </building-modal>
-                <floor-modal v-if="floorModalVisible"
-                             :visible="floorModalVisible"
-                             :item="selectedFloor"
-                             :building-id="selectedBuilding.id"
-                             :place-id="item.id"
-                             @floor-modal:close="closeFloorModal"
-                             @floor-modal:add="addFloor"
-                             @floor-modal:update="updateFloor"
-                             @floor-modal:remove="removeFloor">
-                </floor-modal>
             </div>
         </template>
     </layout>
@@ -217,26 +124,23 @@
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
     import buildingModal from '../buildings/upsert-modal';
-    import floorModal from '../floors/upsert-modal';
     import mapLocationSelect from './map-location-select';
+    import buildingCard from './building-card';
 
     export default {
         mixins: [multipleSelection],
         components: {
             upsertModal,
             buildingModal,
-            floorModal,
-            mapLocationSelect
+            mapLocationSelect,
+            buildingCard
         },
         data() {
             return {
                 upsertModalVisible: false,
                 buildingModalVisible: false,
-                floorModalVisible: false,
                 resource: 'places',
-                item: null,
-                selectedBuilding: null,
-                selectedFloor: null
+                item: null
             };
         },
         created() {
@@ -253,62 +157,22 @@
             },
             updateItem(item) {
                 this.item = item;
-                this.closeUpsertModal();
+                this.upsertModalVisible = false;
             },
             removeItem() {
                 this.$router.push('/' + this.resource);
             },
-            openUpsertModal() {
-                this.upsertModalVisible = true;
-            },
-            closeUpsertModal() {
-                this.upsertModalVisible = false;
-            },
-            openBuildingModal(building = null) {
-                this.selectedBuilding = building;
-                this.buildingModalVisible = true;
-            },
-            closeBuildingModal() {
-                this.buildingModalVisible = false;
-            },
-            openFloorModal(building, item = null) {
-                this.selectedBuilding = building;
-                this.selectedFloor = item;
-                this.floorModalVisible = true;
-            },
-            closeFloorModal() {
-                this.floorModalVisible = false;
-            },
             addBuilding(building) {
                 this.item.buildings.push(building);
-                this.closeBuildingModal();
+                this.buildingModalVisible = false;
             },
             updateBuilding(building) {
                 let index = this.item.buildings.findIndex(({id}) => id === building.id);
                 this.item.buildings.splice(index, 1, building);
-                this.closeBuildingModal();
             },
             removeBuilding(building) {
                 let index = this.item.buildings.findIndex(({id}) => id === building.id);
                 this.item.buildings.splice(index, 1);
-                this.closeBuildingModal();
-            },
-            addFloor(data) {
-                let building = this.item.buildings.find(({id}) => id === data.buildingId);
-                building.floors.push(data.floor);
-                this.closeFloorModal();
-            },
-            updateFloor(data) {
-                let building = this.item.buildings.find(({id}) => id === data.buildingId);
-                let floorIndex = building.floors.findIndex(({id}) => id === data.floor.id);
-                building.floors.splice(floorIndex, 1, data.floor);
-                this.closeFloorModal();
-            },
-            removeFloor(data) {
-                let building = this.item.buildings.find(({id}) => id === data.buildingId);
-                let floorIndex = building.floors.findIndex(({id}) => id === data.floor.id);
-                building.floors.splice(floorIndex, 1);
-                this.closeFloorModal();
             }
         },
         computed: {

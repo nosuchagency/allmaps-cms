@@ -19,7 +19,7 @@
                                        filterable
                                        value-key="id"
                                        ref="select"
-                                       @input="setLocationId">
+                                       @input="setLocation">
                                 <el-option v-for="item in items"
                                            :key="item.id"
                                            :label="item.name"
@@ -55,7 +55,7 @@
         props: {
             url: String,
             title: String,
-            floorUrl: String,
+            floor: Object,
             identifier: String
         },
         data() {
@@ -63,7 +63,8 @@
                 currentTab: 'main',
                 visible: false,
                 form: new Form({
-                    [this.identifier]: this.location ? this.location.id : null
+                    [this.identifier]: this.location,
+                    floor: this.floor
                 }),
                 location: null
             }
@@ -76,11 +77,11 @@
             }
         },
         methods: {
-            setLocationId({id}) {
-                this.form[this.identifier] = id;
+            setLocation(element) {
+                this.form[this.identifier] = element;
             },
             create() {
-                this.form.post(`${this.floorUrl}/locations`)
+                this.form.post('locations')
                     .then(response => {
                         this.$emit('location:add', response);
                         this.visible = false;
