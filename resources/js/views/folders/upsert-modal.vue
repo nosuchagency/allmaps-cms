@@ -68,6 +68,10 @@
                         Are you sure?
                     </el-button>
                 </template>
+                <span class="info-text-danger"
+                      v-if="item && item.primary">
+                    Cannot delete auto generated folder
+                </span>
                 <el-button type="text"
                            size="small"
                            class="btn-cancel"
@@ -136,4 +140,11 @@
 </script>
 
 <style lang="scss" scoped>
+    .info-text-danger {
+        float: left;
+        color: #FF0000;
+        font-size: 12px;
+        padding: 9px 0;
+        font-weight: 500;
+    }
 </style>
