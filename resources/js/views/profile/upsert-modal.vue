@@ -134,8 +134,8 @@
                     locale: this.item ? this.item.locale : ''
                 }),
                 locales: [
-                    {'label': 'English', 'value': 'en', 'flag': 'gb'},
-                    {'label': 'Dansk', 'value': 'da', 'flag': 'dk'}
+                    {'label': 'English', 'value': 'en_GB', 'flag': 'gb'},
+                    {'label': 'Dansk', 'value': 'da_DK', 'flag': 'dk'}
                 ]
             }
         },
