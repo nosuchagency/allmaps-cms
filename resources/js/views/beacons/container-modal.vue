@@ -83,7 +83,9 @@
             }
         },
         mounted() {
-            setTimeout(() => this.$refs.select.focus(), 500);
+            if (!this.item) {
+                setTimeout(() => this.$refs.select.focus(), 500);
+            }
         },
         methods: {
             create() {
