@@ -34,7 +34,7 @@
                                     <el-option v-for="(role, index) in items"
                                                :key="index"
                                                :label="role.name"
-                                               :value="role.name">
+                                               :value="role">
                                     </el-option>
                                 </el-select>
                             </fetch-items>
@@ -139,7 +139,7 @@
                     name: this.item ? this.item.name : '',
                     email: this.item ? this.item.email : '',
                     password: '',
-                    role: this.item ? this.item.role.name : '',
+                    role: this.item ? this.item.role : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     invitation: false
