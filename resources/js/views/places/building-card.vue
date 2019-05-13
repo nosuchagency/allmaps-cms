@@ -53,7 +53,7 @@
                                    size="small"
                                    icon="el-icon-picture-outline"
                                    circle
-                                   v-if="$auth.user().permissions.includes('floors.read')"
+                                   v-if="$auth.user().hasPermissionTo('floors.read')"
                                    @click="$router.push(`/places/${building.id}/buildings/${building.id}/floors/${scope.row.id}/structures`)">
                         </el-button>
                     </el-tooltip>
@@ -63,7 +63,7 @@
                         <el-button type="warning"
                                    size="small"
                                    circle
-                                   v-if="$auth.user().permissions.includes('floors.read')"
+                                   v-if="$auth.user().hasPermissionTo('floors.read')"
                                    @click="$router.push(`/places/${building.id}/buildings/${building.id}/floors/${scope.row.id}/locations`)">
                             <i class="fa fa-location-arrow"></i>
                         </el-button>

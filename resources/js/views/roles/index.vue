@@ -12,7 +12,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.create', {name : $t('roles.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('roles.create')">
+                                v-if="$auth.user().hasPermissionTo('roles.create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"

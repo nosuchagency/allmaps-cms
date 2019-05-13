@@ -1,11 +1,11 @@
 export default class Errors {
+
     /**
      * Create a new Errors instance.
      */
     constructor() {
         this.errors = {};
     }
-
 
     /**
      * Determine if an errors exists for the given field.
@@ -16,14 +16,12 @@ export default class Errors {
         return this.errors.hasOwnProperty(field);
     }
 
-
     /**
      * Determine if we have any errors.
      */
     any() {
         return Object.keys(this.errors).length > 0;
     }
-
 
     /**
      * Retrieve the error message for a field.
@@ -36,7 +34,6 @@ export default class Errors {
         }
     }
 
-
     /**
      * Record the new errors.
      *
@@ -45,7 +42,6 @@ export default class Errors {
     record(errors) {
         this.errors = errors;
     }
-
 
     /**
      * Clear one or all error fields.

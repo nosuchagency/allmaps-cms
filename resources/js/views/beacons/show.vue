@@ -14,7 +14,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('beacons.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('beacons.update')">
+                                v-if="$auth.user().hasPermissionTo('beacons.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"

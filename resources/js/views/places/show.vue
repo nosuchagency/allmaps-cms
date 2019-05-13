@@ -12,7 +12,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('places.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('places.update')">
+                                v-if="$auth.user().hasPermissionTo('places.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="upsertModalVisible = true"
@@ -86,7 +86,7 @@
                                     :content="$t('general.actions.add', {name : $t('buildings.singular')})"
                                     placement="top-start"
                                     style="margin-left: auto;"
-                                    v-if="$auth.user().permissions.includes('buildings.create')">>
+                                    v-if="$auth.user().hasPermissionTo('buildings.create')">>
                             <el-button type="primary"
                                        size="small"
                                        @click="buildingModalVisible = true"

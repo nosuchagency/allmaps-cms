@@ -12,7 +12,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.create', {name : $t('components.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('components.create')">
+                                v-if="$auth.user().hasPermissionTo('components.create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -134,7 +134,6 @@
 <script>
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
-    import _ from 'lodash';
     import QueryParams from 'js/utils/QueryParams';
 
     export default {

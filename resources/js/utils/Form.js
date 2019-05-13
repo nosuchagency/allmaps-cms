@@ -2,6 +2,7 @@ import Errors from './Errors';
 import axios from 'axios';
 
 export default class Form {
+
     /**
      * Create a new Form instance.
      *
@@ -19,7 +20,6 @@ export default class Form {
         this.errors = new Errors();
         this.busy = false;
     }
-
 
     /**
      * Fetch all relevant data for the form.
@@ -52,7 +52,6 @@ export default class Form {
         return data;
     }
 
-
     /**
      * Reset the form fields.
      */
@@ -84,7 +83,6 @@ export default class Form {
         return this.submit('post', url, options);
     }
 
-
     /**
      * Send a PUT request to the given URL.
      * .
@@ -94,7 +92,6 @@ export default class Form {
     put(url, options = null) {
         return this.submit('put', url, options);
     }
-
 
     /**
      * Send a PATCH request to the given URL.
@@ -106,7 +103,6 @@ export default class Form {
         return this.submit('patch', url, options);
     }
 
-
     /**
      * Send a DELETE request to the given URL.
      * .
@@ -116,7 +112,6 @@ export default class Form {
     delete(url, options = null) {
         return this.submit('delete', url, options);
     }
-
 
     /**
      * Submit the form.
@@ -141,7 +136,6 @@ export default class Form {
         });
     }
 
-
     /**
      * Handle a successful form submission.
      *
@@ -150,7 +144,6 @@ export default class Form {
     onSuccess(data) {
         // this.reset();
     }
-
 
     /**
      * Handle a failed form submission.

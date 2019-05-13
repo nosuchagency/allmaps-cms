@@ -11,7 +11,7 @@
                         content="Create new Folder"
                         placement="top-start"
                         style="margin-left: auto;"
-                        v-if="$auth.user().permissions.includes('folders.create')">
+                        v-if="$auth.user().hasPermissionTo('folders.create')">
                 <el-button type="primary"
                            size="small"
                            @click="openFolderModal()"
