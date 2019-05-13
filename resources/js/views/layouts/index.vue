@@ -25,12 +25,14 @@
         </template>
         <template slot="content">
             <div class="content">
-                <ribbon @bulk-action="applyBulkAction"
-                        @ribbon:search="setSearchFilter"
-                        @ribbon:category="setCategoryFilter"
-                        @ribbon:tag="setTagsFilter"
+                <ribbon @ribbon:search="setFilter('search', $event)"
+                        @ribbon:category="setFilter('category', $event)"
+                        @ribbon:tag="setFilter('category', $event.join(','))"
+                        @ribbon:bulk-action="setBulkAction"
+                        @ribbon:apply="applyBulkAction"
                         :selections="selectedItems"
-                        :bulk-actions="bulkActions">
+                        :bulk-actions="bulkActions"
+                        :selected-bulk-action="selectedBulkAction">
                 </ribbon>
                 <el-table :data="tableItems"
                           :default-sort="{prop: 'name', order: 'ascending'}"
@@ -91,9 +93,9 @@
                     </div>
                     <div class="pagination-container-right">
                         <el-pagination background
-                                       @prev-click="setPage"
-                                       @next-click="setPage"
-                                       @current-change="setPage"
+                                       @prev-click="setFilter('page', $event)"
+                                       @next-click="setFilter('page', $event)"
+                                       @current-change="setFilter('page', $event)"
                                        layout="prev, pager, next"
                                        :total="items.meta.total"
                                        :page-size="50">
@@ -122,7 +124,6 @@
 <script>
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
-    import _ from 'lodash';
     import QueryParams from 'js/utils/QueryParams';
 
     export default {
@@ -159,17 +160,8 @@
             }
         },
         methods: {
-            setCategoryFilter(category) {
-                this.params.category = category;
-            },
-            setTagsFilter(tags) {
-                this.params.tags = tags.join(',');
-            },
-            setSearchFilter: _.debounce(function (query) {
-                this.params.search = query;
-            }, 500),
-            setPage(page) {
-                this.params.page = page;
+            setFilter(key, value) {
+                this.params[key] = value;
             },
             getUrl() {
                 return this.resource + '/paginated?';

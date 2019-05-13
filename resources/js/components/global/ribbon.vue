@@ -6,18 +6,20 @@
                     <el-select placeholder="Bulk Actions"
                                size="small"
                                :disabled="!anySelections"
-                               v-model="selectedBulkAction">
+                               :value="selectedBulkAction"
+                               @input="$emit('ribbon:bulk-action', $event)"
+                               value-key="value">
                         <el-option v-for="item in bulkActions"
                                    :key="item.value"
                                    :label="item.label"
-                                   :value="item.value">
+                                   :value="item">
                         </el-option>
                     </el-select>
                 </el-col>
                 <el-col :span="10">
                     <el-button size="small"
                                :disabled="!anySelections || !selectedBulkAction"
-                               @click="$emit('bulk-action', selectedBulkAction)">
+                               @click="$emit('ribbon:apply', selectedBulkAction)">
                         {{$t('general.actions.apply')}}
                     </el-button>
                 </el-col>
@@ -75,8 +77,18 @@
 <script>
     export default {
         props: {
-            selections: Array,
-            bulkActions: Array,
+            selections: {
+                type: Array,
+                default: () => []
+            },
+            bulkActions: {
+                type: Array,
+                default: () => []
+            },
+            selectedBulkAction: {
+                type: Object,
+                default: null
+            },
             searchQueryActivated: {
                 type: Boolean,
                 default: true
@@ -92,7 +104,6 @@
         },
         data() {
             return {
-                selectedBulkAction: null,
                 searchQuery: '',
                 selectedCategory: null,
                 selectedTags: []

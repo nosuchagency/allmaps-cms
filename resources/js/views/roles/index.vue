@@ -26,10 +26,12 @@
         <template slot="content">
 
             <div class="content">
-                <ribbon @bulk-action="applyBulkAction"
-                        @ribbon:search="setSearchFilter"
+                <ribbon @ribbon:search="setFilter('search', $event)"
+                        @ribbon:bulk-action="setBulkAction"
+                        @ribbon:apply="applyBulkAction"
                         :selections="selectedItems"
                         :bulk-actions="bulkActions"
+                        :selected-bulk-action="selectedBulkAction"
                         :category-filter-activated="false"
                         :tags-filter-activated="false">
                 </ribbon>
@@ -59,9 +61,9 @@
                     </div>
                     <div class="pagination-container-right">
                         <el-pagination background
-                                       @prev-click="setPage"
-                                       @next-click="setPage"
-                                       @current-change="setPage"
+                                       @prev-click="setFilter('page', $event)"
+                                       @next-click="setFilter('page', $event)"
+                                       @current-change="setFilter('page', $event)"
                                        layout="prev, pager, next"
                                        :total="items.meta.total"
                                        :page-size="50">
@@ -87,7 +89,6 @@
 <script>
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
-    import _ from 'lodash';
     import QueryParams from 'js/utils/QueryParams';
 
     export default {
@@ -120,11 +121,8 @@
             }
         },
         methods: {
-            setSearchFilter: _.debounce(function (query) {
-                this.params.search = query;
-            }, 500),
-            setPage(page) {
-                this.params.page = page;
+            setFilter(key, value) {
+                this.params[key] = value;
             },
             getUrl() {
                 return this.resource + '/paginated';

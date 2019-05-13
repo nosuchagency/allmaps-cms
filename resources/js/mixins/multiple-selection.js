@@ -5,19 +5,26 @@ let multipleSelection = {
             bulkRemoving: false,
             bulkActions: [
                 {value: null, label: 'Bulk Actions'},
-                {value: 'delete', label: 'Delete'},
-                // {value: 'publish', label: 'Publish'},
-            ]
+                {value: 'delete', label: 'Delete'}
+            ],
+            selectedBulkAction: null,
         }
     },
     methods: {
-        handleSelectionChange(val) {
-            this.selectedItems = val;
+        handleSelectionChange(items) {
+            this.selectedItems = items;
+
+            if (items.length === 0) {
+                this.selectedBulkAction = null;
+            }
         },
-        applyBulkAction(action) {
-            if (action === 'delete') {
+        applyBulkAction(bulkAction) {
+            if (bulkAction.value === 'delete') {
                 this.confirmDeleteVisible = true;
             }
+        },
+        setBulkAction(bulkAction) {
+            this.selectedBulkAction = bulkAction;
         },
         async bulkRemove() {
             if (this.selectedItems.length < 1) {

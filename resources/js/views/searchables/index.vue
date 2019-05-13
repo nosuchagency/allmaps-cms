@@ -12,10 +12,12 @@
         </template>
         <template slot="content">
             <div class="content">
-                <ribbon @bulk-action="applyBulkAction"
-                        @ribbon:search="searchQuery = $event"
+                <ribbon @ribbon:search="setFilter('search', $event)"
+                        @ribbon:bulk-action="setBulkAction"
+                        @ribbon:apply="applyBulkAction"
                         :selections="selectedItems"
                         :bulk-actions="bulkActions"
+                        :selected-bulk-action="selectedBulkAction"
                         :category-filter-activated="false"
                         :tags-filter-activated="false">
                 </ribbon>
@@ -81,13 +83,16 @@
                 items: null,
                 loading: false,
                 resource: 'plugins',
-                searchQuery: ''
+                search: ''
             };
         },
         created() {
             this.getItems(this.getUrl());
         },
         methods: {
+            setFilter(key, value) {
+                this.params[key] = value;
+            },
             getUrl() {
                 return '/' + this.resource;
             },
@@ -109,11 +114,11 @@
                     return [];
                 }
 
-                if (!this.searchQuery) {
+                if (!this.search) {
                     return this.items;
                 }
 
-                return this.items.filter(item => item.name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+                return this.items.filter(item => item.name.toLowerCase().includes(this.search.toLowerCase()))
             }
         }
     };
