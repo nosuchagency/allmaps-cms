@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'singular' => 'Container',
-    'plural' => 'Containers',
+    'singular' => 'Content',
+    'plural' => 'Contents',
 
     'attributes' => [
         'id' => 'ID',

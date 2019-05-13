@@ -7,7 +7,7 @@
                      label-width="120px"
                      @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Container" name="container">
+                    <el-tab-pane label="Content" name="content">
                         <br>
                         <el-form-item :label="$t('containers.attributes.name')"
                                       :class="{'is-error' : form.errors.has('name')}">
@@ -158,7 +158,7 @@
         },
         data() {
             return {
-                currentTab: 'container',
+                currentTab: 'content',
                 resource: 'containers',
                 confirmDelete: false,
                 form: new Form({

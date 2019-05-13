@@ -12,7 +12,8 @@
                 </el-form-item>
                 <el-form-item label="Url"
                               :class="{'is-error' : form.errors.has('url')}">
-                    <el-input v-model="fields.url">
+                    <el-input v-model="fields.url"
+                              placeholder="https://domain.com">
                     </el-input>
                 </el-form-item>
             </el-tab-pane>

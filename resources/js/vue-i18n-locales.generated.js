@@ -248,8 +248,8 @@ export default {
             }
         },
         "containers": {
-            "singular": "Container",
-            "plural": "Containers",
+            "singular": "Content",
+            "plural": "Contents",
             "attributes": {
                 "id": "ID",
                 "name": "Name",
