@@ -40,7 +40,7 @@
                                    clearable
                                    filterable
                                    placeholder="Choose Category"
-                                   @change="$emit('ribbon:category', $event)">
+                                   @change="$emit('ribbon:category', $event ? $event : '')">
                             <el-option v-for="item in items"
                                        :key="item.id"
                                        :label="item.name"

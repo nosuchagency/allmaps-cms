@@ -5,8 +5,8 @@ Vue.prototype.$axios = axios;
 Vue.prototype.$axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 Vue.prototype.$axios.defaults.headers.common['Content-Type'] = 'application/json';
 Vue.prototype.$axios.defaults.headers.common['Accept'] = 'application/json';
-Vue.prototype.$axios.defaults.headers.common['Api-Key'] = window.apiKey;
-Vue.prototype.$axios.defaults.baseURL = window.baseUrl;
+Vue.prototype.$axios.defaults.headers.common['Api-Key'] = window.apiSettings.key;
+Vue.prototype.$axios.defaults.baseURL = window.apiSettings.baseUrl + window.apiSettings.prefix;
 
 let token = document.head.querySelector('meta[name="csrf-token"]');
 

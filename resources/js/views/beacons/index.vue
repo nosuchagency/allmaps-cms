@@ -26,9 +26,9 @@
         <template slot="content">
             <div class="content">
                 <ribbon @bulk-action="applyBulkAction"
-                        @ribbon:search="search"
-                        @ribbon:category="categoryFilter"
-                        @ribbon:tag="tagsFilter"
+                        @ribbon:search="setSearchFilter"
+                        @ribbon:category="setCategoryFilter"
+                        @ribbon:tag="setTagsFilter"
                         :selections="selectedItems"
                         :bulk-actions="bulkActions">
                 </ribbon>
@@ -61,23 +61,20 @@
                         </template>
                     </el-table-column>
                     <el-table-column :label="$t('beacons.attributes.content')"
-                                     align="center"
-                                     sortable>
+                                     align="center">
                         <template slot-scope="scope">
                             {{scope.row.containers.length}}
                         </template>
                     </el-table-column>
                     <el-table-column :label="$t('beacons.attributes.map')"
-                                     align="center"
-                                     sortable>
+                                     align="center">
                         <template slot-scope="scope">
                             <i class="fa fa-check" v-if="scope.row.floor"></i>
                             <i class="fa fa-times" v-else></i>
                         </template>
                     </el-table-column>
                     <el-table-column :label="$t('beacons.attributes.category')"
-                                     align="center"
-                                     sortable>
+                                     align="center">
                         <template slot-scope="scope">
                             <el-tag v-if="scope.row.category"
                                     type="primary"
@@ -104,9 +101,9 @@
                     </div>
                     <div class="pagination-container-right">
                         <el-pagination background
-                                       @prev-click="refetch"
-                                       @next-click="refetch"
-                                       @current-change="refetch"
+                                       @prev-click="setPage"
+                                       @next-click="setPage"
+                                       @current-change="setPage"
                                        layout="prev, pager, next"
                                        :total="items.meta.total"
                                        :page-size="50">
@@ -133,6 +130,7 @@
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
     import _ from 'lodash';
+    import QueryParams from 'js/utils/QueryParams';
 
     export default {
         mixins: [multipleSelection],
@@ -146,43 +144,46 @@
                 items: null,
                 loading: false,
                 resource: 'beacons',
-                searchQuery: '',
-                selectedCategory: '',
-                selectedTags: []
+                params: {
+                    page: 1,
+                    search: '',
+                    category: '',
+                    tags: '',
+                    include: 'containers,tags'
+                }
             };
         },
         created() {
-            this.getItems(this.getUrl() + this.getRelationsParams());
+            this.getItems(this.getUrl());
+        },
+        watch: {
+            params: {
+                handler(val) {
+                    this.getItems(this.getUrl());
+                },
+                deep: true
+            }
         },
         methods: {
-            categoryFilter(category) {
-                this.selectedCategory = category;
-                this.getItems(this.getUrl() + this.getRelationsParams() + this.getFilterParams());
+            setCategoryFilter(category) {
+                this.params.category = category;
             },
-            tagsFilter(tags) {
-                this.selectedTags = tags;
-                this.getItems(this.getUrl() + this.getRelationsParams() + this.getFilterParams());
+            setTagsFilter(tags) {
+                this.params.tags = tags.join(',');
             },
-            search: _.debounce(function (query) {
-                this.searchQuery = query;
-                this.getItems(this.getUrl() + this.getRelationsParams() + this.getFilterParams());
+            setSearchFilter: _.debounce(function (query) {
+                this.params.search = query;
             }, 500),
-            refetch(page) {
-                this.getItems(this.getUrl() + this.getRelationsParams() + this.getFilterParams() + '&page=' + page);
+            setPage(page) {
+                this.params.page = page;
             },
             getUrl() {
-                return this.resource + '/paginated?';
-            },
-            getRelationsParams() {
-                return 'include=containers,tags';
-            },
-            getFilterParams() {
-                return '&search=' + this.searchQuery + '&category=' + this.selectedCategory + '&tags=' + this.selectedTags.join(',');
+                return this.resource + '/paginated';
             },
             async getItems(url) {
                 try {
                     this.loading = true;
-                    const response = await this.$axios.get(url);
+                    const response = await this.$axios.get(url + new QueryParams(this.params));
                     this.items = response.data;
                 } catch (error) {
                     console.log(error);
@@ -248,5 +249,13 @@
 
     .el-pagination.is-background /deep/ .el-pager li {
         background-color: white;
+    }
+
+    .fa-check {
+        color: #67c23a;
+    }
+
+    .fa-times {
+        color: #f56c6c;
     }
 </style>

@@ -6,9 +6,11 @@ export default class Form {
      * Create a new Form instance.
      *
      * @param {object} data
+     * @param {object} options
      */
-    constructor(data) {
+    constructor(data, options = {}) {
         this.originalData = data;
+        this.options = options;
 
         for (let field in data) {
             this[field] = data[field];
@@ -23,10 +25,28 @@ export default class Form {
      * Fetch all relevant data for the form.
      */
     data() {
+        if (this.options.asFormData) {
+            return this.asFormData();
+        }
+
+        return this.asJson();
+    }
+
+    asJson() {
         let data = {};
 
         for (let property in this.originalData) {
             data[property] = this[property];
+        }
+
+        return data;
+    }
+
+    asFormData() {
+        let data = new FormData();
+
+        for (let property in this.originalData) {
+            data.set(property, this[property]);
         }
 
         return data;
@@ -48,20 +68,20 @@ export default class Form {
      * Send a GET request to the given URL.
      * .
      * @param {string} url
-     * @param {object} headers
+     * @param {object} options
      */
-    get(url, headers = null) {
-        return this.submit('get', url, headers);
+    get(url, options = null) {
+        return this.submit('get', url, options);
     }
 
     /**
      * Send a POST request to the given URL.
      * .
      * @param {string} url
-     * @param {object} headers
+     * @param {object} options
      */
-    post(url, headers = null) {
-        return this.submit('post', url, headers);
+    post(url, options = null) {
+        return this.submit('post', url, options);
     }
 
 
@@ -69,10 +89,10 @@ export default class Form {
      * Send a PUT request to the given URL.
      * .
      * @param {string} url
-     * @param {object} headers
+     * @param {object} options
      */
-    put(url, headers = null) {
-        return this.submit('put', url, headers);
+    put(url, options = null) {
+        return this.submit('put', url, options);
     }
 
 
@@ -80,10 +100,10 @@ export default class Form {
      * Send a PATCH request to the given URL.
      * .
      * @param {string} url
-     * @param {object} headers
+     * @param {object} options
      */
-    patch(url, headers = null) {
-        return this.submit('patch', url, headers);
+    patch(url, options = null) {
+        return this.submit('patch', url, options);
     }
 
 
@@ -91,10 +111,10 @@ export default class Form {
      * Send a DELETE request to the given URL.
      * .
      * @param {string} url
-     * @param {object} headers
+     * @param {object} options
      */
-    delete(url, headers = null) {
-        return this.submit('delete', url, headers);
+    delete(url, options = null) {
+        return this.submit('delete', url, options);
     }
 
 
@@ -103,12 +123,12 @@ export default class Form {
      *
      * @param {string} requestType
      * @param {string} url
-     * @param {object} headers
+     * @param {object} options
      */
-    submit(requestType, url, headers) {
+    submit(requestType, url, options) {
         return new Promise((resolve, reject) => {
             this.busy = true;
-            axios[requestType](url, this.data(), headers)
+            axios[requestType](url, this.data(), options)
                 .then(response => {
                     this.onSuccess(response.data);
                     resolve(response.data);

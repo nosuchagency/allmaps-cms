@@ -103,6 +103,8 @@
             this.structures.forEach(this.addStructure);
             this.locations.forEach((location) => this.addLocation(location, false));
 
+            this.structuresLayer.addTo(this.mainLayer);
+
             this.activateEventListeners();
         },
         methods: {

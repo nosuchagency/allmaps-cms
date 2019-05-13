@@ -26,7 +26,7 @@
         <template slot="content">
             <div class="content">
                 <ribbon @bulk-action="applyBulkAction"
-                        @ribbon:search="search"
+                        @ribbon:search="setSearchFilter"
                         :selections="selectedItems"
                         :bulk-actions="bulkActions"
                         :category-filter-activated="false"
@@ -71,9 +71,9 @@
                     </div>
                     <div class="pagination-container-right">
                         <el-pagination background
-                                       @prev-click="refetch"
-                                       @next-click="refetch"
-                                       @current-change="refetch"
+                                       @prev-click="setPage"
+                                       @next-click="setPage"
+                                       @current-change="setPage"
                                        layout="prev, pager, next"
                                        :total="items.meta.total"
                                        :page-size="50">
@@ -103,6 +103,7 @@
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
     import _ from 'lodash';
+    import QueryParams from 'js/utils/QueryParams';
 
     export default {
         mixins: [multipleSelection],
@@ -116,31 +117,38 @@
                 items: null,
                 loading: false,
                 resource: 'categories',
-                searchQuery: '',
-                selectedCategory: null
+                selectedCategory: null,
+                params: {
+                    page: 1,
+                    search: ''
+                }
             };
         },
         created() {
             this.getItems(this.getUrl());
         },
+        watch: {
+            params: {
+                handler(val) {
+                    this.getItems(this.getUrl());
+                },
+                deep: true
+            }
+        },
         methods: {
-            search: _.debounce(function (query) {
-                this.searchQuery = query;
-                this.getItems(this.getUrl() + this.getFilterParams());
+            setSearchFilter: _.debounce(function (query) {
+                this.params.search = query;
             }, 500),
-            refetch(page) {
-                this.getItems(this.getUrl() + this.getFilterParams() + '&page=' + page);
+            setPage(page) {
+                this.params.page = page;
             },
             getUrl() {
                 return this.resource + '/paginated';
             },
-            getFilterParams() {
-                return '?search=' + this.searchQuery;
-            },
             async getItems(url) {
                 try {
                     this.loading = true;
-                    const response = await this.$axios.get(url);
+                    const response = await this.$axios.get(url + new QueryParams(this.params));
                     this.items = response.data;
                 } catch (error) {
                     console.log(error);

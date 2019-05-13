@@ -17,6 +17,7 @@ return [
     'tags' => 'Tags',
     'components' => 'Map Components',
     'searchables' => 'Searchables',
+    'skins' => 'Skins',
     'map-settings' => 'Map Settings',
     'email_layouts' => 'Email Layouts',
     'email_templates' => 'Email Templates',

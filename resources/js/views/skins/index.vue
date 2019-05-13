@@ -4,15 +4,15 @@
             <toolbar>
                 <template slot="left">
                     <div class="title-icon-wrapper">
-                        <i class="fa fa-id-badge title-icon"></i>
-                        <label>{{$t('roles.plural')}}</label>
+                        <i class="fa fa-palette title-icon"></i>
+                        <label>{{$t('skins.plural')}}</label>
                     </div>
                 </template>
                 <template slot="right">
                     <el-tooltip effect="dark"
-                                :content="$t('general.actions.create', {name : $t('roles.singular')})"
+                                :content="$t('general.actions.create', {name : $t('skins.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('roles.create')">
+                                v-if="$auth.user().permissions.includes('skins.create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -24,7 +24,6 @@
             </toolbar>
         </template>
         <template slot="content">
-
             <div class="content">
                 <ribbon @bulk-action="applyBulkAction"
                         @ribbon:search="setSearchFilter"
@@ -34,7 +33,6 @@
                         :tags-filter-activated="false">
                 </ribbon>
                 <el-table :data="tableItems"
-                          @row-click="$router.push({name: 'roles-show', params: {id: $event.id}})"
                           :default-sort="{prop: 'name', order: 'ascending'}"
                           @selection-change="handleSelectionChange">
                     <el-table-column type="selection"
@@ -42,8 +40,29 @@
                                      align="center">
                     </el-table-column>
                     <el-table-column property="name"
-                                     :label="$t('roles.attributes.name')"
+                                     :label="$t('skins.attributes.name')"
                                      sortable>
+                    </el-table-column>
+                    <el-table-column :label="$t('skins.attributes.valid')"
+                                     align="center">
+                        <template slot-scope="scope">
+                            <i class="fa fa-check" v-if="scope.row.valid"></i>
+                            <i class="fa fa-times" v-else></i>
+                        </template>
+                    </el-table-column>
+                    <el-table-column align="right">
+                        <template slot-scope="scope">
+                            <el-tooltip effect="dark"
+                                        :content="$t('general.actions.edit', {name : $t('skins.singular')})"
+                                        placement="top-start">
+                                <el-button type="primary"
+                                           size="small"
+                                           @click="openUpsertModal(scope.row)"
+                                           circle>
+                                    <i class="fa fa-edit"></i>
+                                </el-button>
+                            </el-tooltip>
+                        </template>
                     </el-table-column>
                     <template slot="empty">
                         <i class="fa fa-cog fa-spin loading-spinner" v-if="loading"></i>
@@ -76,8 +95,11 @@
                 </confirm-dialog>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
+                              :item="selectedSkin"
                               @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:add="addItem">
+                              @upsert-modal:add="addItem"
+                              @upsert-modal:update="updateItem"
+                              @upsert-modal:remove="removeItem">
                 </upsert-modal>
             </div>
         </template>
@@ -101,7 +123,8 @@
                 confirmDeleteVisible: false,
                 items: null,
                 loading: false,
-                resource: 'roles',
+                resource: 'skins',
+                selectedSkin: null,
                 params: {
                     page: 1,
                     search: ''
@@ -141,18 +164,32 @@
                 }
             },
             addItem(item) {
-                this.$router.push('/' + this.resource + '/' + item.id);
+                this.items.data.push(item);
+                this.items.meta.total++;
+                this.closeUpsertModal();
             },
-            openUpsertModal() {
+            updateItem(item) {
+                let index = this.items.data.findIndex(({id}) => id === item.id);
+                this.items.data.splice(index, 1, item);
+                this.closeUpsertModal();
+            },
+            removeItem(item) {
+                let index = this.items.data.findIndex(({id}) => id === item.id);
+                this.items.data.splice(index, 1);
+                this.items.meta.total--;
+                this.closeUpsertModal();
+            },
+            openUpsertModal(skin = null) {
+                this.selectedSkin = skin;
                 this.upsertModalVisible = true;
             },
             closeUpsertModal() {
                 this.upsertModalVisible = false;
-            },
+            }
         },
         computed: {
             text() {
-                let name = this.selectedItems.length > 1 ? this.$t('roles.plural') : this.$t('roles.singular');
+                let name = this.selectedItems.length > 1 ? this.$t('skins.plural') : this.$t('skins.singular');
 
                 return this.$t('general.actions.delete', {name});
             },
@@ -168,12 +205,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-table {
-        /deep/ &__row {
-            cursor: pointer;
-        }
-    }
-
     .pagination-container {
         margin: 25px 0;
         display: flex;
@@ -198,5 +229,13 @@
 
     .el-pagination.is-background /deep/ .el-pager li {
         background-color: white;
+    }
+
+    .fa-check {
+        color: #67c23a;
+    }
+
+    .fa-times {
+        color: #f56c6c;
     }
 </style>

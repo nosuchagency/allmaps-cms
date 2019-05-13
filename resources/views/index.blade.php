@@ -14,7 +14,7 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
-    <script src="https://maps.googleapis.com/maps/api/js?key={{config('beacon-bacon.google.api_key')}}"
+    <script src="https://maps.googleapis.com/maps/api/js?key={{config('bb.google.api_key')}}"
             async
             defer>
     </script>
@@ -22,8 +22,11 @@
     <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
 
     <script>
-        window.baseUrl = "{{config('beacon-bacon.api.url')}}";
-        window.apiKey = "{{config('beacon-bacon.api.key')}}";
+        window.apiSettings = {
+            baseUrl: "{{config('bb.api.url')}}",
+            prefix: "{{config('bb.api.prefix')}}",
+            key: "{{config('bb.api.key')}}"
+        };
     </script>
 </head>
 <body>

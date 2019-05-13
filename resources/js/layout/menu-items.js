@@ -97,6 +97,11 @@ let menuItems = {
                             icon: 'search-location',
                             route: 'searchables'
                         },
+                        {
+                            title: this.$t('menu.skins'),
+                            icon: 'palette',
+                            route: 'skins'
+                        },
                         // {
                         //     title: this.$t('menu.map-settings'),
                         //     children: null,

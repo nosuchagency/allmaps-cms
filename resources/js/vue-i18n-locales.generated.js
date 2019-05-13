@@ -183,6 +183,19 @@ export default {
                 "search_text": "Search Text"
             }
         },
+        "skins": {
+            "singular": "Skin",
+            "plural": "Skins",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "file": "File",
+                "mobile": "Mobile",
+                "tablet": "Tablet",
+                "desktop": "Desktop",
+                "valid": "Valid"
+            }
+        },
         "users": {
             "singular": "User",
             "plural": "Users",
@@ -218,6 +231,7 @@ export default {
             "tags": "Tags",
             "components": "Map Components",
             "searchables": "Searchables",
+            "skins": "Skins",
             "map-settings": "Map Settings",
             "email_layouts": "Email Layouts",
             "email_templates": "Email Templates",
@@ -241,6 +255,9 @@ export default {
                 "name": "Name",
                 "description": "Description",
                 "folders_enabled": "Folders enabled",
+                "mobile_skin": "Mobile Skin",
+                "tablet_skin": "Tablet Skin",
+                "desktop_skin": "Desktop Skin",
                 "folders": "Folders",
                 "category": "Category",
                 "tags": "Tags",

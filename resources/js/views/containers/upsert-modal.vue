@@ -30,6 +30,53 @@
                             <el-input v-model="form.folder_name" :disabled="!!item"></el-input>
                         </el-form-item>
                     </el-tab-pane>
+                    <el-tab-pane label="Skins" name="skins">
+                        <br>
+                        <fetch-items url="/skins">
+                            <div slot-scope="{items, loading}">
+                                <el-form-item :label="$t('containers.attributes.mobile_skin')"
+                                              :class="{'is-error' : form.errors.has('mobile_skin')}">
+                                    <el-select v-model="form.mobile_skin"
+                                               placeholder="Select"
+                                               clearable
+                                               value-key="id">
+                                        <el-option v-for="item in items.filter(i => i.mobile === true)"
+                                                   :key="item.id"
+                                                   :label="item.name"
+                                                   :value="item">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item :label="$t('containers.attributes.tablet_skin')"
+                                              :class="{'is-error' : form.errors.has('tablet_skin')}">
+                                    <el-select v-model="form.tablet_skin"
+                                               placeholder="Select"
+                                               clearable
+                                               value-key="id">
+                                        <el-option v-for="item in items.filter(i => i.tablet === true)"
+                                                   :key="item.id"
+                                                   :label="item.name"
+                                                   :value="item">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item :label="$t('containers.attributes.desktop_skin')"
+                                              :class="{'is-error' : form.errors.has('desktop_skin')}">
+                                    <el-select v-model="form.desktop_skin"
+                                               placeholder="Select"
+                                               clearable
+                                               value-key="id">
+                                        <el-option v-for="item in items.filter(i => i.desktop === true)"
+                                                   :key="item.id"
+                                                   :label="item.name"
+                                                   :value="item">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                        </fetch-items>
+                        <br>
+                    </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
                         <el-form-item :label="$t('containers.attributes.category')"
@@ -118,6 +165,9 @@
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     folders_enabled: this.item ? !!this.item.folders_enabled : false,
+                    mobile_skin: this.item ? this.item.mobile_skin : null,
+                    tablet_skin: this.item ? this.item.tablet_skin : null,
+                    desktop_skin: this.item ? this.item.desktop_skin : null,
                     folder_name: this.item ? this.item.primary_folder.name : 'Auto generated folder',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []

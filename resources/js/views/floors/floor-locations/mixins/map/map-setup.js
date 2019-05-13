@@ -36,20 +36,20 @@ let mapSetup = {
             L.easyButton({
                 position: 'bottomleft',
                 states: [{
-                    stateName: 'structures-hidden',
-                    icon: 'fa-image',
-                    title: 'Click to show structures',
-                    onClick: (btn, map) => {
-                        btn.state('structures-visible');
-                        this.structuresLayer.addTo(this.mainLayer);
-                    }
-                }, {
                     stateName: 'structures-visible',
                     icon: 'fa-image',
                     title: 'Click to hide structures',
                     onClick: (btn, map) => {
                         btn.state('structures-hidden');
                         this.structuresLayer.removeFrom(this.mainLayer);
+                    }
+                }, {
+                    stateName: 'structures-hidden',
+                    icon: 'fa-image',
+                    title: 'Click to show structures',
+                    onClick: (btn, map) => {
+                        btn.state('structures-visible');
+                        this.structuresLayer.addTo(this.mainLayer);
                     }
                 }]
             }).addTo(this.map);

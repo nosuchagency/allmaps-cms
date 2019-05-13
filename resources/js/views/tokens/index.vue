@@ -27,11 +27,11 @@
         <template slot="content">
             <div class="content">
                 <ribbon @bulk-action="applyBulkAction"
-                        @ribbon:search="search"
+                        @ribbon:search="setSearchFilter"
+                        @ribbon:category="setCategoryFilter"
+                        @ribbon:tag="setTagsFilter"
                         :selections="selectedItems"
-                        :bulk-actions="bulkActions"
-                        :category-filter-activated="false"
-                        :tags-filter-activated="false">
+                        :bulk-actions="bulkActions">
                 </ribbon>
                 <el-table :data="tableItems"
                           @row-click="$router.push({name: 'tokens-show', params: {id: $event.id}})"
@@ -46,8 +46,7 @@
                                      sortable>
                     </el-table-column>
                     <el-table-column property="role"
-                                     :label="$t('tokens.attributes.role')"
-                                     sortable>
+                                     :label="$t('tokens.attributes.role')">
                     </el-table-column>
                     <template slot="empty">
                         <i class="fa fa-cog fa-spin loading-spinner" v-if="loading"></i>
@@ -63,9 +62,9 @@
                     </div>
                     <div class="pagination-container-right">
                         <el-pagination background
-                                       @prev-click="refetch"
-                                       @next-click="refetch"
-                                       @current-change="refetch"
+                                       @prev-click="setPage"
+                                       @next-click="setPage"
+                                       @current-change="setPage"
                                        layout="prev, pager, next"
                                        :total="items.meta.total"
                                        :page-size="50">
@@ -92,6 +91,7 @@
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
     import _ from 'lodash';
+    import QueryParams from 'js/utils/QueryParams';
 
     export default {
         mixins: [multipleSelection],
@@ -105,30 +105,45 @@
                 items: null,
                 loading: false,
                 resource: 'tokens',
-                searchQuery: ''
+                params: {
+                    page: 1,
+                    search: '',
+                    category: '',
+                    tags: ''
+                }
             };
         },
         created() {
             this.getItems(this.getUrl());
         },
+        watch: {
+            params: {
+                handler(val) {
+                    this.getItems(this.getUrl());
+                },
+                deep: true
+            }
+        },
         methods: {
-            search: _.debounce(function (query) {
-                this.searchQuery = query;
-                this.getItems(this.getUrl() + this.getFilterParams());
+            setCategoryFilter(category) {
+                this.params.category = category;
+            },
+            setTagsFilter(tags) {
+                this.params.tags = tags.join(',');
+            },
+            setSearchFilter: _.debounce(function (query) {
+                this.params.search = query;
             }, 500),
-            refetch(page) {
-                this.getItems(this.getUrl() + this.getFilterParams() + '&page=' + page);
+            setPage(page) {
+                this.params.page = page;
             },
             getUrl() {
                 return this.resource + '/paginated';
             },
-            getFilterParams() {
-                return '?search=' + this.searchQuery;
-            },
             async getItems(url) {
                 try {
                     this.loading = true;
-                    const response = await this.$axios.get(url);
+                    const response = await this.$axios.get(url + new QueryParams(this.params));
                     this.items = response.data;
                 } catch (error) {
                     console.log(error);
