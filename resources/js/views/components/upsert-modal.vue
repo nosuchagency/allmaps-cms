@@ -58,16 +58,49 @@
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item :label="$t('components.attributes.curved')"
-                                              :class="{'is-error' : form.errors.has('curved')}"
-                                              v-if="form.shape === 'polyline' || form.shape === 'polygon'">
+                                              :class="{'is-error' : form.errors.has('curved')}">
                                     <el-switch v-model="form.curved"></el-switch>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
+                                <el-form-item :label="$t('components.attributes.stroke')"
+                                              :class="{'is-error' : form.errors.has('stroke')}">
+                                    <el-switch v-model="form.stroke"></el-switch>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :label="$t('components.attributes.fill')"
+                                              :class="{'is-error' : form.errors.has('fill')}">
+                                    <el-switch v-model="form.fill"></el-switch>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
+                                <el-form-item :label="$t('components.attributes.dashed')"
+                                              :class="{'is-error' : form.errors.has('dashed')}">
+                                    <el-switch v-model="form.dashed"></el-switch>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item :label="$t('components.attributes.dash_pattern')"
+                                              :class="{'is-error' : form.errors.has('dash_pattern')}">
+                                    <el-select v-model="form.dash_pattern"
+                                               placeholder="Select">
+                                        <el-option v-for="item in ['1,2,3', '3,2,1', '4,5,6']"
+                                                   :key="item"
+                                                   :label="item"
+                                                   :value="item">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
                                 <el-form-item :label="$t('components.attributes.color')"
-                                              v-if="form.shape !== 'image'"
                                               :class="{'is-error' : form.errors.has('color')}">
                                     <el-color-picker v-model="form.color"
                                                      :show-alpha="false"
@@ -76,18 +109,36 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
+                                <el-form-item :label="$t('components.attributes.fill_color')"
+                                              :class="{'is-error' : form.errors.has('fill_color')}">
+                                    <el-color-picker v-model="form.fill_color"
+                                                     :show-alpha="false"
+                                                     :color-format="'hex'">
+                                    </el-color-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="25">
+                            <el-col :span="12">
                                 <el-form-item :label="$t('components.attributes.opacity')"
-                                              :class="{'is-error' : form.errors.has('opacity')}"
-                                              v-if="form.shape === 'polygon' || form.shape === 'circle'  || form.shape === 'rectangle'">
+                                              :class="{'is-error' : form.errors.has('opacity')}">
                                     <el-slider v-model="opacity"
                                                :step="10"
                                                :format-tooltip="formatTooltip">
                                     </el-slider>
                                 </el-form-item>
                             </el-col>
+                            <el-col :span="12">
+                                <el-form-item :label="$t('components.attributes.fill_opacity')"
+                                              :class="{'is-error' : form.errors.has('fill_opacity')}">
+                                    <el-slider v-model="fillOpacity"
+                                               :step="10"
+                                               :format-tooltip="formatTooltip">
+                                    </el-slider>
+                                </el-form-item>
+                            </el-col>
                         </el-row>
-                        <el-row v-if="form.shape === 'image'"
-                                :gutter="25">
+                        <el-row :gutter="25">
                             <el-col :span="12">
                                 <el-form-item :label="$t('components.attributes.width')"
                                               :class="{'is-error' : form.errors.has('width')}">
@@ -112,12 +163,10 @@
                         </el-row>
                         <el-row :gutter="25">
                             <el-col :span="12">
-                                <el-form-item :label="$t('components.attributes.thickness')"
-                                              :class="{'is-error' : form.errors.has('weight')}"
-                                              v-if="form.shape !== 'image'">
+                                <el-form-item :label="$t('components.attributes.weight')"
+                                              :class="{'is-error' : form.errors.has('weight')}">
                                     <el-input-number v-model="form.weight"
-                                                     :min="1"
-                                                     :max="10">
+                                                     :min="1">
                                     </el-input-number>
                                 </el-form-item>
                             </el-col>
@@ -214,15 +263,21 @@
                 form: new Form({
                     name: this.item ? this.item.name : '',
                     type: this.item ? this.item.type : 'plan',
-                    description: this.item ? this.item.description : '',
                     shape: this.item ? this.item.shape : 'polyline',
-                    color: this.item ? this.item.color : '#000000',
-                    weight: this.item ? this.item.weight : 2,
-                    curved: this.item ? !!this.item.curved : false,
+                    description: this.item ? this.item.description : '',
+                    stroke: this.item ? !!this.item.stroke : true,
+                    color: this.item ? this.item.color : '#3388ff',
+                    weight: this.item ? this.item.weight : 3,
                     opacity: this.item ? this.item.opacity : 1,
+                    dashed: this.item ? !!this.item.dashed : true,
+                    dash_pattern : this.item ? this.item.dash_pattern : '',
+                    fill: this.item ? !!this.item.fill : true,
+                    fill_color: this.item ? this.item.fill_color : '#3388ff',
+                    fill_opacity: this.item ? this.item.fill_opacity : 0.2,
+                    curved: this.item ? !!this.item.curved : false,
+                    image: this.item ? this.item.image : null,
                     width: this.item ? this.item.width : 0,
                     height: this.item ? this.item.height : 0,
-                    image: this.item ? this.item.image : null,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 })
@@ -261,6 +316,14 @@
                 },
                 set(value) {
                     this.form.opacity = value / 100;
+                }
+            },
+            fillOpacity: {
+                get() {
+                    return this.form.fill_opacity * 100;
+                },
+                set(value) {
+                    this.form.fill_opacity = value / 100;
                 }
             }
         }

@@ -54,7 +54,7 @@
                                      sortable>
                     </el-table-column>
                     <el-table-column property="weight"
-                                     :label="$t('components.attributes.thickness')"
+                                     :label="$t('components.attributes.weight')"
                                      sortable>
                     </el-table-column>
                     <el-table-column property="color"
