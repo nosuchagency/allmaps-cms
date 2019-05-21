@@ -53,12 +53,12 @@
                                      :label="$t('components.attributes.shape')"
                                      sortable>
                     </el-table-column>
-                    <el-table-column property="weight"
-                                     :label="$t('components.attributes.weight')"
+                    <el-table-column property="stroke_width"
+                                     :label="$t('components.attributes.stroke_width')"
                                      sortable>
                     </el-table-column>
                     <el-table-column property="color"
-                                     :label="$t('components.attributes.color')"
+                                     :label="$t('components.attributes.stroke_color')"
                                      sortable>
                     </el-table-column>
                     <el-table-column :label="$t('containers.attributes.category')"

@@ -23,29 +23,22 @@
                     </el-tab-pane>
                     <el-tab-pane label="Image" name="image">
                         <br>
-                        <el-row :gutter="25">
-                            <el-col :span="12">
-                                <el-form-item :label="$t('fixtures.attributes.width')"
-                                              :class="{'is-error' : form.errors.has('width')}">
-                                    <el-input v-model.number="form.width"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item :label="$t('fixtures.attributes.height')"
-                                              :class="{'is-error' : form.errors.has('height')}">
-                                    <el-input v-model.number="form.height"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item :label="$t('fixtures.attributes.image')"
-                                              :class="{'is-error' : form.errors.has('image')}">
-                                    <image-upload @image-uploaded="setImage"
-                                                  @image-removed="setImage"
-                                                  :image="form.image">
-                                    </image-upload>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
+                        <el-form-item :label="$t('fixtures.attributes.image')"
+                                      :class="{'is-error' : form.errors.has('image')}">
+                            <image-upload @image-uploaded="setImage"
+                                          @image-removed="setImage"
+                                          :image="form.image">
+                            </image-upload>
+                        </el-form-item>
+                        <el-form-item :label="$t('fixtures.attributes.image_width')"
+                                      :class="{'is-error' : form.errors.has('image_width')}">
+                            <el-input v-model.number="form.image_width"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$t('fixtures.attributes.image_height')"
+                                      :class="{'is-error' : form.errors.has('image_height')}">
+                            <el-input v-model.number="form.image_height"></el-input>
+                        </el-form-item>
+
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
@@ -139,8 +132,8 @@
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     image: this.item ? this.item.image : '',
-                    width: this.item ? this.item.width : 0,
-                    height: this.item ? this.item.height : 0,
+                    image_width: this.item ? this.item.image_width : 0,
+                    image_height: this.item ? this.item.image_height : 0,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                 })
