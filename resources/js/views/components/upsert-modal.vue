@@ -50,7 +50,8 @@
                             <el-form-item :label="$t('components.attributes.stroke')"
                                           :class="{'is-error' : form.errors.has('stroke')}">
                                 <el-switch v-model="form.stroke"
-                                           :disabled="['polyline'].includes(form.shape)">
+                                           :disabled="['polyline'].includes(form.shape)"
+                                           @change="strokeToggled">
                                 </el-switch>
                             </el-form-item>
                             <el-form-item v-if="form.stroke">
@@ -82,7 +83,8 @@
                                     <el-col :span="4">
                                         <span>{{$t('components.attributes.stroke_color')}}</span>
                                     </el-col>
-                                    <el-col :span="20">
+                                    <el-col :span="20"
+                                            style="line-height: normal">
                                         <el-color-picker v-model="form.stroke_color"
                                                          :show-alpha="false"
                                                          :color-format="'hex'">
@@ -103,14 +105,15 @@
                                         </el-slider>
                                     </el-col>
                                 </el-row>
-                                <div style="width:100%; border-top: 1px solid #dcdcdc; margin: 5px 0;"></div>
+                                <div style="width:100%; border-top: 1px solid #dcdcdc; margin: 15px 0 5px 0;"></div>
                             </el-form-item>
                         </template>
                         <template v-if="!['image', 'polyline'].includes(form.shape)">
                             <el-form-item :label="$t('components.attributes.fill')"
                                           :class="{'is-error' : form.errors.has('fill')}">
                                 <el-switch v-model="form.fill"
-                                           :disabled="['polygon', 'rectangle'].includes(form.shape)">
+                                           :disabled="['polygon'].includes(form.shape)"
+                                           @change="fillToggled">
                                 </el-switch>
                             </el-form-item>
                             <el-form-item :class="{'is-error' : form.errors.has('fill_color')}"
@@ -119,7 +122,8 @@
                                     <el-col :span="4">
                                         <span>{{$t('components.attributes.fill_color')}}</span>
                                     </el-col>
-                                    <el-col :span="20">
+                                    <el-col :span="20"
+                                            style="line-height: normal">
                                         <el-color-picker v-model="form.fill_color"
                                                          :show-alpha="false"
                                                          :color-format="'hex'">
@@ -140,7 +144,7 @@
                                         </el-slider>
                                     </el-col>
                                 </el-row>
-                                <div style="width:100%; border-top: 1px solid #dcdcdc; margin: 5px 0;"></div>
+                                <div style="width:100%; border-top: 1px solid #dcdcdc; margin: 15px 0 5px 0;"></div>
                             </el-form-item>
                         </template>
                         <template v-if="['image'].includes(form.shape)">
@@ -306,8 +310,19 @@
                 } else if (val === 'image') {
                     this.form.stroke = false;
                     this.form.fill = false;
-                } else if (['polygon', 'rectangle'].includes(val)) {
+                } else if (['polygon', 'rectangle', 'circle'].includes(val)) {
+                    this.form.stroke = true;
                     this.form.fill = true;
+                }
+            },
+            strokeToggled(val) {
+                if (!val && !this.form.fill) {
+                    this.form.fill = true;
+                }
+            },
+            fillToggled(val) {
+                if (!val && !this.form.stroke) {
+                    this.form.stroke = true;
                 }
             }
         },
