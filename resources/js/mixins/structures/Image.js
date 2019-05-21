@@ -27,7 +27,7 @@ let Image = {
                         coordinates = [[bottomLeft.lat, bottomLeft.lng], [topRight.lat, topRight.lng]];
                     }
 
-                    let options = {...structure.component, ...{transform: true, draggable: true, weight: 0}};
+                    let options = {...this.getAttributes(), ...{transform: true, draggable: true, weight: 0}};
 
                     L.Rectangle.prototype.initialize.call(this, coordinates, options);
 

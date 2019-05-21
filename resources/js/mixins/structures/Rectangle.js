@@ -10,7 +10,7 @@ let Rectangle = {
                     this.structure = structure;
                     this.readonly = readonly;
 
-                    let options = {...structure.component, ...{draggable: true, transform: true}};
+                    let options = {...this.getAttributes(), ...{draggable: true, transform: true}};
 
                     L.Rectangle.prototype.initialize.call(this, this.initialCoordinates(), options);
 

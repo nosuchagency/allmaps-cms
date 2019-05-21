@@ -12,7 +12,7 @@ let Circle = {
 
                     let coordinates = this.structure.coordinates || self.map.getCenter();
 
-                    L.Circle.prototype.initialize.call(this, coordinates, structure.component);
+                    L.Circle.prototype.initialize.call(this, coordinates, this.getAttributes());
 
                     this.setRadius(this.structure.radius || 5);
 

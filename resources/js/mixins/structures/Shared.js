@@ -2,11 +2,17 @@ export default {
     getStructure() {
         return this.structure;
     },
+    getComponent() {
+        return this.structure.component;
+    },
     getId() {
         return this.structure.id;
     },
     getName() {
         return this.structure.name;
+    },
+    getRadius() {
+        return this.structure.radius;
     },
     getShape() {
         return this.structure.component.shape;
@@ -14,23 +20,41 @@ export default {
     getType() {
         return this.structure.component.type;
     },
-    getCurved() {
-        return this.structure.component.curved;
+    getStroke() {
+        return this.structure.component.stroke;
     },
-    getColor() {
-        return this.structure.component.color;
+    getStrokeType() {
+        return this.structure.component.stroke_type;
     },
-    getOpacity() {
-        return this.structure.component.opacity;
+    getStrokeColor() {
+        return this.structure.component.stroke_color;
     },
-    getWidth() {
-        return this.structure.component.width;
+    getStrokeWidth() {
+        return this.structure.component.stroke_width;
     },
-    getHeight() {
-        return this.structure.component.height;
+    getStrokeOpacity() {
+        return this.structure.component.stroke_opacity;
+    },
+    getFill() {
+        return this.structure.component.fill;
+    },
+    getFillColor() {
+        return this.structure.component.fill_color;
+    },
+    getFillOpacity() {
+        return this.structure.component.fill_opacity;
     },
     getImage() {
         return this.structure.component.image;
+    },
+    getImageWidth() {
+        return this.structure.component.width;
+    },
+    getImageHeight() {
+        return this.structure.component.height;
+    },
+    isCurved() {
+        return this.structure.component.stroke_type === 'curved';
     },
     getMarkers() {
         if (!this.structure.markers) {
@@ -67,5 +91,17 @@ export default {
     },
     getDestination() {
         return null;
+    },
+    getAttributes() {
+        return {
+            radius: this.getRadius(),
+            stroke: this.getStroke(),
+            color: this.getStrokeColor(),
+            weight: this.getStrokeWidth(),
+            opacity: this.getStrokeOpacity(),
+            fill: this.getFill(),
+            fillColor: this.getFillColor(),
+            fillOpacity: this.getFillOpacity()
+        }
     }
 }

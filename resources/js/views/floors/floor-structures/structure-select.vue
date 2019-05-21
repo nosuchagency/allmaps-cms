@@ -13,9 +13,9 @@
             <span class="component-select-name">
                 {{ item.name }}
             </span>
-            <i class="fa fa-square" :style="{color : item.color, opacity : item.opacity}"></i>
+            <i class="fa fa-square" :style="{color : item.stroke_color, opacity : item.stroke_opacity}"></i>
             <span class="component-select-attribute">
-                {{ item.curved ? 'Curved' : '' }} {{ item.shape }}
+                {{ item.stroke_type }} {{ item.shape }}
             </span>
         </el-option>
     </el-select>

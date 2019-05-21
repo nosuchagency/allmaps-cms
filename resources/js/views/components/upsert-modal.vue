@@ -36,7 +36,8 @@
                         <el-form-item :label="$t('components.attributes.shape')"
                                       :class="{'is-error' : form.errors.has('shape')}">
                             <el-select v-model="form.shape"
-                                       :disabled="!!item">
+                                       :disabled="!!item"
+                                       @change="shapeChanged">
                                 <el-option
                                         v-for="item in ['polyline', 'polygon', 'rectangle', 'circle', 'image']"
                                         :key="item"
@@ -45,16 +46,21 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <template v-if="form.shape !== 'image'">
+                        <template v-if="!['image'].includes(form.shape)">
                             <el-form-item :label="$t('components.attributes.stroke')"
                                           :class="{'is-error' : form.errors.has('stroke')}">
-                                <el-switch v-model="form.stroke"></el-switch>
+                                <el-switch v-model="form.stroke"
+                                           :disabled="['polyline'].includes(form.shape)">
+                                </el-switch>
                             </el-form-item>
                             <el-form-item v-if="form.stroke">
                                 <el-radio-group v-model="form.stroke_type">
                                     <el-radio label="solid">Solid</el-radio>
                                     <el-radio label="dashed">Dashed</el-radio>
-                                    <el-radio label="curved">Curved</el-radio>
+                                    <el-radio v-if="['polyline', 'polygon'].includes(form.shape)"
+                                              label="curved">
+                                        Curved
+                                    </el-radio>
                                 </el-radio-group>
                             </el-form-item>
                             <el-form-item v-if="form.stroke"
@@ -100,10 +106,12 @@
                                 <div style="width:100%; border-top: 1px solid #dcdcdc; margin: 5px 0;"></div>
                             </el-form-item>
                         </template>
-                        <template v-if="form.shape !== 'image'">
+                        <template v-if="!['image', 'polyline'].includes(form.shape)">
                             <el-form-item :label="$t('components.attributes.fill')"
                                           :class="{'is-error' : form.errors.has('fill')}">
-                                <el-switch v-model="form.fill"></el-switch>
+                                <el-switch v-model="form.fill"
+                                           :disabled="['polygon', 'rectangle'].includes(form.shape)">
+                                </el-switch>
                             </el-form-item>
                             <el-form-item :class="{'is-error' : form.errors.has('fill_color')}"
                                           v-if="form.fill">
@@ -135,7 +143,7 @@
                                 <div style="width:100%; border-top: 1px solid #dcdcdc; margin: 5px 0;"></div>
                             </el-form-item>
                         </template>
-                        <template v-if="form.shape === 'image'">
+                        <template v-if="['image'].includes(form.shape)">
                             <el-form-item :label="$t('components.attributes.image')"
                                           :class="{'is-error' : form.errors.has('image')}">
                                 <image-upload @image-uploaded="setImage"
@@ -255,7 +263,7 @@
                     stroke_color: this.item ? this.item.stroke_color : '#3388ff',
                     stroke_width: this.item ? this.item.stroke_width : 3,
                     stroke_opacity: this.item ? this.item.stroke_opacity : 1,
-                    fill: this.item ? !!this.item.fill : true,
+                    fill: this.item ? !!this.item.fill : false,
                     fill_color: this.item ? this.item.fill_color : '#3388ff',
                     fill_opacity: this.item ? this.item.fill_opacity : 0.2,
                     image: this.item ? this.item.image : null,
@@ -290,6 +298,17 @@
             },
             setImage(image = null) {
                 this.form.image = image;
+            },
+            shapeChanged(val) {
+                if (val === 'polyline') {
+                    this.form.stroke = true;
+                    this.form.fill = false;
+                } else if (val === 'image') {
+                    this.form.stroke = false;
+                    this.form.fill = false;
+                } else if (['polygon', 'rectangle'].includes(val)) {
+                    this.form.fill = true;
+                }
             }
         },
         computed: {

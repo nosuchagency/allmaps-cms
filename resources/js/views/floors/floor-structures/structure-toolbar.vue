@@ -13,7 +13,7 @@
                 </span>
                 <span class="structure-color">
                     <i class="fa fa-square"
-                       :style="{color : structure.getColor(), opacity : structure.getOpacity()}">
+                       :style="{color : structure.getStrokeColor(), opacity : structure.getStrokeOpacity()}">
                     </i>
                 </span>
                 <span class="structure-shape">

@@ -63,8 +63,8 @@ export default {
                 "name": "Name",
                 "description": "Description",
                 "image": "Image",
-                "width": "Width",
-                "height": "Height",
+                "image_width": "Width",
+                "image_height": "Height",
                 "category": "Category",
                 "tags": "Tags"
             }
@@ -279,11 +279,11 @@ export default {
                 "stroke_width": "Width",
                 "stroke_opacity": "Opacity",
                 "fill": "Fill",
-                "fill_color": "Fill Color",
-                "fill_opacity": "Fill Opacity",
+                "fill_color": "Color",
+                "fill_opacity": "Opacity",
                 "image": "Image",
-                "width": "Width",
-                "height": "Height",
+                "image_width": "Width",
+                "image_height": "Height",
                 "category": "Category",
                 "tags": "Tags"
             }
