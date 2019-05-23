@@ -9,7 +9,7 @@ return [
 
     '403' => [
         'title' => 'Unauthorized - 403',
-        'description' => 'You do not possess the necessary permissions to visit this page. Contact the system
+        'description' => 'You do not possess the necessary permissions to access the requested resource. Contact the system
                     administrator if you need access to this particular page.',
         'link_text' => 'Go to Dashboard'
     ],
@@ -17,6 +17,6 @@ return [
     '404' => [
         'title' => 'Page not found - 404',
         'description' => 'The requested page could not be found',
-        'link_text' => 'Go back'
+        'link_text' => 'Go to Dashboard'
     ]
 ];

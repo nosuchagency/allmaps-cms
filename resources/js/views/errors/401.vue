@@ -5,7 +5,7 @@
                 <template slot="left">
                     <el-button type="primary"
                                size="small"
-                               @click="$router.push('/dashboard')">
+                               @click="$router.push({name : 'dashboard'})">
                         {{$t('errors.401.link_text')}}
                     </el-button>
                 </template>

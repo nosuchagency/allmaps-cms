@@ -22,19 +22,25 @@ axios.interceptors.response.use(
         return response;
     },
     error => {
-        if (error.response.status === 419) {
-            if (Vue.auth.user().check()) {
+        let {response: {status} = {}} = error;
+
+        if (status === 419) {
+            if (Vue.auth.check()) {
                 Vue.auth.logout({
                     url: 'logout',
                     makeRequest: true,
-                    redirect: '/login'
+                    redirect: {name: 'login'}
                 });
             } else {
                 window.location.reload();
             }
         }
 
-        if (error.response.status === 404) {
+        if (status === 403) {
+            router.push({name: '403'});
+        }
+
+        if (status === 404) {
             router.push({name: '404'});
         }
 

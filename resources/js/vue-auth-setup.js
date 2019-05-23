@@ -5,10 +5,12 @@ Vue.use(require('@websanova/vue-auth'), {
     auth: require('./auth-driver'),
     http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
     router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
-    refreshData: {enabled: false},
+    refreshData: {
+        url: 'profile',
+        interval: 5
+    },
     fetchData: {
         url: 'profile',
-        method: 'GET', enabled: true,
         success({data}) {
             Vue.auth.user(new User(data));
         }

@@ -26,7 +26,9 @@
             </el-row>
         </el-col>
         <el-col :span="16">
-            <el-row type="flex" justify="end" :gutter="5">
+            <el-row type="flex"
+                    justify="end"
+                    :gutter="5">
                 <el-col :span="5" v-if="searchQueryActivated">
                     <el-input v-model="searchQuery"
                               size="small"
