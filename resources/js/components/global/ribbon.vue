@@ -31,7 +31,7 @@
                     <el-input v-model="searchQuery"
                               size="small"
                               placeholder="Search ..."
-                              @input="$emit('ribbon:search', $event)">
+                              @input="throttledSearch">
                     </el-input>
                 </el-col>
                 <el-col :span="6" v-if="categoryFilterActivated">
@@ -108,6 +108,11 @@
                 selectedCategory: null,
                 selectedTags: []
             }
+        },
+        created() {
+            this.throttledSearch = _.debounce(($event) => {
+                this.$emit('ribbon:search', $event);
+            }, 200)
         },
         computed: {
             anySelections() {
