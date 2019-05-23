@@ -112,7 +112,7 @@
         created() {
             this.throttledSearch = _.debounce(($event) => {
                 this.$emit('ribbon:search', $event);
-            }, 200)
+            }, 500)
         },
         computed: {
             anySelections() {
