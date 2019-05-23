@@ -53,10 +53,10 @@
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.image')"
                                       :class="{'is-error' : form.errors.has('image')}">
-                            <image-upload @image-uploaded="setImage"
-                                          @image-removed="setImage"
-                                          :image="form.image">
-                            </image-upload>
+                            <image-uploader :images="image"
+                                            @image:added="form.image = $event"
+                                            @image:removed="form.image = null">
+                            </image-uploader>
                         </el-form-item>
                         <el-form-item :label="$t('locations.attributes.description')"
                                       :class="{'is-error' : form.errors.has('description')}">
@@ -333,11 +333,11 @@
 
 <script>
     import Form from '../../../utils/Form';
-    import imageUpload from 'js/components/image-upload';
+    import imageUploader from 'js/components/image-uploader';
 
     export default {
         components: {
-            imageUpload
+            imageUploader
         },
         props: {
             visible: Boolean,
@@ -386,7 +386,8 @@
                     activated_at: this.location.activated_at,
                     publish_at: this.location.publish_at,
                     unpublish_at: this.location.unpublish_at
-                })
+                }),
+                image: this.item && this.item.image ? [{source: this.item.image, options: {type: 'local'}}] : [],
             }
         },
         methods: {
@@ -400,7 +401,7 @@
             },
             remove() {
                 this.form.delete('/locations/' + this.location.id)
-                    .then(response => this.$emit('location-modal:remove', response))
+                    .then(response => this.$emit('location-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {

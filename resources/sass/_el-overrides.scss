@@ -1,0 +1,83 @@
+.el-input-number {
+    width: 100% !important;
+}
+
+.el-tooltip__popper {
+    text-transform: capitalize;
+}
+
+.el-tabs {
+    &__item {
+        text-transform: capitalize;
+    }
+}
+
+.el-form-item {
+    margin-bottom: 10px !important;
+
+    &__label {
+        padding: 0 12px 0 0 !important;
+        font-weight: bold;
+    }
+
+    &.inline-select {
+        .el-form-item__content {
+            display: flex;
+
+            .el-select {
+                flex-grow: 1;
+            }
+
+            .el-button {
+                margin-left: 5px;
+            }
+        }
+    }
+}
+
+.el-checkbox.is-bordered {
+    height: 38px !important;
+}
+
+.el-select {
+    width: 100%;
+
+    input {
+        text-transform: capitalize;
+    }
+}
+
+.el-button {
+    &.is-circle {
+        width: 32px;
+    }
+}
+
+.el-scrollbar {
+    span {
+        text-transform: capitalize;
+    }
+}
+
+.el-color-picker {
+    width: 100% !important;
+
+    &__trigger {
+        width: 100% !important;
+    }
+}
+
+.el-slider {
+    padding: 0 8px;
+}
+
+.el-dialog {
+    &__header {
+        display: none;
+    }
+
+    &__footer {
+        padding: 20px;
+        border-top: 1px solid #dfdfdf;
+    }
+}

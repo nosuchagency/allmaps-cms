@@ -4,10 +4,8 @@
 @import '../../node_modules/leaflet/dist/leaflet.css';
 @import '../../node_modules/leaflet-easybutton/src/easy-button.css';
 @import '../../node_modules/flag-icon-css/sass/flag-icon';
-@import 'variables';
-@import 'mixin';
 @import 'transition';
 @import 'sidebar';
 @import 'btn';
 @import 'index';
-@import 'dialog';
+@import 'el-overrides';

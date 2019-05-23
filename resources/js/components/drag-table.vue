@@ -21,6 +21,7 @@
             </el-table-column>
             <slot name="table-columns"></slot>
         </el-table>
+        <slot name="footer"></slot>
     </el-card>
 </template>
 

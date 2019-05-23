@@ -15,8 +15,9 @@
                         </el-form-item>
                         <el-form-item :label="$t('floors.attributes.level')"
                                       :class="{'is-error' : form.errors.has('level')}">
-                            <el-input v-model="form.level">
-                            </el-input>
+                            <el-input-number v-model="form.level"
+                                             :min="0">
+                            </el-input-number>
                         </el-form-item>
                     </el-tab-pane>
                 </el-tabs>

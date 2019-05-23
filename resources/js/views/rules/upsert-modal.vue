@@ -205,7 +205,7 @@
             remove() {
                 this.form.delete(`/containers/${this.containerId}/beacons/${this.beaconId}/rules/${this.item.id}`)
                     .then(response => this.$emit('rule-modal:remove', {
-                        rule: response,
+                        rule: this.item,
                         containerId: this.containerId,
                         beaconId: this.beaconId
                     }))

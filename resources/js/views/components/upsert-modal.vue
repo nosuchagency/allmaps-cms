@@ -105,7 +105,7 @@
                                         </el-slider>
                                     </el-col>
                                 </el-row>
-                                <div style="width:100%; border-top: 1px solid #dcdcdc; margin: 15px 0 5px 0;"></div>
+                                <divider></divider>
                             </el-form-item>
                         </template>
                         <template v-if="!['image', 'polyline'].includes(form.shape)">
@@ -144,16 +144,16 @@
                                         </el-slider>
                                     </el-col>
                                 </el-row>
-                                <div style="width:100%; border-top: 1px solid #dcdcdc; margin: 15px 0 5px 0;"></div>
+                                <divider></divider>
                             </el-form-item>
                         </template>
                         <template v-if="['image'].includes(form.shape)">
                             <el-form-item :label="$t('components.attributes.image')"
                                           :class="{'is-error' : form.errors.has('image')}">
-                                <image-upload @image-uploaded="setImage"
-                                              @image-removed="setImage"
-                                              :image="form.image">
-                                </image-upload>
+                                <image-uploader :images="image"
+                                                @image:added="form.image = $event"
+                                                @image:removed="form.image = null">
+                                </image-uploader>
                             </el-form-item>
                             <el-form-item :label="$t('components.attributes.image_width')"
                                           :class="{'is-error' : form.errors.has('image_width')}">
@@ -242,7 +242,8 @@
 
 <script>
     import Form from '../../utils/Form';
-    import imageUpload from 'js/components/image-upload';
+    import imageUploader from 'js/components/image-uploader';
+    import divider from 'js/components/divider';
 
     export default {
         props: {
@@ -250,7 +251,8 @@
             item: Object
         },
         components: {
-            imageUpload
+            imageUploader,
+            divider
         },
         data() {
             return {
@@ -275,7 +277,8 @@
                     image_height: this.item ? this.item.image_height : 0,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
-                })
+                }),
+                image: this.item && this.item.image ? [{source: this.item.image, options: {type: 'local'}}] : [],
             }
         },
         methods: {
@@ -291,7 +294,7 @@
             },
             remove() {
                 this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .then(response => this.$emit('upsert-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {
@@ -299,9 +302,6 @@
             },
             formatTooltip(val) {
                 return val / 100;
-            },
-            setImage(image = null) {
-                this.form.image = image;
             },
             shapeChanged(val) {
                 if (val === 'polyline') {

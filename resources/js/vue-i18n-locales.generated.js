@@ -48,6 +48,19 @@ export default {
                 "tags": "Tags"
             }
         },
+        "menu_items": {
+            "singular": "Menu Item",
+            "plural": "Menu Items",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "order": "Order",
+                "poi": "Poi",
+                "location": "Location",
+                "tag": "Tag",
+                "category": "Category"
+            }
+        },
         "passwords": {
             "password": "Passwords must be at least six characters and match the confirmation.",
             "reset": "Your password has been reset!",
@@ -155,6 +168,7 @@ export default {
                 "id": "ID",
                 "name": "Name",
                 "image": "Image",
+                "menu": "Menu",
                 "place_id": "Place ID"
             },
             "map_plan": "Map Plan"
@@ -196,6 +210,14 @@ export default {
                 "valid": "Valid"
             }
         },
+        "menus": {
+            "singular": "Menu",
+            "plural": "Menus",
+            "attributes": {
+                "id": "ID",
+                "name": "Name"
+            }
+        },
         "users": {
             "singular": "User",
             "plural": "Users",
@@ -216,7 +238,10 @@ export default {
         },
         "menu": {
             "dashboard": "Dashboard",
+            "map": "Map",
             "places": "Places",
+            "components": "Components",
+            "menus": "Menus",
             "beacons": "Beacons",
             "pois": "Points of Interest",
             "fixtures": "Fixtures",
@@ -229,7 +254,6 @@ export default {
             "settings": "Settings",
             "categories": "Categories",
             "tags": "Tags",
-            "components": "Map Components",
             "searchables": "Searchables",
             "skins": "Skins",
             "map-settings": "Map Settings",
@@ -301,6 +325,7 @@ export default {
                 "lat": "Latitude",
                 "lng": "Longitude",
                 "activated": "Activated",
+                "menu": "Menu",
                 "category": "Category",
                 "tags": "Tags"
             },

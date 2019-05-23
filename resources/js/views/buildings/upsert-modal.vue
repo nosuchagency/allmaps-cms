@@ -18,10 +18,29 @@
                         <br>
                         <el-form-item :label="$t('buildings.attributes.image')"
                                       :class="{'is-error' : form.errors.has('image')}">
-                            <image-upload @image-uploaded="setImage"
-                                          @image-removed="setImage"
-                                          :image="form.image">
-                            </image-upload>
+                            <image-uploader :images="image"
+                                            @image:added="form.image = $event"
+                                            @image:removed="form.image = null">
+                            </image-uploader>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="Menu" name="menu">
+                        <br>
+                        <el-form-item :label="$t('buildings.attributes.menu')"
+                                      :class="{'is-error' : form.errors.has('menu')}">
+                            <fetch-items url="/menus">
+                                <el-select v-model="form.menu"
+                                           slot-scope="{items, loading}"
+                                           placeholder="Select"
+                                           clearable
+                                           value-key="id">
+                                    <el-option v-for="item in items"
+                                               :key="item.id"
+                                               :label="item.name"
+                                               :value="item">
+                                    </el-option>
+                                </el-select>
+                            </fetch-items>
                         </el-form-item>
                     </el-tab-pane>
                 </el-tabs>
@@ -62,11 +81,11 @@
 
 <script>
     import Form from '../../utils/Form';
-    import imageUpload from 'js/components/image-upload';
+    import imageUploader from 'js/components/image-uploader';
 
     export default {
         components: {
-            imageUpload
+            imageUploader
         },
         props: {
             visible: Boolean,
@@ -81,8 +100,10 @@
                 form: new Form({
                     name: this.item ? this.item.name : '',
                     image: this.item ? this.item.image : '',
-                    place: this.place
-                })
+                    menu: this.item ? this.item.menu : null,
+                    place: this.place,
+                }),
+                image: this.item && this.item.image ? [{source: this.item.image, options: {type: 'local'}}] : [],
             }
         },
         methods: {
@@ -98,14 +119,11 @@
             },
             remove() {
                 this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('building-modal:remove', response))
+                    .then(response => this.$emit('building-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {
                 this.$emit('building-modal:close');
-            },
-            setImage(image = null) {
-                this.form.image = image;
             }
         }
     }

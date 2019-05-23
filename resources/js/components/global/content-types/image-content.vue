@@ -10,10 +10,13 @@
                     <el-input v-model="fields.name">
                     </el-input>
                 </el-form-item>
-                <image-upload @image-uploaded="setImage"
-                              @image-removed="setImage"
-                              :image="fields.image">
-                </image-upload>
+                <el-form-item :label="$t('pois.attributes.image')"
+                              :class="{'is-error' : form.errors.has('image')}">
+                    <image-uploader :images="image"
+                                    @image:added="form.image = $event"
+                                    @image:removed="form.image = null">
+                    </image-uploader>
+                </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="Taxonomy" name="taxonomies">
                 <el-form-item :label="$t('places.attributes.category')"
@@ -54,11 +57,11 @@
 </template>
 
 <script>
-    import imageUpload from 'js/components/image-upload';
+    import imageUploader from 'js/components/image-uploader';
 
     export default {
         components: {
-            imageUpload
+            imageUploader
         },
         props: {
             item: Object,
@@ -69,6 +72,7 @@
             return {
                 fields: this.getFields(),
                 currentTab: 'image',
+                image: this.item && this.item.image ? [{source: this.item.image, options: {type: 'local'}}] : [],
             };
         },
         watch: {
@@ -93,9 +97,6 @@
                     tags: this.item ? this.item.tags : [],
                     folder: this.folder
                 };
-            },
-            setImage(image = null) {
-                this.fields.image = image;
             },
             syncFields() {
                 this.$emit('sync-fields', this.fields);

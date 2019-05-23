@@ -8,6 +8,7 @@ return [
         'id' => 'ID',
         'name' => 'Name',
         'image' => 'Image',
+        'menu' => 'Menu',
         'place_id' => 'Place ID',
     ],
 

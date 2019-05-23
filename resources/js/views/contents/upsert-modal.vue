@@ -50,7 +50,7 @@
 
 <script>
     import contentType from './content-type';
-    import Form from '../../../utils/Form';
+    import Form from 'js/utils/Form';
 
     export default {
         props: {
@@ -82,7 +82,7 @@
             },
             remove() {
                 this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('content-modal:remove', response))
+                    .then(response => this.$emit('content-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {

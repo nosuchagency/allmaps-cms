@@ -10,17 +10,31 @@ let menuItems = {
                     border: true
                 },
                 {
-                    title: this.$t('menu.places'),
-                    children: null,
-                    icon: 'map-marked-alt',
-                    route: 'places',
-                    border: true
-                },
-                {
-                    title: this.$t('menu.containers'),
-                    icon: 'archive',
-                    route: 'containers',
-                    border: true
+                    title: this.$t('menu.map'),
+                    icon: 'map',
+                    border: true,
+                    children: [
+                        {
+                            title: this.$t('menu.places'),
+                            icon: 'map-marked-alt',
+                            route: 'places',
+                        },
+                        {
+                            title: this.$t('menu.components'),
+                            icon: 'map-signs',
+                            route: 'components'
+                        },
+                        {
+                            title: this.$t('menu.menus'),
+                            icon: 'bars',
+                            route: 'menus',
+                        },
+                        {
+                            title: this.$t('menu.searchables'),
+                            icon: 'search-location',
+                            route: 'searchables'
+                        },
+                    ],
                 },
                 {
                     title: this.$t('menu.locations'),
@@ -45,25 +59,28 @@ let menuItems = {
                     ]
                 },
                 {
+                    title: this.$t('menu.containers'),
+                    icon: 'archive',
+                    route: 'containers',
+                    border: true
+                },
+                {
                     title: this.$t('menu.user_management'),
                     icon: 'users-cog',
                     border: true,
                     children: [
                         {
                             title: this.$t('menu.users'),
-                            children: null,
                             icon: 'users',
                             route: 'users'
                         },
                         {
                             title: this.$t('menu.roles'),
-                            children: null,
                             icon: 'id-badge',
                             route: 'roles'
                         },
                         {
                             title: this.$t('menu.tokens'),
-                            children: null,
                             icon: 'key',
                             route: 'tokens'
                         }
@@ -76,26 +93,13 @@ let menuItems = {
                     children: [
                         {
                             title: this.$t('menu.categories'),
-                            children: null,
                             icon: 'cat',
                             route: 'categories'
                         },
                         {
                             title: this.$t('menu.tags'),
-                            children: null,
                             icon: 'tags',
                             route: 'tags'
-                        },
-                        {
-                            title: this.$t('menu.components'),
-                            children: null,
-                            icon: 'map-signs',
-                            route: 'components'
-                        },
-                        {
-                            title: this.$t('menu.searchables'),
-                            icon: 'search-location',
-                            route: 'searchables'
                         },
                         {
                             title: this.$t('menu.skins'),
@@ -110,13 +114,11 @@ let menuItems = {
                         // },
                         {
                             title: this.$t('menu.email_layouts'),
-                            children: null,
                             icon: 'pen-fancy',
                             route: 'layouts'
                         },
                         {
                             title: this.$t('menu.email_templates'),
-                            children: null,
                             icon: 'mail-bulk',
                             route: 'templates'
                         }
@@ -128,13 +130,11 @@ let menuItems = {
                     children: [
                         {
                             title: this.$t('menu.profile'),
-                            children: null,
                             icon: 'id-card',
                             route: 'profile'
                         },
                         {
                             title: this.$t('menu.log_out'),
-                            children: null,
                             icon: 'sign-out-alt',
                             route: 'logout'
                         }

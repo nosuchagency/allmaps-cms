@@ -2,7 +2,10 @@
 
 return [
     'dashboard' => 'Dashboard',
+    'map' => 'Map',
     'places' => 'Places',
+    'components' => 'Components',
+    'menus' => 'Menus',
     'beacons' => 'Beacons',
     'pois' => 'Points of Interest',
     'fixtures' => 'Fixtures',
@@ -15,7 +18,6 @@ return [
     'settings' => 'Settings',
     'categories' => 'Categories',
     'tags' => 'Tags',
-    'components' => 'Map Components',
     'searchables' => 'Searchables',
     'skins' => 'Skins',
     'map-settings' => 'Map Settings',

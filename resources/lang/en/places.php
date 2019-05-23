@@ -14,6 +14,7 @@ return [
         'lat' => 'Latitude',
         'lng' => 'Longitude',
         'activated' => 'Activated',
+        'menu' => 'Menu',
         'category' => 'Category',
         'tags' => 'Tags'
     ],

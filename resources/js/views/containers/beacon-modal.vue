@@ -100,7 +100,7 @@
             },
             remove() {
                 this.form.delete(`/containers/${this.containerId}/beacons/${this.item.id}`)
-                    .then(response => this.$emit('beacon-modal:remove', response))
+                    .then(response => this.$emit('beacon-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {

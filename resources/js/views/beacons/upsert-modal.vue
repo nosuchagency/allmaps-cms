@@ -189,7 +189,7 @@
             },
             remove() {
                 this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .then(response => this.$emit('upsert-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {

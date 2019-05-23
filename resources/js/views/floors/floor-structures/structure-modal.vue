@@ -77,7 +77,7 @@
             },
             remove() {
                 this.form.delete('/structures/' + this.structure.id)
-                    .then(response => this.$emit('structure-modal:remove', response))
+                    .then(response => this.$emit('structure-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {

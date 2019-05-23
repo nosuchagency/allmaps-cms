@@ -69,7 +69,7 @@
                     text-align: left;
                     text-indent: 20px;
                     top: 0px;
-                    background-color: $subMenuBg !important;
+                    background-color: #1f2d3d !important;
                     opacity: 1;
                 }
             }
@@ -108,10 +108,10 @@
     .nest-menu .el-submenu > .el-submenu__title,
     .el-submenu .el-menu-item {
         min-width: 210px !important;
-        background-color: $subMenuBg !important;
+        background-color: #1f2d3d !important;
 
         &:hover {
-            background-color: $menuHover !important;
+            background-color: #001528 !important;
         }
     }
 

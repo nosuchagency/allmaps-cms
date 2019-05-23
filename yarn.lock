@@ -2822,6 +2822,36 @@ file-loader@^0.11.2:
   dependencies:
     loader-utils "^1.0.2"
 
+filepond-plugin-file-validate-type@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.4.tgz#ce7f5f469dbc7ce0da12fdef7b0f24e4c263c410"
+  integrity sha512-K1qD8mfahJoz2zRlWWvYoHuy4k/8tHggsoGbm/blpTp63OyahOdJBzMN3VK7USYn5OZ58uOFdMTMyi8ibFpW/Q==
+
+filepond-plugin-image-exif-orientation@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-exif-orientation/-/filepond-plugin-image-exif-orientation-1.0.6.tgz#75920935a5da298884718bfd454f03362ad783e8"
+  integrity sha512-CxoZSa3tjZaoQrRAvsYgDuYhyQPtylnOJ5usbbH5qo/m4x/CbZpkrbFjWXr3MvdiKz3SV8d+CadsLbSXKgWKjA==
+
+filepond-plugin-image-preview@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-preview/-/filepond-plugin-image-preview-4.1.1.tgz#7294332e9e9ee9592b0ccd96da4eb90b8ca683ec"
+  integrity sha512-cQZPWJ0iltLTmJ5iKCEBX6DShk9GDjpUhKjByaw7QuzAa3RnoU0E7K/W0Zod1+ZLch+tbNZ6ySBEjm9RrNy+6Q==
+
+filepond-plugin-image-resize@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-resize/-/filepond-plugin-image-resize-2.0.4.tgz#1f1c77ec692f37d789a9a5600920dd9fc5f26015"
+  integrity sha512-4qDB6cGqO/9sxAHnmlI5iJ1sXWgqzusKeTFCLEEba9JiX6eaY+w5BQjkO5zrhF7OuYAvqFAziunIhkZet6BpiQ==
+
+filepond-plugin-image-transform@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-image-transform/-/filepond-plugin-image-transform-3.3.0.tgz#d6bcbfd5439a48702b994e8b18cd64c76271fc4a"
+  integrity sha512-lzGeIIJb7z+pjL5/YrNYpLC6TQC2QHaAomnVq2mt2nb6tDtb3Gebe9QmrjwoZaNTrPuKnxGT60vcVZZDLeltlA==
+
+filepond@^4.4.7:
+  version "4.4.7"
+  resolved "https://registry.yarnpkg.com/filepond/-/filepond-4.4.7.tgz#6ed6e054699ea167992d4c4f6617167943a48e78"
+  integrity sha512-5fncOAWAq6cj9F0nJbys+x5vqEUKEGAnTi0S4HViRs0gG3yP/TyqKFIfxbs9P+Y8aBgvDD/HUZl82x+TmGwsrA==
+
 fill-range@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/fill-range/-/fill-range-4.0.0.tgz#d544811d428f98eb06a63dc402d2403c328c38f7"
@@ -7682,6 +7712,11 @@ vue-count-to@^1.0.13:
   version "1.0.13"
   resolved "https://registry.yarnpkg.com/vue-count-to/-/vue-count-to-1.0.13.tgz#3e7573ea6e64c2b2972f64e0a2ab2e23c7590ff3"
   integrity sha512-6R4OVBVNtQTlcbXu6SJ8ENR35M2/CdWt3Jmv57jOUM+1ojiFmjVGvZPH8DfHpMDSA+ITs+EW5V6qthADxeyYOQ==
+
+vue-filepond@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/vue-filepond/-/vue-filepond-5.1.1.tgz#ad356025d0badac40a747a5477d61e391f01d0de"
+  integrity sha512-mQ+V9lpqZFz7SMJNODwuT+NMeXaBUyKI823Ekei1r1prY/qdh5TqJs/OM8Ub5PJUnck7Pk6jr7NeI3V33Jcphw==
 
 vue-hot-reload-api@^2.2.0:
   version "2.3.3"

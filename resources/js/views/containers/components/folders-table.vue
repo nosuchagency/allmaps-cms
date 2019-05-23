@@ -40,6 +40,8 @@
                     </template>
                 </template>
             </el-table-column>
+        </template>
+        <template slot="footer">
             <folder-modal v-if="folderModalVisible"
                           :visible="folderModalVisible"
                           :item="selectedFolder"

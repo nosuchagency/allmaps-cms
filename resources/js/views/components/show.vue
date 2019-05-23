@@ -45,12 +45,10 @@
 </template>
 
 <script>
-    import imageUpload from 'js/components/image-upload';
     import upsertModal from './upsert-modal';
 
     export default {
         components: {
-            imageUpload,
             upsertModal
         },
         data() {

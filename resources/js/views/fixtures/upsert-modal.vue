@@ -25,20 +25,23 @@
                         <br>
                         <el-form-item :label="$t('fixtures.attributes.image')"
                                       :class="{'is-error' : form.errors.has('image')}">
-                            <image-upload @image-uploaded="setImage"
-                                          @image-removed="setImage"
-                                          :image="form.image">
-                            </image-upload>
+                            <image-uploader :images="image"
+                                            @image:added="form.image = $event"
+                                            @image:removed="form.image = null">
+                            </image-uploader>
                         </el-form-item>
-                        <el-form-item :label="$t('fixtures.attributes.image_width')"
+                        <el-form-item :label="$t('components.attributes.image_width')"
                                       :class="{'is-error' : form.errors.has('image_width')}">
-                            <el-input v-model.number="form.image_width"></el-input>
+                            <el-input-number v-model="form.image_width"
+                                             :min="0">
+                            </el-input-number>
                         </el-form-item>
-                        <el-form-item :label="$t('fixtures.attributes.image_height')"
+                        <el-form-item :label="$t('components.attributes.image_height')"
                                       :class="{'is-error' : form.errors.has('image_height')}">
-                            <el-input v-model.number="form.image_height"></el-input>
+                            <el-input-number v-model="form.image_height"
+                                             :min="0">
+                            </el-input-number>
                         </el-form-item>
-
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
@@ -113,7 +116,7 @@
 
 <script>
     import Form from '../../utils/Form';
-    import imageUpload from 'js/components/image-upload';
+    import imageUploader from 'js/components/image-uploader';
 
     export default {
         props: {
@@ -121,7 +124,7 @@
             item: Object
         },
         components: {
-            imageUpload
+            imageUploader
         },
         data() {
             return {
@@ -136,13 +139,11 @@
                     image_height: this.item ? this.item.image_height : 0,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
-                })
+                }),
+                image: this.item && this.item.image ? [{source: this.item.image, options: {type: 'local'}}] : [],
             }
         },
         methods: {
-            setImage(image = null) {
-                this.form.image = image;
-            },
             create() {
                 this.form.post(`/${this.resource}`)
                     .then(response => this.$emit('upsert-modal:add', response))
@@ -155,7 +156,7 @@
             },
             remove() {
                 this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .then(response => this.$emit('upsert-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {

@@ -32,6 +32,9 @@
                     case 'folder':
                     case 'folders':
                         return 'folder';
+                    case 'header':
+                    case 'headers':
+                        return 'heading';
                     case 'floor':
                     case 'floors':
                         return 'grip-lines';

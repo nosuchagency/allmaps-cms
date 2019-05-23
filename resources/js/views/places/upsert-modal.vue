@@ -40,10 +40,38 @@
                         <br>
                         <el-form-item :label="$t('places.attributes.image')"
                                       :class="{'is-error' : form.errors.has('image')}">
-                            <image-upload @image-uploaded="setImage"
-                                          @image-removed="setImage"
-                                          :image="form.image">
-                            </image-upload>
+                            <image-uploader :images="image"
+                                            @image:added="form.image = $event"
+                                            @image:removed="form.image = null">
+                            </image-uploader>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="Location" name="location">
+                        <br>
+                        <map-location-select v-if="mapInitialized"
+                                             :latitude="form.latitude"
+                                             :longitude="form.longitude"
+                                             :interactive="true"
+                                             @map:selection="setLatLng">
+                        </map-location-select>
+                    </el-tab-pane>
+                    <el-tab-pane label="Menu" name="menu">
+                        <br>
+                        <el-form-item :label="$t('places.attributes.menu')"
+                                      :class="{'is-error' : form.errors.has('menu')}">
+                            <fetch-items url="/menus">
+                                <el-select v-model="form.menu"
+                                           slot-scope="{items, loading}"
+                                           placeholder="Select"
+                                           clearable
+                                           value-key="id">
+                                    <el-option v-for="item in items"
+                                               :key="item.id"
+                                               :label="item.name"
+                                               :value="item">
+                                    </el-option>
+                                </el-select>
+                            </fetch-items>
                         </el-form-item>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
@@ -80,15 +108,6 @@
                                 </el-select>
                             </fetch-items>
                         </el-form-item>
-                    </el-tab-pane>
-                    <el-tab-pane label="Location" name="location">
-                        <br>
-                        <map-location-select v-if="mapInitialized"
-                                             :latitude="form.latitude"
-                                             :longitude="form.longitude"
-                                             :interactive="true"
-                                             @map:selection="setLatLng">
-                        </map-location-select>
                     </el-tab-pane>
                 </el-tabs>
             </el-form>
@@ -129,12 +148,12 @@
 <script>
     import Form from '../../utils/Form';
     import mapLocationSelect from './map-location-select';
-    import imageUpload from 'js/components/image-upload';
+    import imageUploader from 'js/components/image-uploader';
 
     export default {
         components: {
             mapLocationSelect,
-            imageUpload
+            imageUploader
         },
         props: {
             visible: Boolean,
@@ -154,9 +173,11 @@
                     latitude: this.item && this.item.latitude ? this.item.latitude : 55.663874,
                     longitude: this.item && this.item.longitude ? this.item.longitude : 12.393955,
                     activated: this.item ? this.item.activated : false,
+                    menu: this.item ? this.item.menu : null,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : []
                 }),
+                image: this.item && this.item.image ? [{source: this.item.image, options: {type: 'local'}}] : [],
                 mapInitialized: false
             }
         },
@@ -173,7 +194,7 @@
             },
             remove() {
                 this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .then(response => this.$emit('upsert-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {
@@ -187,9 +208,6 @@
             setLatLng(latLng) {
                 this.form.latitude = latLng.lat;
                 this.form.longitude = latLng.lng;
-            },
-            setImage(image = null) {
-                this.form.image = image;
             }
         }
     }
