@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Vue from 'vue';
+import router from './router/index';
 
 Vue.prototype.$axios = axios;
 Vue.prototype.$axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -21,7 +22,7 @@ axios.interceptors.response.use(
         return response;
     },
     error => {
-        if (error.response === 419) {
+        if (error.response.status === 419) {
             if (Vue.auth.user().check()) {
                 Vue.auth.logout({
                     url: 'logout',
@@ -32,6 +33,11 @@ axios.interceptors.response.use(
                 window.location.reload();
             }
         }
+
+        if (error.response.status === 404) {
+            router.push({name: '404'});
+        }
+
         return Promise.reject(error);
     }
 );

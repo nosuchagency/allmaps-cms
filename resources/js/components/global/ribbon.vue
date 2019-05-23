@@ -30,6 +30,7 @@
                 <el-col :span="5" v-if="searchQueryActivated">
                     <el-input v-model="searchQuery"
                               size="small"
+                              clearable
                               placeholder="Search ..."
                               @input="throttledSearch">
                     </el-input>

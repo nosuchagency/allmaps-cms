@@ -10,8 +10,12 @@ module.exports = [
         component: require('../../views/errors/403'),
     },
     {
-        path: '*',
         name: '404',
-        component: require('../../views/errors/404'),
+        path: '/404',
+        component: require('../../views/errors/404')
+    },
+    {
+        path: '*',
+        redirect: '404'
     }
 ];

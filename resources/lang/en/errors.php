@@ -17,6 +17,6 @@ return [
     '404' => [
         'title' => 'Page not found - 404',
         'description' => 'The requested page could not be found',
-        'link_text' => 'Go to Dashboard'
+        'link_text' => 'Go back'
     ]
 ];
