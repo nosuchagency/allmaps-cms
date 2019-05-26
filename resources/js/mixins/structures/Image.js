@@ -16,8 +16,8 @@ let Image = {
                         coordinates = structure.coordinates;
                     } else {
                         let metersPerPixel = this.getMetersPerPixel();
-                        let width = (this.getWidth() / 100) / metersPerPixel;
-                        let height = (this.getHeight() / 100) / metersPerPixel;
+                        let width = (this.getImageWidth() / 100) / metersPerPixel;
+                        let height = (this.getImageHeight() / 100) / metersPerPixel;
 
                         let center = self.map.getCenter();
                         let pointC = self.map.latLngToContainerPoint(center);

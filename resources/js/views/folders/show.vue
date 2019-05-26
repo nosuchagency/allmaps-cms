@@ -6,7 +6,8 @@
                     <div class="title-icon-wrapper">
                         <i class="fa fa-archive title-icon"></i>
                         <template v-if="item">
-                            <router-link v-if="item" :to="'/containers/' + item.container.id">
+                            <router-link v-if="item"
+                                         :to="{ name: 'containers-show', params: { id: item.container.id }}">
                                 {{ item.container.name }}
                             </router-link>
                             <i class="fa fa-caret-right" style="margin: 0 10px;"></i>

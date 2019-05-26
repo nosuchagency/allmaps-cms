@@ -48,10 +48,10 @@ export default {
         return this.structure.component.image;
     },
     getImageWidth() {
-        return this.structure.component.width;
+        return this.structure.component.image_width;
     },
     getImageHeight() {
-        return this.structure.component.height;
+        return this.structure.component.image_height;
     },
     isCurved() {
         return this.structure.component.stroke_type === 'curved';

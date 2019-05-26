@@ -35,12 +35,17 @@
                                   autoComplete="on"
                                   placeholder="password">
                         </el-input>
-                        <div class="el-form-item__error" v-if="form.errors.has('password')">
+                        <div class="el-form-item__error"
+                             v-if="form.errors.has('password')">
                             {{form.errors.get('password')}}
                         </div>
                     </el-form-item>
                     <div class="link-container">
-                        <router-link to="/password/reset" class="link" href="#">Forgot your password?</router-link>
+                        <router-link :to="{name : 'password-forgot'}"
+                                     class="link"
+                                     href="#">
+                            Forgot your password?
+                        </router-link>
                     </div>
                     <el-button type="primary"
                                class="submit-btn"

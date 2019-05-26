@@ -5,7 +5,8 @@
                    @click="visible = true">
             {{title}}
         </el-button>
-        <portal to="modals" v-if="visible">
+        <portal to="modals"
+                v-if="visible">
             <el-dialog :visible="visible"
                        @close="closeModal">
                 <el-tabs v-model="currentTab">

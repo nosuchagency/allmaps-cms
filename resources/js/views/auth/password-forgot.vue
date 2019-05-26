@@ -8,63 +8,39 @@
                 <el-form :model="form"
                          autoComplete="on"
                          label-position="left"
-                         @submit.native.prevent>
-                    <el-form-item :class="{'is-error' : form.errors.has('email')}">
+                         @submit.native.prevent
+                         @keydown.native="form.errors.clear($event.target.name)">
+                    <el-form-item class="last-field"
+                                  :class="{'is-error' : form.errors.has('email')}">
                         <span class="svg-container">
                             <i class="fa fa-user"></i>
                         </span>
                         <el-input v-model="form.email"
                                   name="email"
                                   type="text"
-                                  readonly
+                                  @keyup.enter.native="submit"
                                   autoComplete="on"
                                   placeholder="email">
                         </el-input>
                         <div class="el-form-item__error" v-if="form.errors.has('email')">
-                            {{form.errors.get('email')}}
-                        </div>
-                    </el-form-item>
-                    <el-form-item :class="{'is-error' : form.errors.has('password')}">
-                        <span class="svg-container">
-                            <i class="fa fa-lock"></i>
-                        </span>
-                        <el-input v-model="form.password"
-                                  name="password"
-                                  type="password"
-                                  autoComplete="on"
-                                  placeholder="password">
-                        </el-input>
-                        <div class="el-form-item__error" v-if="form.errors.has('password')">
-                            {{form.errors.get('password')}}
-                        </div>
-                    </el-form-item>
-                    <el-form-item class="last-field"
-                                  :class="{'is-error' : form.errors.has('password_confirmation')}">
-                        <span class="svg-container">
-                            <i class="fa fa-lock"></i>
-                        </span>
-                        <el-input v-model="form.password_confirmation"
-                                  name="password_confirmation"
-                                  type="password"
-                                  @keyup.enter.native="submit"
-                                  autoComplete="on"
-                                  placeholder="confirm password">
-                        </el-input>
-                        <div class="el-form-item__error" v-if="form.errors.has('password_confirmation')">
-                            {{form.errors.get('password_confirmation')}}
+                            {{get('email')}}
                         </div>
                     </el-form-item>
                     <div class="message" v-if="result" :class="{'error' : !result.status}">
                         {{result.message}}
                     </div>
                     <div class="link-container">
-                        <router-link to="/login" class="link" href="#">Back to login?</router-link>
+                        <router-link :to="{name : 'login'}"
+                                     class="link"
+                                     href="#">
+                            Back to login?
+                        </router-link>
                     </div>
                     <el-button type="primary"
                                class="submit-btn"
                                @click.stop.prevent="submit"
                                :loading="busy">
-                        Reset
+                        Send email
                     </el-button>
                 </el-form>
             </el-card>
@@ -76,37 +52,27 @@
     import Form from '../../utils/Form';
 
     export default {
-        props: {
-            token: String
-        },
         data() {
             return {
                 busy: false,
                 form: new Form({
-                    email: this.$route.query.email,
-                    password: '',
-                    password_confirmation: '',
-                    token: this.token
+                    email: ''
                 }),
                 result: null
             }
         },
         methods: {
-            async submit() {
+            submit() {
                 this.busy = true;
 
-                this.form.post('/password/reset')
+                this.form.post('/password/email')
                     .then(response => {
                         this.result = response.data;
                         this.form.email = '';
                         this.busy = false;
-
-                        setTimeout(() => {
-                            window.location.href = '/dashboard';
-                        }, 1000);
                     })
                     .catch(error => this.busy = false);
-            },
+            }
         }
     }
 </script>

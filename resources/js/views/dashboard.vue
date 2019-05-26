@@ -19,7 +19,7 @@
                             :sm="12"
                             :lg="6"
                             class="card-panel-col">
-                        <router-link to="/places">
+                        <router-link :to="{name : 'places-index'}">
                             <div class='card-panel'>
                                 <div class="card-panel-icon-wrapper icon-building">
                                     <i class="fa fa-map-marked-alt"
@@ -35,7 +35,7 @@
                             :sm="12"
                             :lg="6"
                             class="card-panel-col">
-                        <router-link to="/containers">
+                        <router-link :to="{name : 'containers-index'}">
                             <div class="card-panel">
                                 <div class="card-panel-icon-wrapper icon-site">
                                     <i class="fa fa-archive"
@@ -51,7 +51,7 @@
                             :sm="12"
                             :lg="6"
                             class="card-panel-col">
-                        <router-link to="/fixtures">
+                        <router-link :to="{name : 'fixtures-index'}">
                             <div class="card-panel">
                                 <div class="card-panel-icon-wrapper icon-error">
                                     <i class="fa fa-couch"
@@ -67,7 +67,7 @@
                             :sm="12"
                             :lg="6"
                             class="card-panel-col">
-                        <router-link to="/beacons">
+                        <router-link :to="{name : 'beacons-index'}">
                             <div class="card-panel">
                                 <div class="card-panel-icon-wrapper icon-monitor">
                                     <i class="fa fa-wifi"
