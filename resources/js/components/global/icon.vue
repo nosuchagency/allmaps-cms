@@ -41,9 +41,12 @@
                     case 'layout':
                     case 'layouts':
                         return 'pen-fancy';
+                    case 'location' :
+                    case 'locations' :
+                        return 'map-pin';
                     case 'logged in' :
                         return 'sign-in-alt';
-                    case 'mapcomponent':
+                    case 'component':
                     case 'components':
                         return 'map-signs';
                     case 'poi':

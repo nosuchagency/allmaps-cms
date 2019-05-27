@@ -35,7 +35,7 @@
 
                 let icon = L.icon({
                     iconUrl: '/img/bullseye.png',
-                    iconSize: [20, 20]
+                    iconSize: [30, 30]
                 });
 
                 this.marker = new L.Marker({lat: this.latitude, lng: this.longitude}, {icon})

@@ -45,7 +45,7 @@ let PoiPoint = {
                 getIcon() {
                     return new L.Icon({
                         iconUrl: this.location.poi.image,
-                        iconSize: [20, 20]
+                        iconSize: [30, 30]
                     });
                 },
                 save() {

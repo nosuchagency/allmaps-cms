@@ -116,8 +116,8 @@
                                            @change="fillToggled">
                                 </el-switch>
                             </el-form-item>
-                            <el-form-item :class="{'is-error' : form.errors.has('fill_color')}"
-                                          v-if="form.fill">
+                            <el-form-item v-if="form.fill"
+                                          :class="{'is-error' : form.errors.has('fill_color')}">
                                 <el-row>
                                     <el-col :span="4">
                                         <span>{{$t('components.attributes.fill_color')}}</span>
@@ -131,8 +131,8 @@
                                     </el-col>
                                 </el-row>
                             </el-form-item>
-                            <el-form-item :class="{'is-error' : form.errors.has('fill_opacity')}"
-                                          v-if="form.fill">
+                            <el-form-item v-if="form.fill"
+                                          :class="{'is-error' : form.errors.has('fill_opacity')}">
                                 <el-row>
                                     <el-col :span="4">
                                         <span>{{$t('components.attributes.fill_opacity')}}</span>

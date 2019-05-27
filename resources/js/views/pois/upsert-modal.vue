@@ -34,22 +34,107 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item :label="$t('pois.attributes.color')"
-                                      :class="{'is-error' : form.errors.has('color')}"
-                                      v-if="form.type === 'area'">
-                            <el-color-picker v-model="form.color"
-                                             :show-alpha="false"
-                                             :color-format="'hex'">
-                            </el-color-picker>
-                        </el-form-item>
-                        <el-form-item :label="$t('pois.attributes.image')"
-                                      :class="{'is-error' : form.errors.has('image')}"
-                                      v-else>
+                        <el-form-item v-if="form.type === 'image'"
+                                      :label="$t('pois.attributes.image')"
+                                      :class="{'is-error' : form.errors.has('image')}">
                             <image-uploader :images="image"
                                             @image:added="form.image = $event"
                                             @image:removed="form.image = null">
                             </image-uploader>
                         </el-form-item>
+                        <template v-else>
+                            <el-form-item :label="$t('pois.attributes.stroke')"
+                                          :class="{'is-error' : form.errors.has('stroke')}">
+                                <el-switch v-model="form.stroke"
+                                           @change="strokeToggled">
+                                </el-switch>
+                            </el-form-item>
+                            <el-form-item v-if="form.stroke">
+                                <el-radio-group v-model="form.stroke_type">
+                                    <el-radio label="solid">Solid</el-radio>
+                                    <el-radio label="dashed">Dashed</el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+                            <el-form-item v-if="form.stroke"
+                                          :class="{'is-error' : form.errors.has('stroke_width')}">
+                                <el-row>
+                                    <el-col :span="4">
+                                        <span>{{$t('pois.attributes.stroke_width')}}</span>
+                                    </el-col>
+                                    <el-col :span="20">
+                                        <el-input-number v-model="form.stroke_width"
+                                                         :min="1">
+                                        </el-input-number>
+                                    </el-col>
+                                </el-row>
+                            </el-form-item>
+                            <el-form-item v-if="form.stroke"
+                                          :class="{'is-error' : form.errors.has('stroke_color')}">
+                                <el-row>
+                                    <el-col :span="4">
+                                        <span>{{$t('pois.attributes.stroke_color')}}</span>
+                                    </el-col>
+                                    <el-col :span="20"
+                                            style="line-height: normal">
+                                        <el-color-picker v-model="form.stroke_color"
+                                                         :show-alpha="false"
+                                                         :color-format="'hex'">
+                                        </el-color-picker>
+                                    </el-col>
+                                </el-row>
+                            </el-form-item>
+                            <el-form-item v-if="form.stroke"
+                                          :class="{'is-error' : form.errors.has('stroke_opacity')}">
+                                <el-row>
+                                    <el-col :span="4">
+                                        <span>{{$t('pois.attributes.stroke_opacity')}}</span>
+                                    </el-col>
+                                    <el-col :span="20">
+                                        <el-slider v-model="strokeOpacity"
+                                                   :step="10"
+                                                   :format-tooltip="formatTooltip">
+                                        </el-slider>
+                                    </el-col>
+                                </el-row>
+                                <divider></divider>
+                            </el-form-item>
+                            <el-form-item :label="$t('pois.attributes.fill')"
+                                          :class="{'is-error' : form.errors.has('fill')}">
+                                <el-switch v-model="form.fill"
+                                           @change="fillToggled">
+                                </el-switch>
+                            </el-form-item>
+                            <el-form-item v-if="form.fill"
+                                          :class="{'is-error' : form.errors.has('fill_color')}">
+                                <el-row>
+                                    <el-col :span="4">
+                                        <span>{{$t('pois.attributes.fill_color')}}</span>
+                                    </el-col>
+                                    <el-col :span="20"
+                                            style="line-height: normal">
+                                        <el-color-picker v-model="form.fill_color"
+                                                         :show-alpha="false"
+                                                         :color-format="'hex'">
+                                        </el-color-picker>
+                                    </el-col>
+                                </el-row>
+                            </el-form-item>
+                            <el-form-item v-if="form.fill"
+                                          :class="{'is-error' : form.errors.has('fill_opacity')}">
+                                <el-row>
+                                    <el-col :span="4">
+                                        <span>{{$t('pois.attributes.fill_opacity')}}</span>
+                                    </el-col>
+                                    <el-col :span="20">
+                                        <el-slider v-model="fillOpacity"
+                                                   :step="10"
+                                                   :format-tooltip="formatTooltip">
+                                        </el-slider>
+                                    </el-col>
+                                </el-row>
+                                <divider></divider>
+                            </el-form-item>
+                        </template>
                     </el-tab-pane>
                     <el-tab-pane label="Taxonomy" name="taxonomies">
                         <br>
@@ -125,6 +210,7 @@
 <script>
     import Form from '../../utils/Form';
     import imageUploader from 'js/components/image-uploader';
+    import divider from 'js/components/divider';
 
     export default {
         props: {
@@ -132,7 +218,8 @@
             item: Object
         },
         components: {
-            imageUploader
+            imageUploader,
+            divider
         },
         data() {
             return {
@@ -143,7 +230,14 @@
                     name: this.item ? this.item.name : '',
                     description: this.item ? this.item.description : '',
                     type: this.item ? this.item.type : 'image',
-                    color: this.item ? this.item.color : '#000000',
+                    stroke: this.item ? !!this.item.stroke : true,
+                    stroke_type: this.item ? this.item.stroke_type : 'solid',
+                    stroke_color: this.item ? this.item.stroke_color : '#3388ff',
+                    stroke_width: this.item ? this.item.stroke_width : 3,
+                    stroke_opacity: this.item ? this.item.stroke_opacity : 1,
+                    fill: this.item ? !!this.item.fill : true,
+                    fill_color: this.item ? this.item.fill_color : '#3388ff',
+                    fill_opacity: this.item ? this.item.fill_opacity : 0.2,
                     image: this.item ? this.item.image : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
@@ -169,6 +263,37 @@
             },
             closeModal() {
                 this.$emit('upsert-modal:close');
+            },
+            formatTooltip(val) {
+                return val / 100;
+            },
+            strokeToggled(val) {
+                if (!val && !this.form.fill) {
+                    this.form.fill = true;
+                }
+            },
+            fillToggled(val) {
+                if (!val && !this.form.stroke) {
+                    this.form.stroke = true;
+                }
+            }
+        },
+        computed: {
+            strokeOpacity: {
+                get() {
+                    return this.form.stroke_opacity * 100;
+                },
+                set(value) {
+                    this.form.stroke_opacity = value / 100;
+                }
+            },
+            fillOpacity: {
+                get() {
+                    return this.form.fill_opacity * 100;
+                },
+                set(value) {
+                    this.form.fill_opacity = value / 100;
+                }
             }
         }
     }

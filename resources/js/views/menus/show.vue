@@ -41,14 +41,13 @@
                             <template v-for="(element, index) in menuables">
                                 <el-tooltip :key="index"
                                             effect="dark"
-                                            :content="'Add ' + element.type"
+                                            :content="'Add ' + element"
                                             placement="top-start">
                                     <el-button type="primary"
                                                size="mini"
                                                style="margin-left: 10px;"
-                                               @click="openMenuItemModal(element.type)">
-                                        <i :class="'fa-' + element.icon"
-                                           class="fa"></i>
+                                               @click="openMenuItemModal(element)">
+                                        <icon :resource="element"></icon>
                                     </el-button>
                                 </el-tooltip>
                             </template>
@@ -61,7 +60,7 @@
                                 <el-tooltip :content="scope.row.type">
                                     <el-button type="primary"
                                                size="mini"
-                                               style="margin-left: 10px;">
+                                               style="margin-left: 10px; cursor: default">
                                         <icon :resource="scope.row.type"></icon>
                                     </el-button>
                                 </el-tooltip>
@@ -134,11 +133,11 @@
                 upsertModalVisible: false,
                 item: null,
                 menuables: [
-                    {type: 'header', icon: 'heading'},
-                    {type: 'poi', icon: 'map-marker-alt'},
-                    {type: 'location', icon: 'map-pin'},
-                    {type: 'tag', icon: 'tags'},
-                    {type: 'category', icon: 'cat'},
+                    'header',
+                    'poi',
+                    'location',
+                    'tag',
+                    'category',
                 ],
                 menuItemType: null,
                 menuItemModalActive: false,

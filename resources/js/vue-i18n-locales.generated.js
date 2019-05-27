@@ -522,7 +522,14 @@ export default {
                 "description": "Description",
                 "image": "Image",
                 "type": "Type",
-                "color": "Color",
+                "stroke": "Stroke",
+                "stroke_type": "Type",
+                "stroke_color": "Color",
+                "stroke_width": "Width",
+                "stroke_opacity": "Opacity",
+                "fill": "Fill",
+                "fill_color": "Color",
+                "fill_opacity": "Opacity",
                 "category": "Category",
                 "tags": "Tags"
             }
