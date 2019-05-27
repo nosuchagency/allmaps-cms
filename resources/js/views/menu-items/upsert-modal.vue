@@ -14,6 +14,9 @@
                                       :class="{'is-error' : form.errors.has('name')}">
                             <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
+                        <el-form-item :label="$t('menu_items.attributes.shown')">
+                                <el-checkbox v-model="form.shown"></el-checkbox>
+                        </el-form-item>
                         <template v-if="type === 'poi'">
                             <el-form-item :label="$t('menu_items.attributes.poi')"
                                           :class="{'is-error' : form.errors.has('poi')}">
@@ -136,6 +139,7 @@
                 form: new Form({
                     type: this.type,
                     name: this.item ? this.item.name : null,
+                    shown : this.item ? !!this.item.shown : false,
                     [this.type]: this.item ? this.item.menuable : null,
                     menu: this.menu
                 }),

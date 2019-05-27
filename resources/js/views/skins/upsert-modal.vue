@@ -32,9 +32,9 @@
                             </el-form-item>
                         </template>
                         <el-form-item>
-                            <el-checkbox v-model="mobile">Mobile</el-checkbox>
-                            <el-checkbox v-model="tablet">Tablet</el-checkbox>
-                            <el-checkbox v-model="desktop">Desktop</el-checkbox>
+                            <el-checkbox v-model="form.mobile">Mobile</el-checkbox>
+                            <el-checkbox v-model="form.tablet">Tablet</el-checkbox>
+                            <el-checkbox v-model="form.desktop">Desktop</el-checkbox>
                         </el-form-item>
                     </el-tab-pane>
                 </el-tabs>

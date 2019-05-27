@@ -55,6 +55,7 @@ export default {
                 "id": "ID",
                 "name": "Name",
                 "order": "Order",
+                "shown": "Shown",
                 "poi": "Poi",
                 "location": "Location",
                 "tag": "Tag",
