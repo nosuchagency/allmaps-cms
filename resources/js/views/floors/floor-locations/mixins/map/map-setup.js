@@ -87,7 +87,7 @@ let mapSetup = {
                 case 'fixture':
                     return new L.Fixture(location);
                 case 'poi':
-                    if (location.poi.type === 'area') {
+                    if (location.locatable.type === 'area') {
                         return new L.PoiArea(location);
                     }
                     return new L.PoiPoint(location);

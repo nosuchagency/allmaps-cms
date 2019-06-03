@@ -178,23 +178,28 @@
                 } finally {
                     this.loading = false;
                 }
-            },
+            }
+            ,
             addItem(item) {
                 this.$router.push('/' + this.resource + '/' + item.id);
-            },
+            }
+            ,
             openUpsertModal() {
                 this.upsertModalVisible = true;
-            },
+            }
+            ,
             closeUpsertModal() {
                 this.upsertModalVisible = false;
-            },
+            }
+            ,
         },
         computed: {
             text() {
                 let name = this.selectedItems.length > 1 ? this.$t('places.plural') : this.$t('places.singular');
 
                 return this.$t('general.actions.delete', {name});
-            },
+            }
+            ,
             tableItems() {
                 if (!this.items) {
                     return [];
@@ -203,7 +208,8 @@
                 return this.items.data;
             }
         }
-    };
+    }
+    ;
 </script>
 
 <style lang="scss" scoped>

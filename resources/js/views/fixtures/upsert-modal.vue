@@ -30,13 +30,13 @@
                                             @image:removed="form.image = null">
                             </image-uploader>
                         </el-form-item>
-                        <el-form-item :label="$t('components.attributes.image_width')"
+                        <el-form-item :label="$t('fixtures.attributes.image_width')"
                                       :class="{'is-error' : form.errors.has('image_width')}">
                             <el-input-number v-model="form.image_width"
                                              :min="0">
                             </el-input-number>
                         </el-form-item>
-                        <el-form-item :label="$t('components.attributes.image_height')"
+                        <el-form-item :label="$t('fixtures.attributes.image_height')"
                                       :class="{'is-error' : form.errors.has('image_height')}">
                             <el-input-number v-model="form.image_height"
                                              :min="0">

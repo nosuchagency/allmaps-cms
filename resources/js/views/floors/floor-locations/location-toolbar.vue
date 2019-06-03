@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    import locationModal from './location-modal';
+    import locationModal from '../../locations/upsert-modal';
 
     export default {
         components: {
@@ -75,7 +75,7 @@
 
                 try {
                     let coordinates = this.location.getCoordinates();
-                    const {data} = await this.$axios.put('/locations/' + this.location.getId(), {coordinates});
+                    const {data} = await this.$axios.put(`/locations/${this.location.getId()}`, {coordinates});
                     this.updateLocation(data);
                 } catch (error) {
                     console.log(error);

@@ -1,3 +1,5 @@
+import {lineString, bezierSpline} from '@turf/turf';
+
 export default {
     getStructure() {
         return this.structure;
@@ -64,8 +66,8 @@ export default {
         return this.structure.markers;
     },
     bezierSpline(coordinates) {
-        let line = turf.lineString(coordinates.map(x => [x.lat, x.lng]));
-        let curved = turf.bezierSpline(line);
+        let line = lineString(coordinates.map(x => [x.lat, x.lng]));
+        let curved = bezierSpline(line);
 
         return curved.geometry.coordinates;
     },
@@ -101,7 +103,8 @@ export default {
             opacity: this.getStrokeOpacity(),
             fill: this.getFill(),
             fillColor: this.getFillColor(),
-            fillOpacity: this.getFillOpacity()
+            fillOpacity: this.getFillOpacity(),
+            dashArray: this.getStrokeType() === 'dashed' ? '5,10' : null,
         }
     }
 }

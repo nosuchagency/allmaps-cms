@@ -16,7 +16,7 @@
                                            value-key="id"
                                            placeholder="Choose Beacon"
                                            ref="select">
-                                    <el-option v-for="item in $lodash.differenceWith(items, beacons, (one, two) => {
+                                    <el-option v-for="item in diffWith(items, beacons, (one, two) => {
                                                     return item ? (item.id !== one.id && one.id === two.id) : one.id === two.id;
                                                 })"
                                                :key="item.id"
@@ -65,6 +65,7 @@
 
 <script>
     import Form from '../../utils/Form';
+    import {differenceWith} from 'lodash';
 
     export default {
         props: {
@@ -105,6 +106,11 @@
             },
             closeModal() {
                 this.$emit('beacon-modal:close');
+            }
+        },
+        computed: {
+            diffWith() {
+                return differenceWith;
             }
         }
     }

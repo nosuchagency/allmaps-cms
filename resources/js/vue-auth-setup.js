@@ -18,7 +18,4 @@ Vue.use(require('@websanova/vue-auth'), {
     authRedirect: {path: '/login'},
     forbiddenRedirect: {name: '403'},
     notFoundRedirect: {name: '404'},
-    parseUserData(data) {
-        return data;
-    }
 });

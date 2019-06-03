@@ -27,9 +27,7 @@ let routes = [
 ];
 
 let context = require.context('./routes', true, /\.js$/);
-context.keys().forEach(function (key) {
-    routes = routes.concat(context(key))
-});
+context.keys().forEach(key => routes = routes.concat(context(key).default));
 
 export default new VueRouter({
     scrollBehavior(to, from, savedPosition) {

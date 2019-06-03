@@ -47,7 +47,7 @@
 </template>
 
 <script>
-    import structureModal from './structure-modal';
+    import structureModal from '../../structures/upsert-modal';
 
     export default {
         components: {
@@ -82,7 +82,7 @@
                 try {
                     let coordinates = this.structure.getCoordinates();
                     let markers = this.structure.getMarkers();
-                    const {data} = await this.$axios.put('/structures/' + this.structure.getId(), {
+                    const {data} = await this.$axios.put(`/structures/${this.structure.getId()}`, {
                         coordinates,
                         markers
                     });

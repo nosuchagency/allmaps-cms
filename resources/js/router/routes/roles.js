@@ -1,10 +1,19 @@
-module.exports = [
+import Vue from 'vue';
+
+export default [
     {
         path: '/roles',
         name: 'roles-index',
         component: require('../../views/roles'),
         meta: {
             auth: true
+        },
+        beforeEnter: (to, from, next) => {
+            if (Vue.auth.user().hasPermissionTo('roles.read')) {
+                next();
+            } else {
+                next({name: '403'});
+            }
         }
     },
     {
@@ -14,6 +23,13 @@ module.exports = [
         props: true,
         meta: {
             auth: true
+        },
+        beforeEnter: (to, from, next) => {
+            if (Vue.auth.user().hasPermissionTo('roles.read')) {
+                next();
+            } else {
+                next({name: '403'});
+            }
         }
     }
 ];

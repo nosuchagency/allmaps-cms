@@ -10,7 +10,7 @@ let PoiArea = {
                     this.location = location;
                     this.unsavedChanges = false;
 
-                    L.Polygon.prototype.initialize.call(this, this.location.coordinates || [], location.poi);
+                    L.Polygon.prototype.initialize.call(this, this.location.coordinates || [], this.getAttributes());
 
                     this.activateEventListeners();
                 },

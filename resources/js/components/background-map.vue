@@ -13,7 +13,7 @@
             this.map = new L.Map('map', {
                 center: new L.LatLng(55.669712, 12.532526),
                 zoom: 18,
-                zoomControl : false
+                zoomControl: false
             });
 
             L.gridLayer

@@ -56,7 +56,7 @@
                                      align="center">
                         <template slot-scope="scope">
                             {{scope.row.beacons.length}} /
-                            {{$lodash.sumBy(scope.row.beacons, ({rules}) => { return rules.length })}}
+                            {{sumUp(scope.row.beacons, ({rules}) => rules.length )}}
                         </template>
                     </el-table-column>
                     <el-table-column :label="$t('containers.attributes.category')"
@@ -116,6 +116,7 @@
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
     import QueryParams from 'js/utils/QueryParams';
+    import {sumBy} from 'lodash';
 
     export default {
         mixins: [multipleSelection],
@@ -189,6 +190,9 @@
                 }
 
                 return this.items.data;
+            },
+            sumUp() {
+                return sumBy;
             }
         }
     };

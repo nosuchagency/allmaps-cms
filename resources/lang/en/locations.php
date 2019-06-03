@@ -22,6 +22,8 @@ return [
         'phone' => 'Phone',
         'email' => 'Email',
         'search_activated' => 'Search Activated',
-        'search_text' => 'Search Text'
+        'search_text' => 'Search Text',
+        'category' => 'Category',
+        'tags' => 'Tags'
     ]
 ];

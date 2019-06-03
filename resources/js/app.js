@@ -24,8 +24,6 @@ require('./leaflet-icon-fix');
 require('./sentry-setup');
 require('./axios-setup');
 
-Vue.prototype.$lodash = require('lodash');
-
 const files = require.context('./components/global', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)));
 
@@ -34,13 +32,11 @@ Vue.config.productionTip = false;
 
 require('./vue-auth-setup');
 
-import app from './app.vue';
+import App from './App.vue';
 
 new Vue({
     i18n,
     store,
     router,
-    components: {
-        app
-    }
+    render: h => h(App)
 }).$mount('#app');

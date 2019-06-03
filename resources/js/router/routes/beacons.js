@@ -1,10 +1,19 @@
-module.exports = [
+import Vue from 'vue';
+
+export default [
     {
         path: '/beacons',
         name: 'beacons-index',
         component: require('../../views/beacons'),
         meta: {
             auth: true
+        },
+        beforeEnter: (to, from, next) => {
+            if (Vue.auth.user().hasPermissionTo('beacons.read')) {
+                next();
+            } else {
+                next({name: '403'});
+            }
         }
     },
     {
@@ -14,6 +23,13 @@ module.exports = [
         props: true,
         meta: {
             auth: true
+        },
+        beforeEnter: (to, from, next) => {
+            if (Vue.auth.user().hasPermissionTo('beacons.read')) {
+                next();
+            } else {
+                next({name: '403'});
+            }
         }
     }
 ];

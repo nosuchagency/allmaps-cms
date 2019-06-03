@@ -1,10 +1,19 @@
-module.exports = [
+import Vue from 'vue';
+
+export default [
     {
         path: '/places',
         name: 'places-index',
         component: require('../../views/places'),
         meta: {
             auth: true
+        },
+        beforeEnter: (to, from, next) => {
+            if (Vue.auth.user().hasPermissionTo('places.read')) {
+                next();
+            } else {
+                next({name: '403'});
+            }
         }
     },
     {
@@ -14,6 +23,13 @@ module.exports = [
         props: true,
         meta: {
             auth: true
+        },
+        beforeEnter: (to, from, next) => {
+            if (Vue.auth.user().hasPermissionTo('places.read')) {
+                next();
+            } else {
+                next({name: '403'});
+            }
         }
     }
 ];

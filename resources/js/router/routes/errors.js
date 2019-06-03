@@ -1,4 +1,4 @@
-module.exports = [
+export default [
     {
         path: '/401',
         name: '401',

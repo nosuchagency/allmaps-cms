@@ -298,6 +298,41 @@
                             </el-col>
                         </el-row>
                     </el-tab-pane>
+                    <el-tab-pane label="Taxonomy" name="taxonomies">
+                        <br>
+                        <el-form-item :label="$t('locations.attributes.category')"
+                                      :class="{'is-error' : form.errors.has('category')}">
+                            <fetch-items url="/categories">
+                                <el-select v-model="form.category"
+                                           slot-scope="{items, loading}"
+                                           placeholder="Select"
+                                           clearable
+                                           value-key="id">
+                                    <el-option v-for="item in items"
+                                               :key="item.id"
+                                               :label="item.name"
+                                               :value="item">
+                                    </el-option>
+                                </el-select>
+                            </fetch-items>
+                        </el-form-item>
+                        <el-form-item :label="$t('locations.attributes.tags')"
+                                      :class="{'is-error' : form.errors.has('tags')}">
+                            <fetch-items url="/tags">
+                                <el-select v-model="form.tags"
+                                           slot-scope="{items, loading}"
+                                           placeholder="Select"
+                                           multiple
+                                           value-key="id">
+                                    <el-option v-for="item in items"
+                                               :key="item.id"
+                                               :label="item.name"
+                                               :value="item">
+                                    </el-option>
+                                </el-select>
+                            </fetch-items>
+                        </el-form-item>
+                    </el-tab-pane>
                 </el-tabs>
             </el-form>
             <span slot="footer">
@@ -332,7 +367,7 @@
 </template>
 
 <script>
-    import Form from '../../../utils/Form';
+    import Form from '../../utils/Form';
     import imageUploader from 'js/components/image-uploader';
 
     export default {
@@ -385,14 +420,16 @@
 
                     activated_at: this.location.activated_at,
                     publish_at: this.location.publish_at,
-                    unpublish_at: this.location.unpublish_at
+                    unpublish_at: this.location.unpublish_at,
+                    category: this.location.category,
+                    tags: this.location.tags,
                 }),
                 image: this.item && this.item.image ? [{source: this.item.image, options: {type: 'local'}}] : [],
             }
         },
         methods: {
             update() {
-                this.form.put('/locations/' + this.location.id)
+                this.form.put(`/locations/${this.location.id}`)
                     .then(response => {
                         this.$emit('location-modal:update', response);
                         this.closeModal();
@@ -400,7 +437,7 @@
                     .catch(error => console.log(error));
             },
             remove() {
-                this.form.delete('/locations/' + this.location.id)
+                this.form.delete(`/locations/${this.location.id}`)
                     .then(response => this.$emit('location-modal:remove', this.item))
                     .catch(error => console.log(error));
             },

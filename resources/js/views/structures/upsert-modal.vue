@@ -50,7 +50,7 @@
 </template>
 
 <script>
-    import Form from '../../../utils/Form';
+    import Form from '../../utils/Form';
 
     export default {
         props: {
@@ -68,7 +68,7 @@
         },
         methods: {
             update() {
-                this.form.put('/structures/' + this.structure.id)
+                this.form.put(`/structures/${this.structure.id}`)
                     .then(response => {
                         this.$emit('structure-modal:update', response);
                         this.closeModal();
@@ -76,7 +76,7 @@
                     .catch(error => console.log(error));
             },
             remove() {
-                this.form.delete('/structures/' + this.structure.id)
+                this.form.delete(`/structures/${this.structure.id}`)
                     .then(response => this.$emit('structure-modal:remove', this.item))
                     .catch(error => console.log(error));
             },
