@@ -80,12 +80,8 @@
                 this.saving = true;
 
                 try {
-                    let coordinates = this.structure.getCoordinates();
-                    let markers = this.structure.getMarkers();
-                    const {data} = await this.$axios.put(`/structures/${this.structure.getId()}`, {
-                        coordinates,
-                        markers
-                    });
+                    let payload = this.structure.getPayload();
+                    const {data} = await this.$axios.put(`/structures/${this.structure.getId()}`, payload);
                     this.updateStructure(data);
                 } catch (error) {
                     console.log(error);

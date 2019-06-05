@@ -43,6 +43,12 @@ let Circle = {
                 },
                 addMarkers() {
                     self.addMarker(this.getLatLng());
+                },
+                getPayload() {
+                    return {
+                        coordinates: this.getCoordinates(),
+                        radius: this.getRadius()
+                    }
                 }
             }
         });

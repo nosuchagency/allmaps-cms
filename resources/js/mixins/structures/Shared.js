@@ -13,7 +13,7 @@ export default {
     getName() {
         return this.structure.name;
     },
-    getRadius() {
+    getCircleRadius() {
         return this.structure.radius;
     },
     getShape() {
@@ -96,7 +96,7 @@ export default {
     },
     getAttributes() {
         return {
-            radius: this.getRadius(),
+            radius: this.getCircleRadius(),
             stroke: this.getStroke(),
             color: this.getStrokeColor(),
             weight: this.getStrokeWidth(),
@@ -105,6 +105,12 @@ export default {
             fillColor: this.getFillColor(),
             fillOpacity: this.getFillOpacity(),
             dashArray: this.getStrokeType() === 'dashed' ? '5,10' : null,
+        }
+    },
+    getPayload() {
+        return {
+            coordinates: this.getCoordinates(),
+            markers: this.getMarkers()
         }
     }
 }

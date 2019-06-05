@@ -65,7 +65,7 @@
 
 <script>
     import Form from '../../utils/Form';
-    import {differenceWith} from 'lodash';
+    import differenceWith from 'lodash/differenceWith';
 
     export default {
         props: {

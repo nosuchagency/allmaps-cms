@@ -96,6 +96,7 @@
 <script>
     import upsertModal from './upsert-modal';
     import pieChart from '../../components/PieChart';
+    import sumBy from 'lodash/sumBy';
 
     export default {
         components: {
@@ -163,12 +164,12 @@
                                 '#7647a2'
                             ],
                             data: [
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'web') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'image') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'video') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'file') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'gallery') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'text') : 0
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'web') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'image') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'video') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'file') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'gallery') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'text') : 0
                             ]
                         }
                     ]

@@ -49,7 +49,11 @@ let Polyline = {
                     return null;
                 },
                 addMarkers() {
-                    this.getCoordinates().forEach(self.addMarker);
+                    if (this.isCurved()) {
+                        this.getMarkers().forEach(self.addMarker);
+                    } else {
+                        this.getCoordinates().forEach(self.addMarker);
+                    }
                 }
             }
         });

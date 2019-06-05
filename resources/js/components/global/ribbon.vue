@@ -78,6 +78,8 @@
 </template>
 
 <script>
+    import debounce from 'lodash/debounce';
+
     export default {
         props: {
             selections: {
@@ -113,7 +115,7 @@
             }
         },
         created() {
-            this.throttledSearch = _.debounce(($event) => {
+            this.throttledSearch = debounce(($event) => {
                 this.$emit('ribbon:search', $event);
             }, 500)
         },

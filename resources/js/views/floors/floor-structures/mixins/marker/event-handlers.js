@@ -45,10 +45,7 @@ let markerEvents = {
             this.currentStructure.setLatLngs(latlngs);
         },
         dragEndHandler(e) {
-            setTimeout(() => {
-                this.map.on('click', this.mapClickHandler);
-            }, 100);
-
+            setTimeout(() => this.map.on('click', this.mapClickHandler), 100);
             this.polylineLatlng = null;
         }
     }

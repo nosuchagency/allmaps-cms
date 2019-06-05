@@ -116,7 +116,7 @@
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
     import QueryParams from 'js/utils/QueryParams';
-    import {sumBy} from 'lodash';
+    import sumBy from 'lodash/sumBy';
 
     export default {
         mixins: [multipleSelection],
