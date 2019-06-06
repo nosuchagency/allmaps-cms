@@ -82,6 +82,11 @@
                         </router-link>
                     </el-col>
                 </el-row>
+                <el-row type="flex" justify="center">
+                    <el-col :span="4">
+                        <img src="/images/wip.gif">
+                    </el-col>
+                </el-row>
             </div>
 
         </template>
