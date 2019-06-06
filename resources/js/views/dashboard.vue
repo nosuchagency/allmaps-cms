@@ -83,8 +83,9 @@
                     </el-col>
                 </el-row>
                 <el-row type="flex" justify="center">
-                    <el-col :span="4">
-                        <img src="/images/wip.gif">
+                    <el-col :span="6">
+                        <img src="/images/wip.gif"
+                             style="width: 100%;">
                     </el-col>
                 </el-row>
             </div>
