@@ -57,7 +57,7 @@
                                      :label="$t('components.attributes.stroke_width')"
                                      sortable>
                     </el-table-column>
-                    <el-table-column property="color"
+                    <el-table-column property="stroke_color"
                                      :label="$t('components.attributes.stroke_color')"
                                      sortable>
                     </el-table-column>
