@@ -140,7 +140,10 @@
             options() {
                 return {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: 'right'
+                    }
                 };
             },
             styles() {
