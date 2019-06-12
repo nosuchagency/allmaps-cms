@@ -95,7 +95,7 @@
 
 <script>
     import upsertModal from './upsert-modal';
-    import pieChart from '../../components/Charts/PieChart';
+    import pieChart from 'js/components/Charts/PieChart';
     import sumBy from 'lodash/sumBy';
 
     export default {
