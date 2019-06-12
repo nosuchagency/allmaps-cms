@@ -187,8 +187,8 @@
     import beaconModal from './beacon-modal';
     import ruleModal from '../rules/upsert-modal';
     import upsertModal from './upsert-modal';
-    import pieChart from 'js/components/Charts/PieChart';
-    import barChart from 'js/components/Charts/BarChart';
+    import pieChart from 'js/components/charts/PieChart';
+    import barChart from 'js/components/charts/BarChart';
     import sumBy from 'lodash/sumBy';
 
     export default {
