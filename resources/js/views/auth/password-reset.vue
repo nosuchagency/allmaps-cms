@@ -6,8 +6,6 @@
                     <h3 class="title">Beacon Bacon</h3>
                 </div>
                 <el-form :model="form"
-                         autoComplete="on"
-                         label-position="left"
                          @submit.native.prevent>
                     <el-form-item :class="{'is-error' : form.errors.has('email')}">
                         <span class="svg-container">
@@ -17,7 +15,6 @@
                                   name="email"
                                   type="text"
                                   readonly
-                                  autoComplete="on"
                                   placeholder="email">
                         </el-input>
                         <div class="el-form-item__error" v-if="form.errors.has('email')">
@@ -31,7 +28,6 @@
                         <el-input v-model="form.password"
                                   name="password"
                                   type="password"
-                                  autoComplete="on"
                                   placeholder="password">
                         </el-input>
                         <div class="el-form-item__error" v-if="form.errors.has('password')">
@@ -47,7 +43,6 @@
                                   name="password_confirmation"
                                   type="password"
                                   @keyup.enter.native="submit"
-                                  autoComplete="on"
                                   placeholder="confirm password">
                         </el-input>
                         <div class="el-form-item__error" v-if="form.errors.has('password_confirmation')">

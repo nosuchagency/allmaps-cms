@@ -1,22 +1,25 @@
 <template>
     <el-form :model="fields"
-             status-icon
              label-width="120px"
              @keydown.native="form.errors.clear($event.target.name)">
         <el-tabs v-model="currentTab">
-            <el-tab-pane label="Video" name="video">
+            <el-tab-pane label="Text" name="text">
+                <br>
                 <el-form-item label="Name"
                               :class="{'is-error' : form.errors.has('name')}">
                     <el-input v-model="fields.name">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="YouTube URL"
-                              :class="{'is-error' : form.errors.has('yt_url')}">
-                    <el-input v-model="fields.yt_url">
+                <el-form-item label="Text"
+                              :class="{'is-error' : form.errors.has('text')}">
+                    <el-input type="textarea"
+                              v-model="fields.text"
+                              :rows="3">
                     </el-input>
                 </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="Taxonomy" name="taxonomies">
+                <br>
                 <el-form-item :label="$t('places.attributes.category')"
                               :class="{'is-error' : form.errors.has('category')}">
                     <fetch-items url="/categories">
@@ -64,7 +67,7 @@
         data() {
             return {
                 fields: this.getFields(),
-                currentTab: 'video',
+                currentTab: 'text',
             };
         },
         watch: {
@@ -83,8 +86,8 @@
             getFields() {
                 return {
                     name: this.item ? this.item.name : '',
-                    type: 'video',
-                    yt_url: this.item ? this.item.yt_url : '',
+                    type: 'text',
+                    text: this.item ? this.item.text : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     folder: this.folder

@@ -12,6 +12,7 @@ return [
     'containers' => 'Content',
     'locations' => 'Locations',
     'user_management' => 'User Management',
+    'activities' => 'Activities',
     'users' => 'Users',
     'roles' => 'Roles',
     'tokens' => 'API Tokens',

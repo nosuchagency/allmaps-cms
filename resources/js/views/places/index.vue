@@ -25,14 +25,24 @@
         </template>
         <template slot="content">
             <div class="content">
-                <ribbon @ribbon:search="setFilter('search', $event)"
-                        @ribbon:category="setFilter('category', $event)"
-                        @ribbon:tag="setFilter('category', $event.join(','))"
-                        @ribbon:bulk-action="setBulkAction"
-                        @ribbon:apply="applyBulkAction"
-                        :selections="selectedItems"
-                        :bulk-actions="bulkActions"
-                        :selected-bulk-action="selectedBulkAction">
+                <ribbon>
+                    <bulk-actions :bulk-actions="bulkActions"
+                                  :selections="selectedItems"
+                                  @apply-bulk-action="applyBulkAction">
+                    </bulk-actions>
+                    <search-filter :offset="4"
+                                   :span="4"
+                                   @search="setFilter('search', $event)">
+                    </search-filter>
+                    <single-filter :span="4"
+                                   url="/categories"
+                                   placeholder="Choose Category"
+                                   @selection="setFilter('category', $event ? $event.id : '')">
+                    </single-filter>
+                    <multiple-filter url="/tags"
+                                     placeholder="Choose Tags"
+                                     @selection="setFilter('tags', $event.map(cat => cat.id).join(','))">
+                    </multiple-filter>
                 </ribbon>
                 <el-table :data="tableItems"
                           @row-click="$router.push({name: 'places-show', params: {id: $event.id}})"

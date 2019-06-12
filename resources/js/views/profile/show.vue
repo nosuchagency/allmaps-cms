@@ -51,7 +51,7 @@
                             <label>Activity</label>
                         </div>
                     </template>
-                    <el-table :data="item.actions"
+                    <el-table :data="item.activities"
                               :default-sort="{prop: 'name', order: 'ascending'}">
                         <el-table-column label="User">
                             <template slot-scope="scope">
@@ -95,7 +95,7 @@
 
 <script>
     import upsertModal from './upsert-modal';
-    import pieChart from '../../components/PieChart';
+    import pieChart from '../../components/Charts/PieChart';
     import sumBy from 'lodash/sumBy';
 
     export default {

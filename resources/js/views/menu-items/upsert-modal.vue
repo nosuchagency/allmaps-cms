@@ -4,7 +4,6 @@
         <el-dialog :visible="visible"
                    @close="closeModal">
             <el-form :model="form"
-                     status-icon
                      label-width="120px"
                      @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">

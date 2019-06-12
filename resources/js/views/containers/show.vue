@@ -187,8 +187,8 @@
     import beaconModal from './beacon-modal';
     import ruleModal from '../rules/upsert-modal';
     import upsertModal from './upsert-modal';
-    import pieChart from '../../components/PieChart';
-    import barChart from '../../components/BarChart';
+    import pieChart from '../../components/Charts/PieChart';
+    import barChart from '../../components/Charts/BarChart';
     import sumBy from 'lodash/sumBy';
 
     export default {
@@ -220,6 +220,7 @@
                 try {
                     const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
                     this.item = data;
+                    console.log(this.item);
                 } catch (error) {
                     console.log(error);
                 }
@@ -324,7 +325,7 @@
                     labels: this.item ? this.item.beacons.map(beacon => beacon.name) : [],
                     datasets: [
                         {
-                            data: this.item ? this.item.beacons.map(beacon => beacon.hits) : 0,
+                            data: this.item ? this.item.beacons.map(beacon => beacon.hits.length) : 0,
                         }
                     ]
                 };

@@ -70,6 +70,11 @@ let menuItems = {
                     border: true,
                     children: [
                         {
+                            title: this.$t('menu.activities'),
+                            icon: 'tasks',
+                            route: 'activities'
+                        },
+                        {
                             title: this.$t('menu.users'),
                             icon: 'users',
                             route: 'users'

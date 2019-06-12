@@ -4,61 +4,53 @@
             <toolbar>
                 <template slot="left">
                     <div class="title-icon-wrapper">
-                        <i class="fa fa-key title-icon"></i>
-                        <label>{{$t('tokens.plural')}}</label>
+                        <i class="fa fa-tasks title-icon"></i>
+                        <label>{{$t('activities.plural')}}</label>
                     </div>
-                </template>
-                <template slot="right">
-                    <el-tooltip effect="dark"
-                                :content="$t('general.actions.create', {name : $t('tokens.singular')})"
-                                placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('tokens.create')">
-                        <el-button type="primary"
-                                   size="small"
-                                   @click="openUpsertModal()"
-                                   circle>
-                            <i class="fa fa-plus"></i>
-                        </el-button>
-                    </el-tooltip>
                 </template>
             </toolbar>
         </template>
-
         <template slot="content">
             <div class="content">
                 <ribbon>
-                    <bulk-actions :bulk-actions="bulkActions"
-                                  :selections="selectedItems"
-                                  @apply-bulk-action="applyBulkAction">
-                    </bulk-actions>
-                    <search-filter :offset="4"
-                                   :span="4"
-                                   @search="setFilter('search', $event)">
-                    </search-filter>
                     <single-filter :span="4"
-                                   url="/categories"
-                                   placeholder="Choose Category"
-                                   @selection="setFilter('category', $event ? $event.id : '')">
+                                   :offset="16"
+                                   url="/users"
+                                   placeholder="Filter by user"
+                                   @selection="setFilter('user', $event ? $event.id : '')">
                     </single-filter>
-                    <multiple-filter url="/tags"
-                                     placeholder="Choose Tags"
-                                     @selection="setFilter('tags', $event.map(cat => cat.id).join(','))">
-                    </multiple-filter>
+                    <single-filter :span="4"
+                                   url="/tokens"
+                                   placeholder="Filter by token"
+                                   @selection="setFilter('token', $event ? $event.id : '')">
+                    </single-filter>
                 </ribbon>
                 <el-table :data="tableItems"
-                          @row-click="$router.push({name: 'tokens-show', params: {id: $event.id}})"
                           :default-sort="{prop: 'name', order: 'ascending'}"
                           @selection-change="handleSelectionChange">
-                    <el-table-column type="selection"
-                                     width="55"
-                                     align="center">
+                    <el-table-column label="User">
+                        <template slot-scope="scope">
+                            {{scope.row.causer.name}}
+                        </template>
                     </el-table-column>
-                    <el-table-column property="name"
-                                     :label="$t('tokens.attributes.name')"
-                                     sortable>
+                    <el-table-column label="Action">
+                        <template slot-scope="scope">
+                            <icon :resource="scope.row.description"></icon>
+                            {{scope.row.description}}
+                        </template>
                     </el-table-column>
-                    <el-table-column property="role"
-                                     :label="$t('tokens.attributes.role')">
+                    <el-table-column label="Resource">
+                        <template slot-scope="scope">
+                            <el-tooltip :content="scope.row.subject_type">
+                                <icon :resource="scope.row.subject_type"></icon>
+                            </el-tooltip>
+                            {{scope.row.subject_name}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="Time">
+                        <template slot-scope="scope">
+                            {{scope.row.time}} {{scope.row.date}}
+                        </template>
                     </el-table-column>
                     <template slot="empty">
                         <i class="fa fa-cog fa-spin loading-spinner" v-if="loading"></i>
@@ -83,17 +75,6 @@
                         </el-pagination>
                     </div>
                 </div>
-                <confirm-dialog :title="text"
-                                :message="$t('general.confirm')"
-                                @cancel="confirmDeleteVisible = false"
-                                @confirm="bulkRemove"
-                                :visible="confirmDeleteVisible">
-                </confirm-dialog>
-                <upsert-modal v-if="upsertModalVisible"
-                              :visible="upsertModalVisible"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:add="addItem">
-                </upsert-modal>
             </div>
         </template>
     </layout>
@@ -101,26 +82,19 @@
 
 <script>
     import multipleSelection from 'js/mixins/multiple-selection';
-    import upsertModal from './upsert-modal';
     import QueryParams from 'js/utils/QueryParams';
 
     export default {
         mixins: [multipleSelection],
-        components: {
-            upsertModal
-        },
         data() {
             return {
-                upsertModalVisible: false,
-                confirmDeleteVisible: false,
                 items: null,
                 loading: false,
-                resource: 'tokens',
+                resource: 'activities',
                 params: {
                     page: 1,
-                    search: '',
-                    category: '',
-                    tags: ''
+                    user: '',
+                    token: '',
                 }
             };
         },
@@ -152,23 +126,9 @@
                 } finally {
                     this.loading = false;
                 }
-            },
-            addItem(item) {
-                this.$router.push('/' + this.resource + '/' + item.id);
-            },
-            openUpsertModal() {
-                this.upsertModalVisible = true;
-            },
-            closeUpsertModal() {
-                this.upsertModalVisible = false;
             }
         },
         computed: {
-            text() {
-                let name = this.selectedItems.length > 1 ? this.$t('tokens.plural') : this.$t('tokens.singular');
-
-                return this.$t('general.actions.delete', {name});
-            },
             tableItems() {
                 if (!this.items) {
                     return [];
@@ -181,12 +141,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-table {
-        /deep/ &__row {
-            cursor: pointer;
-        }
-    }
-
     .pagination-container {
         margin: 25px 0;
         display: flex;

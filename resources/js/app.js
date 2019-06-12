@@ -24,7 +24,7 @@ require('./leaflet-icon-fix');
 require('./sentry-setup');
 require('./axios-setup');
 
-const files = require.context('./components/global', true, /\.vue$/i);
+const files = require.context('./components', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)));
 
 Vue.router = router;

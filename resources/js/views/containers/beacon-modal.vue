@@ -3,7 +3,6 @@
         <el-dialog :visible="visible"
                    :before-close="closeModal">
             <el-form :model="form"
-                     status-icon
                      @keydown.native="form.errors.clear($event.target.name)">
                 <el-tabs v-model="currentTab">
                     <el-tab-pane label="Beacon" name="beacon">

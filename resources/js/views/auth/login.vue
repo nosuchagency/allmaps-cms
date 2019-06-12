@@ -6,8 +6,6 @@
                     <h3 class="title">Beacon Bacon</h3>
                 </div>
                 <el-form :model="form"
-                         autoComplete="on"
-                         label-position="left"
                          @keydown.native="form.errors.clear($event.target.name)">
                     <el-form-item :class="{'is-error' : form.errors.has('email')}">
                         <span class="svg-container">
@@ -16,10 +14,10 @@
                         <el-input v-model="form.email"
                                   name="email"
                                   type="text"
-                                  autoComplete="on"
                                   placeholder="email">
                         </el-input>
-                        <div class="el-form-item__error" v-if="form.errors.has('email')">
+                        <div class="el-form-item__error"
+                             v-if="form.errors.has('email')">
                             {{form.errors.get('email')}}
                         </div>
                     </el-form-item>
@@ -32,7 +30,6 @@
                                   name="password"
                                   type="password"
                                   @keyup.enter.native="login"
-                                  autoComplete="on"
                                   placeholder="password">
                         </el-input>
                         <div class="el-form-item__error"
@@ -66,7 +63,6 @@
         data() {
             return {
                 busy: false,
-                validEmail: null,
                 error: false,
                 form: new Form({
                     email: '',

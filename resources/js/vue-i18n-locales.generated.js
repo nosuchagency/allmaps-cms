@@ -251,6 +251,7 @@ export default {
             "containers": "Content",
             "locations": "Locations",
             "user_management": "User Management",
+            "activities": "Activities",
             "users": "Users",
             "roles": "Roles",
             "tokens": "API Tokens",
@@ -341,6 +342,14 @@ export default {
                 "id": "ID",
                 "name": "Name",
                 "description": "Description"
+            }
+        },
+        "activities": {
+            "singular": "Activity",
+            "plural": "Activities",
+            "attributes": {
+                "id": "ID",
+                "name": "Name"
             }
         },
         "profile": {

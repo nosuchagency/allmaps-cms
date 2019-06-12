@@ -39,7 +39,7 @@
                             <label>Activity</label>
                         </div>
                     </template>
-                    <el-table :data="item.actions"
+                    <el-table :data="item.activities"
                               :default-sort="{prop: 'name', order: 'ascending'}">
                         <el-table-column label="Token">
                             <template slot-scope="scope">

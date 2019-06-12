@@ -1,19 +1,17 @@
 <template>
     <el-form :model="fields"
-             status-icon
              label-width="120px"
              @keydown.native="form.errors.clear($event.target.name)">
         <el-tabs v-model="currentTab">
-            <el-tab-pane label="Web" name="web">
+            <el-tab-pane label="Video" name="video">
                 <el-form-item label="Name"
                               :class="{'is-error' : form.errors.has('name')}">
                     <el-input v-model="fields.name">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="Url"
-                              :class="{'is-error' : form.errors.has('url')}">
-                    <el-input v-model="fields.url"
-                              placeholder="https://domain.com">
+                <el-form-item label="YouTube URL"
+                              :class="{'is-error' : form.errors.has('yt_url')}">
+                    <el-input v-model="fields.yt_url">
                     </el-input>
                 </el-form-item>
             </el-tab-pane>
@@ -65,7 +63,7 @@
         data() {
             return {
                 fields: this.getFields(),
-                currentTab: 'web'
+                currentTab: 'video',
             };
         },
         watch: {
@@ -84,8 +82,8 @@
             getFields() {
                 return {
                     name: this.item ? this.item.name : '',
-                    type: 'web',
-                    url: this.item ? this.item.url : '',
+                    type: 'video',
+                    yt_url: this.item ? this.item.yt_url : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     folder: this.folder

@@ -1,6 +1,5 @@
 <template>
     <el-form :model="fields"
-             status-icon
              label-width="120px"
              @keydown.native="form.errors.clear($event.target.name)">
         <el-tabs v-model="currentTab">

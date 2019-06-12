@@ -24,16 +24,16 @@
             </toolbar>
         </template>
         <template slot="content">
-
             <div class="content">
-                <ribbon @ribbon:search="setFilter('search', $event)"
-                        @ribbon:bulk-action="setBulkAction"
-                        @ribbon:apply="applyBulkAction"
-                        :selections="selectedItems"
-                        :bulk-actions="bulkActions"
-                        :selected-bulk-action="selectedBulkAction"
-                        :category-filter-activated="false"
-                        :tags-filter-activated="false">
+                <ribbon>
+                    <bulk-actions :bulk-actions="bulkActions"
+                                  :selections="selectedItems"
+                                  @apply-bulk-action="applyBulkAction">
+                    </bulk-actions>
+                    <search-filter :offset="14"
+                                   :span="4"
+                                   @search="setFilter('search', $event)">
+                    </search-filter>
                 </ribbon>
                 <el-table :data="tableItems"
                           @row-click="$router.push({name: 'menus-show', params: {id: $event.id}})"

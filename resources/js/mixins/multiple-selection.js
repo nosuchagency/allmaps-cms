@@ -6,25 +6,17 @@ let multipleSelection = {
             bulkActions: [
                 {value: null, label: 'Bulk Actions'},
                 {value: 'delete', label: 'Delete'}
-            ],
-            selectedBulkAction: null,
+            ]
         }
     },
     methods: {
         handleSelectionChange(items) {
             this.selectedItems = items;
-
-            if (items.length === 0) {
-                this.selectedBulkAction = null;
-            }
         },
         applyBulkAction(bulkAction) {
-            if (bulkAction.value === 'delete') {
+            if (bulkAction === 'delete') {
                 this.confirmDeleteVisible = true;
             }
-        },
-        setBulkAction(bulkAction) {
-            this.selectedBulkAction = bulkAction;
         },
         async bulkRemove() {
             if (this.selectedItems.length < 1) {

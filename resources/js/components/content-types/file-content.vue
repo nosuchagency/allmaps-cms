@@ -1,26 +1,16 @@
 <template>
     <el-form :model="fields"
-             status-icon
              label-width="120px"
              @keydown.native="form.errors.clear($event.target.name)">
         <el-tabs v-model="currentTab">
-            <el-tab-pane label="Text" name="text">
-                <br>
+            <el-tab-pane label="File" name="file">
                 <el-form-item label="Name"
                               :class="{'is-error' : form.errors.has('name')}">
                     <el-input v-model="fields.name">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="Text"
-                              :class="{'is-error' : form.errors.has('text')}">
-                    <el-input type="textarea"
-                              v-model="fields.text"
-                              :rows="3">
-                    </el-input>
-                </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="Taxonomy" name="taxonomies">
-                <br>
                 <el-form-item :label="$t('places.attributes.category')"
                               :class="{'is-error' : form.errors.has('category')}">
                     <fetch-items url="/categories">
@@ -68,7 +58,7 @@
         data() {
             return {
                 fields: this.getFields(),
-                currentTab: 'text',
+                currentTab: 'file'
             };
         },
         watch: {
@@ -87,8 +77,7 @@
             getFields() {
                 return {
                     name: this.item ? this.item.name : '',
-                    type: 'text',
-                    text: this.item ? this.item.text : '',
+                    type : 'file',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     folder: this.folder
@@ -96,6 +85,15 @@
             },
             syncFields() {
                 this.$emit('sync-fields', this.fields);
+            },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePreview(file) {
+                console.log(file);
+            },
+            handleChange(file, fileList) {
+                console.log(fileList);
             }
         }
     };

@@ -6,8 +6,6 @@
                     <h3 class="title">Beacon Bacon</h3>
                 </div>
                 <el-form :model="form"
-                         autoComplete="on"
-                         label-position="left"
                          @submit.native.prevent
                          @keydown.native="form.errors.clear($event.target.name)">
                     <el-form-item class="last-field"
@@ -19,7 +17,6 @@
                                   name="email"
                                   type="text"
                                   @keyup.enter.native="submit"
-                                  autoComplete="on"
                                   placeholder="email">
                         </el-input>
                         <div class="el-form-item__error" v-if="form.errors.has('email')">
