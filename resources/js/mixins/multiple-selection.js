@@ -26,7 +26,7 @@ let multipleSelection = {
             this.bulkRemoving = true;
 
             try {
-                await this.$axios.post('/' + this.resource + '/bulk-destroy', {items: this.selectedItems});
+                await this.$axios.post(`/${this.resource}/bulk-destroy`, {items: this.selectedItems});
                 this.$router.go('/' + this.resource);
             } catch (error) {
                 console.log(error);

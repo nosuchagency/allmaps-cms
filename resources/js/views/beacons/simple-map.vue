@@ -18,9 +18,7 @@
         mounted() {
             this.mapId = this.generateMapId();
 
-            setTimeout(() => {
-                this.setupMap();
-            }, 1);
+            setTimeout(() => this.setupMap(), 1);
         },
         methods: {
             setupMap() {

@@ -41,7 +41,7 @@
                             </div>
                         </template>
                         <simple-map v-if="item.locations.length > 0"
-                                    :latitudes="this.item.locations[0].coordinates.lat"
+                                    :latitude="this.item.locations[0].coordinates.lat"
                                     :longitude="this.item.locations[0].coordinates.lng">
                         </simple-map>
                         <div class="no-location" v-else>
