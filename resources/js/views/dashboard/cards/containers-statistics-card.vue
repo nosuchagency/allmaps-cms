@@ -55,6 +55,7 @@
             return {
                 upsertModalVisible: false,
                 loading: false,
+                items: null
             }
         },
         created() {

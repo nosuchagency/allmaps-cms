@@ -11,14 +11,23 @@
                 </el-button>
             </div>
         </template>
-        <div :class="{'has-activities' : hasActivities}">
-            {{hasActivities
-            ? 'This is what you worked on last - maybe a place to continue?'
-            : 'You have no recent activity'}}
-        </div>
-        <template v-for="activity in activities">
-            <activity :activity="activity"></activity>
-            <br>
+        <template v-if="loading">
+            <div class="loading-container">
+                <i class="fa fa-cog fa-spin loading-spinner"
+                   v-if="loading">
+                </i>
+            </div>
+        </template>
+        <template v-else>
+            <div :class="{'has-activities' : hasActivities}">
+                {{hasActivities
+                ? 'This is what you worked on last - maybe a place to continue?'
+                : 'You have no recent activity'}}
+            </div>
+            <template v-for="activity in activities">
+                <activity :activity="activity"></activity>
+                <br>
+            </template>
         </template>
     </el-card>
 </template>
@@ -32,7 +41,25 @@
         },
         data() {
             return {
-                events: ['created', 'updated', 'deleted']
+                loading: false,
+                events: ['created', 'updated', 'deleted'],
+                user: null
+            }
+        },
+        created() {
+            this.getUser();
+        },
+        methods: {
+            async getUser() {
+                try {
+                    this.loading = true;
+                    const {data} = await this.$axios.get('/profile');
+                    this.user = data;
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    this.loading = false;
+                }
             }
         },
         computed: {
@@ -40,7 +67,7 @@
                 return this.activities.length > 0;
             },
             activities() {
-                let activities = this.$auth.user().activities.filter(({description}) => this.events.includes(description));
+                let activities = this.user.activities.filter(({description}) => this.events.includes(description));
                 return activities.slice(0, 3);
             }
         }
