@@ -19,13 +19,10 @@
             </div>
         </template>
         <template v-else>
-            <div style="margin-bottom: 15px;">
-                <template v-if="activities.length > 0">
-                    This is the latest changes in the system
-                </template>
-                <template v-else>
-                    No activity yet
-                </template>
+            <div :class="{'has-activities' : hasActivities}">
+                {{hasActivities
+                ? 'This is the latest changes in the system'
+                : 'No activity yet'}}
             </div>
             <template v-for="activity in activities">
                 <activity :activity="activity"></activity>
@@ -65,17 +62,22 @@
             },
         },
         computed: {
+            userId() {
+                return this.$auth.user().id;
+            },
+            hasActivities() {
+                return this.activities.length > 0;
+            },
             activities() {
                 let activities = this.items.filter(({causer, description}) => causer.id !== this.userId && this.events.includes(description));
                 return activities.splice(0, 10);
-            },
-            userId() {
-                return this.$auth.user().id;
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-
+    .has-activities {
+        margin-bottom: 15px;
+    }
 </style>

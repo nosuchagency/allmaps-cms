@@ -11,13 +11,10 @@
                 </el-button>
             </div>
         </template>
-        <div style="margin-bottom: 15px;">
-            <template v-if="activities.length > 0">
-                This is what you worked on last - maybe a place to continue?
-            </template>
-            <template v-else>
-                You have no recent activity
-            </template>
+        <div :class="{'has-activities' : hasActivities}">
+            {{hasActivities
+            ? 'This is what you worked on last - maybe a place to continue?'
+            : 'You have no recent activity'}}
         </div>
         <template v-for="activity in activities">
             <activity :activity="activity"></activity>
@@ -39,6 +36,9 @@
             }
         },
         computed: {
+            hasActivities() {
+                return this.activities.length > 0;
+            },
             activities() {
                 let activities = this.$auth.user().activities.filter(({description}) => this.events.includes(description));
                 return activities.slice(0, 3);
@@ -48,5 +48,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+    .has-activities {
+        margin-bottom: 15px;
+    }
 </style>
