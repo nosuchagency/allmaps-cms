@@ -87,7 +87,8 @@
                                               :class="{'is-error' : form.errors.has('date_from')}">
                                     <el-date-picker v-model="form.date_from"
                                                     type="date"
-                                                    format="dd-MM-yyyy">
+                                                    format="dd-MM-yyyy"
+                                                    value-format="dd-MM-yyyy">
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
@@ -97,7 +98,8 @@
                                               :class="{'is-error' : form.errors.has('date_to')}">
                                     <el-date-picker v-model="form.date_to"
                                                     type="date"
-                                                    format="dd-MM-yyyy">
+                                                    format="dd-MM-yyyy"
+                                                    value-format="dd-MM-yyyy">
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>

@@ -13,8 +13,16 @@
         <template slot="content">
             <div class="content">
                 <ribbon>
+                    <date-filter :span="4"
+                                 :offset="8"
+                                 placeholder="From"
+                                 @selection="setFilter('date_from', $event)">
+                    </date-filter>
+                    <date-filter :span="4"
+                                 placeholder="To"
+                                 @selection="setFilter('date_to', $event)">
+                    </date-filter>
                     <single-filter :span="4"
-                                   :offset="16"
                                    url="/users"
                                    placeholder="Filter by user"
                                    @selection="setFilter('user', $event ? $event.id : '')">
@@ -28,7 +36,7 @@
                 <el-table :data="tableItems"
                           :default-sort="{prop: 'name', order: 'ascending'}"
                           @selection-change="handleSelectionChange">
-                    <el-table-column label="User">
+                    <el-table-column label="User/Token">
                         <template slot-scope="scope">
                             {{scope.row.causer.name}}
                         </template>
@@ -95,7 +103,10 @@
                     page: 1,
                     user: '',
                     token: '',
-                }
+                    date_from: null,
+                    date_to: null
+                },
+                date_from: null
             };
         },
         created() {

@@ -282,7 +282,8 @@
                                               :class="{'is-error' : form.errors.has('publish_at')}">
                                     <el-date-picker v-model="form.publish_at"
                                                     type="date"
-                                                    format="dd-MM-yyyy">
+                                                    format="dd-MM-yyyy"
+                                                    value-format="dd-MM-yyyy">
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
@@ -291,7 +292,8 @@
                                               :class="{'is-error' : form.errors.has('unpublish_at')}">
                                     <el-date-picker v-model="form.unpublish_at"
                                                     type="date"
-                                                    format="dd-MM-yyyy">
+                                                    format="dd-MM-yyyy"
+                                                    value-format="dd-MM-yyyy">
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
