@@ -60,7 +60,7 @@
 
 <script>
     import Hub from '../../../events/hub';
-    import floorMap from './floor-map.vue';
+    import floorMap from './floor-map';
     import structureToolbar from './structure-toolbar';
     import structureSelect from './structure-select';
 

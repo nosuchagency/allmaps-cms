@@ -19,7 +19,7 @@
         </template>
         <template slot="content">
             <div class="content">
-                <el-card class="box-card">
+                <el-card>
                     <h3>{{$t('errors.403.title')}}</h3>
                     <h4>{{$t('errors.403.description')}}</h4>
                 </el-card>

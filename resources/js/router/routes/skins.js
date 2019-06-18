@@ -5,6 +5,7 @@ export default [
         path: '/skins',
         name: 'skins-index',
         component: require('../../views/skins'),
+        props: true,
         meta: {
             auth: true
         },

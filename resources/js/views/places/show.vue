@@ -32,7 +32,7 @@
 
             <div class="content" v-else>
 
-                <el-card class="box-card">
+                <el-card>
                     <template slot="header">
                         <div style="display: flex; width: 100%;">
                             <div class="title-icon-wrapper">
@@ -76,7 +76,7 @@
                     </el-row>
                 </el-card>
 
-                <el-card class="box-card">
+                <el-card>
                     <div style="display: flex;">
                         <div class="title-icon-wrapper">
                             <i class="fa fa-building title-icon"></i>

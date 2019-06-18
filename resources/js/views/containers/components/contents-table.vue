@@ -82,7 +82,7 @@
 </template>
 
 <script>
-    import dragTable from 'js/components/drag-table.vue';
+    import dragTable from 'js/components/drag-table';
     import contentUpsertModal from '../../contents/upsert-modal';
 
     export default {

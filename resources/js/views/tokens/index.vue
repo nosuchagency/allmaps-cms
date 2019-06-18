@@ -59,6 +59,9 @@
                     </el-table-column>
                     <el-table-column property="role"
                                      :label="$t('tokens.attributes.role')">
+                        <template slot-scope="scope">
+                            {{scope.row.role.name}}
+                        </template>
                     </el-table-column>
                     <template slot="empty">
                         <i class="fa fa-cog fa-spin loading-spinner" v-if="loading"></i>
@@ -143,10 +146,11 @@
                 return this.resource + '/paginated';
             },
             async getItems(url) {
+                this.loading = true;
                 try {
-                    this.loading = true;
-                    const response = await this.$axios.get(url + new QueryParams(this.params));
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(url + new QueryParams(this.params));
+                    this.items = data;
+                    console.log(this.items);
                 } catch (error) {
                     console.log(error);
                 } finally {

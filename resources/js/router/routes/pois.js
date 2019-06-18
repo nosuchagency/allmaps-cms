@@ -5,6 +5,7 @@ export default [
         path: '/pois',
         name: 'pois-index',
         component: require('../../views/pois'),
+        props: true,
         meta: {
             auth: true
         },

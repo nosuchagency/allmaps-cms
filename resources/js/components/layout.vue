@@ -25,7 +25,7 @@
                     padding: 25px;
                 }
 
-                .box-card {
+                .el-card {
                     margin-bottom: 25px;
                 }
 

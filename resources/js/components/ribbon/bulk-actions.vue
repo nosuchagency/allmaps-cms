@@ -55,7 +55,7 @@
         },
         watch: {
             selections(selections) {
-                if (selections.length === 0) {
+                if (selections.length < 1) {
                     this.selectedBulkAction = null;
                 }
             }

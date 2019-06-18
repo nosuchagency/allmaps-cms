@@ -31,8 +31,8 @@
                                            v-model="form.role"
                                            placeholder="Select"
                                            value-key="id">
-                                    <el-option v-for="(role, index) in items"
-                                               :key="index"
+                                    <el-option v-for="role in items"
+                                               :key="role.id"
                                                :label="role.name"
                                                :value="role">
                                     </el-option>
@@ -139,7 +139,7 @@
                     name: this.item ? this.item.name : '',
                     email: this.item ? this.item.email : '',
                     password: '',
-                    role: this.item ? this.item.role : '',
+                    role: this.item ? this.item.role : null,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     invitation: false

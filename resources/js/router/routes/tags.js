@@ -5,6 +5,7 @@ export default [
         path: '/tags',
         name: 'tags-index',
         component: require('../../views/tags'),
+        props: true,
         meta: {
             auth: true
         },

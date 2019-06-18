@@ -117,7 +117,7 @@
 </template>
 
 <script>
-    import dragTable from 'js/components/drag-table.vue';
+    import dragTable from 'js/components/drag-table';
     import upsertModal from './upsert-modal';
     import menuItemUpsertModal from '../menu-items/upsert-modal';
 

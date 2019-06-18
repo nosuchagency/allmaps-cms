@@ -1,5 +1,5 @@
 <template>
-    <el-card class="box-card">
+    <el-card>
         <template slot="header">
             <div class="title-icon-wrapper">
                 <i class="fa fa-building title-icon"></i>

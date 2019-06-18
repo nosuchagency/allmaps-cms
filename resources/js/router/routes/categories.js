@@ -5,6 +5,7 @@ export default [
         path: '/categories',
         name: 'categories-index',
         component: require('../../views/categories'),
+        props: true,
         meta: {
             auth: true
         },

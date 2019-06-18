@@ -33,7 +33,7 @@
 
             <div class="content" v-else>
                 <template v-if="item">
-                    <el-card class="box-card">
+                    <el-card>
                         <template slot="header">
                             <div class="title-icon-wrapper">
                                 <i class="fa fa-map-marker-alt title-icon"></i>
@@ -50,7 +50,7 @@
                     </el-card>
                 </template>
                 <template v-if="item">
-                    <el-card class="box-card">
+                    <el-card>
                         <div style="display: flex;">
                             <div class="title-icon-wrapper">
                                 <i class="fa fa-archive title-icon"></i>
@@ -69,8 +69,7 @@
                             </el-tooltip>
                         </div>
                     </el-card>
-                    <el-card class="box-card"
-                             v-for="container in item.containers"
+                    <el-card v-for="container in item.containers"
                              :key="container.id">
                         <template slot="header">
                             <div class="title-icon-wrapper">

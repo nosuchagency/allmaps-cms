@@ -11,7 +11,7 @@ let routes = [
     {
         path: '/dashboard',
         name: 'dashboard',
-        component: require('../views/dashboard'),
+        component: require('../views/dashboard/dashboard'),
         meta: {
             auth: true
         }

@@ -14,13 +14,13 @@
                             <el-input v-model="form.name" autofocus></el-input>
                         </el-form-item>
                         <el-form-item :label="$t('menu_items.attributes.shown')">
-                                <el-checkbox v-model="form.shown"></el-checkbox>
+                            <el-checkbox v-model="form.shown"></el-checkbox>
                         </el-form-item>
                         <template v-if="type === 'poi'">
                             <el-form-item :label="$t('menu_items.attributes.poi')"
-                                          :class="{'is-error' : form.errors.has('poi')}">
+                                          :class="{'is-error' : form.errors.has('model')}">
                                 <fetch-items url="/pois">
-                                    <el-select v-model="form.poi"
+                                    <el-select v-model="form.model"
                                                slot-scope="{items, loading}"
                                                placeholder="Select"
                                                value-key="id">
@@ -35,9 +35,9 @@
                         </template>
                         <template v-if="type === 'location'">
                             <el-form-item :label="$t('menu_items.attributes.location')"
-                                          :class="{'is-error' : form.errors.has('location')}">
+                                          :class="{'is-error' : form.errors.has('model')}">
                                 <fetch-items url="/locations">
-                                    <el-select v-model="form.location"
+                                    <el-select v-model="form.model"
                                                slot-scope="{items, loading}"
                                                placeholder="Select"
                                                value-key="id">
@@ -52,9 +52,9 @@
                         </template>
                         <template v-if="type === 'tag'">
                             <el-form-item :label="$t('menu_items.attributes.tag')"
-                                          :class="{'is-error' : form.errors.has('tag')}">
+                                          :class="{'is-error' : form.errors.has('model')}">
                                 <fetch-items url="/tags">
-                                    <el-select v-model="form.tag"
+                                    <el-select v-model="form.model"
                                                slot-scope="{items, loading}"
                                                placeholder="Select"
                                                value-key="id">
@@ -69,9 +69,9 @@
                         </template>
                         <template v-if="type === 'category'">
                             <el-form-item :label="$t('menu_items.attributes.category')"
-                                          :class="{'is-error' : form.errors.has('category')}">
+                                          :class="{'is-error' : form.errors.has('model')}">
                                 <fetch-items url="/categories">
-                                    <el-select v-model="form.category"
+                                    <el-select v-model="form.model"
                                                slot-scope="{items, loading}"
                                                placeholder="Select"
                                                value-key="id">
@@ -138,8 +138,8 @@
                 form: new Form({
                     type: this.type,
                     name: this.item ? this.item.name : null,
-                    shown : this.item ? !!this.item.shown : false,
-                    [this.type]: this.item ? this.item.menuable : null,
+                    shown: this.item ? !!this.item.shown : false,
+                    model: this.item ? this.item.menuable : null,
                     menu: this.menu
                 }),
             };

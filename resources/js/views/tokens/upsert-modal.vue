@@ -89,7 +89,7 @@
                 confirmDelete: false,
                 form: new Form({
                     name: this.item ? this.item.name : '',
-                    role: this.item ? this.item.role : '',
+                    role: this.item ? this.item.role : null,
                     token: this.item ? this.item.token : ''
                 })
             }

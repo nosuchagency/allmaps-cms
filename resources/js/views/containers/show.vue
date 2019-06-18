@@ -30,7 +30,7 @@
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
             <div class="content" v-else>
-                <el-card class="box-card">
+                <el-card>
                     <div slot="header" class="clearfix">
                         <div class="title-icon-wrapper">
                             <i class="fa fa-chart-bar title-icon"></i>
@@ -51,7 +51,7 @@
                                 @content-change="item.contents = $event">
                 </contents-table>
                 <template v-if="item">
-                    <el-card class="box-card">
+                    <el-card>
                         <template slot="header">
                             <div class="title-icon-wrapper">
                                 <i class="fa fa-wifi title-icon"></i>
@@ -74,8 +74,7 @@
                                    :styles="styles">
                         </bar-chart>
                     </el-card>
-                    <el-card class="box-card"
-                             v-for="beacon in item.beacons"
+                    <el-card v-for="beacon in item.beacons"
                              :key="beacon.id">
                         <template slot="header">
                             <div class="title-icon-wrapper">
@@ -220,7 +219,6 @@
                 try {
                     const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
                     this.item = data;
-                    console.log(this.item);
                 } catch (error) {
                     console.log(error);
                 }

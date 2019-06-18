@@ -10,7 +10,7 @@
                                          :to="{ name: 'containers-show', params: { id: item.container.id }}">
                                 {{ item.container.name }}
                             </router-link>
-                            <i class="fa fa-caret-right" style="margin: 0 10px;"></i>
+                            <i class="fa fa-caret-right"></i>
                             <i class="fa fa-folder title-icon"></i>
                             <label>{{item.name}}</label>
                         </template>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import contentsTable from '../containers/components/contents-table.vue';
+    import contentsTable from '../containers/components/contents-table';
     import upsertModal from './upsert-modal';
 
     export default {
@@ -104,5 +104,9 @@
         &:hover {
             color: #939393;
         }
+    }
+
+    .fa-caret-right {
+        margin: 0 10px;
     }
 </style>

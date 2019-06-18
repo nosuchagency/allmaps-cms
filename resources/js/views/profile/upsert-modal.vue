@@ -29,11 +29,13 @@
                             <fetch-items url="/roles">
                                 <el-select slot-scope="{items, loading}"
                                            v-model="form.role"
-                                           placeholder="Select">
-                                    <el-option v-for="(role, index) in items"
-                                               :key="index"
+
+                                           placeholder="Select"
+                                           value-key="id">
+                                    <el-option v-for="role in items"
+                                               :key="role.id"
                                                :label="role.name"
-                                               :value="role.name">
+                                               :value="role">
                                     </el-option>
                                 </el-select>
                             </fetch-items>
@@ -127,7 +129,7 @@
                     name: this.item ? this.item.name : '',
                     email: this.item ? this.item.email : '',
                     password: '',
-                    role: this.item ? this.item.role.name : '',
+                    role: this.item ? this.item.role : null,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     locale: this.item ? this.item.locale : ''

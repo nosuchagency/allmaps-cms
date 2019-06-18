@@ -1,5 +1,5 @@
 <template>
-    <el-card class="box-card">
+    <el-card>
         <template slot="header">
             <slot name="header"></slot>
         </template>

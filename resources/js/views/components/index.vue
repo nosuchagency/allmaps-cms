@@ -151,6 +151,9 @@
         components: {
             upsertModal
         },
+        props: {
+            id: Number
+        },
         data() {
             return {
                 upsertModalVisible: false,
@@ -169,7 +172,7 @@
             };
         },
         created() {
-            this.getItems(this.getUrl());
+            this.getItems(this.getUrl(), () => this.openModal(this.id));
         },
         watch: {
             params: {
@@ -186,11 +189,21 @@
             getUrl() {
                 return this.resource + '/paginated?';
             },
-            async getItems(url) {
+            openModal(id) {
+                let item = this.items.data.find((item) => item.id === id);
+
+                if (item) {
+                    this.openUpsertModal(item);
+                }
+            },
+            async getItems(url, callback = null) {
+                this.loading = true;
                 try {
-                    this.loading = true;
-                    const response = await this.$axios.get(url + new QueryParams(this.params));
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(url + new QueryParams(this.params));
+                    this.items = data;
+                    if (typeof callback == 'function') {
+                        callback()
+                    }
                 } catch (error) {
                     console.log(error);
                 } finally {

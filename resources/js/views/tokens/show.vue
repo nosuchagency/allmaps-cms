@@ -32,7 +32,7 @@
             </div>
 
             <div class="content" v-else>
-                <el-card class="box-card">
+                <el-card>
                     <template slot="header">
                         <div class="title-icon-wrapper">
                             <i class="fa fa-tasks title-icon"></i>
@@ -57,7 +57,7 @@
                                 <el-tooltip :content="scope.row.subject_type">
                                     <icon :resource="scope.row.subject_type"></icon>
                                 </el-tooltip>
-                                {{scope.row.subject_name}}
+                                {{scope.row.subject.name}}
                             </template>
                         </el-table-column>
                         <el-table-column label="Time">

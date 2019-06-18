@@ -44,7 +44,7 @@
                             <el-tooltip :content="scope.row.subject_type">
                                 <icon :resource="scope.row.subject_type"></icon>
                             </el-tooltip>
-                            {{scope.row.subject_name}}
+                            {{scope.row.subject.name}}
                         </template>
                     </el-table-column>
                     <el-table-column label="Time">
@@ -117,10 +117,10 @@
                 return this.resource + '/paginated';
             },
             async getItems(url) {
+                this.loading = true;
                 try {
-                    this.loading = true;
-                    const response = await this.$axios.get(url + new QueryParams(this.params));
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(url + new QueryParams(this.params));
+                    this.items = data;
                 } catch (error) {
                     console.log(error);
                 } finally {

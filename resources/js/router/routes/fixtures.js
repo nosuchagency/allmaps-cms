@@ -5,6 +5,7 @@ export default [
         path: '/fixtures',
         name: 'fixtures-index',
         component: require('../../views/fixtures'),
+        props: true,
         meta: {
             auth: true
         },

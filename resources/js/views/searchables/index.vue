@@ -101,10 +101,10 @@
                 return '/' + this.resource;
             },
             async getItems(url) {
+                this.loading = true;
                 try {
-                    this.loading = true;
-                    const response = await this.$axios.get(url);
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(url);
+                    this.items = data;
                 } catch (error) {
                     console.log(error);
                 } finally {

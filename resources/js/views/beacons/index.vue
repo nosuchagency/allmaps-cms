@@ -81,7 +81,7 @@
                     <el-table-column :label="$t('beacons.attributes.map')"
                                      align="center">
                         <template slot-scope="scope">
-                            <i class="fa fa-check" v-if="scope.row.floor"></i>
+                            <i class="fa fa-check" v-if="scope.row.locations.length > 0"></i>
                             <i class="fa fa-times" v-else></i>
                         </template>
                     </el-table-column>
@@ -160,7 +160,7 @@
                     search: '',
                     category: '',
                     tags: '',
-                    include: 'containers,tags'
+                    include: 'containers,locations,tags'
                 }
             };
         },
@@ -183,10 +183,10 @@
                 return this.resource + '/paginated';
             },
             async getItems(url) {
+                this.loading = true;
                 try {
-                    this.loading = true;
-                    const response = await this.$axios.get(url + new QueryParams(this.params));
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(url + new QueryParams(this.params));
+                    this.items = data;
                 } catch (error) {
                     console.log(error);
                 } finally {

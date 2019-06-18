@@ -5,6 +5,7 @@ export default [
         path: '/components',
         name: 'components-index',
         component: require('../../views/components'),
+        props: true,
         meta: {
             auth: true
         },

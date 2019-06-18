@@ -179,29 +179,25 @@
                 return this.resource + '/paginated?';
             },
             async getItems(url) {
+                this.loading = true;
                 try {
-                    this.loading = true;
-                    const response = await this.$axios.get(url + new QueryParams(this.params));
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(url + new QueryParams(this.params));
+                    this.items = data;
                 } catch (error) {
                     console.log(error);
                 } finally {
                     this.loading = false;
                 }
-            }
-            ,
+            },
             addItem(item) {
                 this.$router.push('/' + this.resource + '/' + item.id);
-            }
-            ,
+            },
             openUpsertModal() {
                 this.upsertModalVisible = true;
-            }
-            ,
+            },
             closeUpsertModal() {
                 this.upsertModalVisible = false;
-            }
-            ,
+            },
         },
         computed: {
             text() {
