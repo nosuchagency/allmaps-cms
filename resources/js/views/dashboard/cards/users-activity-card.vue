@@ -20,7 +20,12 @@
         </template>
         <template v-else>
             <div style="margin-bottom: 15px;">
-                This is the latest 20 changes in the system
+                <template v-if="activities.length > 0">
+                    This is the latest changes in the system
+                </template>
+                <template v-else>
+                    No activity yet
+                </template>
             </div>
             <template v-for="activity in activities">
                 <activity :activity="activity"></activity>

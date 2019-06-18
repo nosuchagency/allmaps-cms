@@ -12,7 +12,12 @@
             </div>
         </template>
         <div style="margin-bottom: 15px;">
-            This is what you worked on last - maybe a place to continue?
+            <template v-if="activities.length > 0">
+                This is what you worked on last - maybe a place to continue?
+            </template>
+            <template v-else>
+                You have no recent activity
+            </template>
         </div>
         <template v-for="activity in activities">
             <activity :activity="activity"></activity>
