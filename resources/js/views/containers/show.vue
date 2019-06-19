@@ -147,7 +147,42 @@
                             </el-table-column>
                         </el-table>
                     </el-card>
+                    <el-card>
+                        <template slot="header">
+                            <div class="title-icon-wrapper">
+                                <i class="fa fa-archive title-icon"></i>
+                                <label>Content</label>
+                            </div>
+                        </template>
+                        <el-table :data="item.locations"
+                                  size="small">
+                            <el-table-column label="Name"
+                                             sortable
+                                             property="name">
+                            </el-table-column>
+                            <el-table-column align="right">
+                                <template slot-scope="scope">
+                                    <el-tooltip effect="dark"
+                                                content="Detach location"
+                                                placement="top-start">
+                                        <el-button type="danger"
+                                                   size="small"
+                                                   @click="openConfirmUnlinkModal(scope.row)"
+                                                   circle>
+                                            <i class="fa fa-unlink"></i>
+                                        </el-button>
+                                    </el-tooltip>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-card>
                 </template>
+                <confirm-dialog v-if="confirmDetachVisible"
+                                :message="$t('general.confirm')"
+                                @cancel="confirmDetachVisible = false"
+                                @confirm="detachLocation"
+                                :visible="confirmDetachVisible">
+                </confirm-dialog>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
@@ -206,8 +241,10 @@
                 beaconModalVisible: false,
                 ruleModalVisible: false,
                 upsertModalVisible: false,
+                confirmDetachVisible: false,
                 selectedBeacon: null,
                 selectedRule: null,
+                selectedLocation: null,
                 item: null,
             };
         },
@@ -281,6 +318,21 @@
                 let ruleIndex = beacon.rules.findIndex(({id}) => id === data.rule.id);
                 beacon.rules.splice(ruleIndex, 1);
                 this.closeRuleModal();
+            },
+            openConfirmUnlinkModal(location) {
+                this.selectedLocation = location;
+                this.confirmDetachVisible = true;
+            },
+            async detachLocation() {
+                try {
+                    await this.$axios.post(`/${this.resource}/${this.item.id}/relationships/locations?_method=delete`, {data: [this.selectedLocation]});
+                    let index = this.item.locations.findIndex(({id}) => id === this.selectedLocation.id);
+                    this.item.locations.splice(index, 1);
+                    this.confirmDetachVisible = false;
+                    this.selectedLocation = null;
+                } catch (error) {
+                    console.log(error);
+                }
             }
         },
         computed: {
@@ -337,7 +389,8 @@
                         yAxes: [
                             {
                                 ticks: {
-                                    beginAtZero: true
+                                    beginAtZero: true,
+                                    stepSize: 1
                                 }
                             }
                         ]
