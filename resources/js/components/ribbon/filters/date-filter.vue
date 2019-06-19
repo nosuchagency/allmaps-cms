@@ -4,6 +4,7 @@
         <el-date-picker v-model="date"
                         @change="$emit('selection', $event)"
                         type="datetime"
+                        size="small"
                         format="dd-MM-yyyy HH:mm"
                         value-format="dd-MM-yyyy HH:mm"
                         :placeholder="placeholder">
@@ -39,15 +40,6 @@
     /deep/ {
         .el-date-editor {
             width: 100%;
-        }
-
-        .el-input__inner {
-            height: 32px;
-            line-height: 32px;
-        }
-
-        .el-input__icon {
-            line-height: 32px;
         }
     }
 </style>

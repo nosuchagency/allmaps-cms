@@ -274,6 +274,24 @@
                             </el-col>
                         </el-row>
                     </el-tab-pane>
+                    <el-tab-pane label="Content" name="content">
+                        <br>
+                        <fetch-items url="/containers">
+                            <el-form-item label="Container" slot-scope="{items, loading}">
+                                <el-select v-model="form.container"
+                                           filterable
+                                           value-key="id"
+                                           placeholder="Select"
+                                           ref="select">
+                                    <el-option v-for="item in items"
+                                               :key="item.id"
+                                               :label="item.name"
+                                               :value="item">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </fetch-items>
+                    </el-tab-pane>
                     <el-tab-pane label="Status" name="status">
                         <br>
                         <el-row :gutter="25">
@@ -418,6 +436,8 @@
                     saturday_to: this.location.saturday_to,
                     sunday_from: this.location.sunday_from,
                     sunday_to: this.location.sunday_to,
+
+                    container: this.location.container,
 
                     activated_at: this.location.activated_at,
                     publish_at: this.location.publish_at,
