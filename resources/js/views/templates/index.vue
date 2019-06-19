@@ -117,9 +117,9 @@
                     </div>
                     <div class="pagination-container-right">
                         <el-pagination background
-                                       @prev-click="setFilter('page', $event)"
-                                       @next-click="setFilter('page', $event)"
-                                       @current-change="setFilter('page', $event)"
+                                       @prev-click="setFilter('page[number]', $event)"
+                                       @next-click="setFilter('page[number]', $event)"
+                                       @current-change="setFilter('page[number]', $event)"
                                        layout="prev, pager, next"
                                        :total="items.meta.total"
                                        :page-size="50">
@@ -164,7 +164,7 @@
                 resource: 'templates',
                 selectedTemplate: null,
                 params: {
-                    page: 1,
+                    'page[number]': 1,
                     search: '',
                     category: '',
                     tags: '',

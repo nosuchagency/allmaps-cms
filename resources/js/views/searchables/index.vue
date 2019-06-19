@@ -85,7 +85,7 @@
                 loading: false,
                 resource: 'plugins',
                 params: {
-                    page: 1,
+                    'page[number]': 1,
                     search: ''
                 }
             };
