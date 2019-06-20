@@ -72,21 +72,21 @@
         methods: {
             create() {
                 this.form.post(`/${this.resource}`)
-                    .then(response => this.$emit('content-modal:add', response))
+                    .then(response => this.$emit('modal:add', response))
                     .catch(error => console.log(error));
             },
             update() {
                 this.form.put(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('content-modal:update', response))
+                    .then(response => this.$emit('modal:update', response))
                     .catch(error => console.log(error));
             },
             remove() {
                 this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('content-modal:remove', this.item))
+                    .then(response => this.$emit('modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('content-modal:close');
+                this.$emit('modal:close');
             },
             syncFields(fields) {
                 this.form = new Form(fields);

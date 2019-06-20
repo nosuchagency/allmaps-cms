@@ -69,18 +69,18 @@
             update() {
                 this.form.put(`/structures/${this.structure.id}`)
                     .then(response => {
-                        this.$emit('structure-modal:update', response);
+                        this.$emit('modal:update', response);
                         this.closeModal();
                     })
                     .catch(error => console.log(error));
             },
             remove() {
                 this.form.delete(`/structures/${this.structure.id}`)
-                    .then(response => this.$emit('structure-modal:remove', this.item))
+                    .then(response => this.$emit('modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('structure-modal:close');
+                this.$emit('modal:close');
             }
         }
     }

@@ -105,15 +105,15 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="upsertModalVisible = false"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
                 <building-modal v-if="buildingModalVisible"
                                 :visible="buildingModalVisible"
                                 :place="item"
-                                @building-modal:close="buildingModalVisible = false"
-                                @building-modal:add="addBuilding">
+                                @modal:close="buildingModalVisible = false"
+                                @modal:add="addBuilding">
                 </building-modal>
             </div>
         </template>
@@ -173,7 +173,13 @@
             removeBuilding(building) {
                 let index = this.item.buildings.findIndex(({id}) => id === building.id);
                 this.item.buildings.splice(index, 1);
-            }
+            },
+            openUpsertModal() {
+                this.upsertModalVisible = true;
+            },
+            closeUpsertModal() {
+                this.upsertModalVisible = false;
+            },
         },
         computed: {
             placePopupContent() {

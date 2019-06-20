@@ -90,21 +90,21 @@
         methods: {
             create() {
                 this.form.post(`/beacons/${this.beaconId}/containers/${this.form.container.id}`)
-                    .then(response => this.$emit('container-modal:add', response))
+                    .then(response => this.$emit('modal:add', response))
                     .catch(error => console.log(error));
             },
             update() {
                 this.form.put(`/beacons/${this.beaconId}/containers/${this.item.id}`)
-                    .then(response => this.$emit('container-modal:update', response))
+                    .then(response => this.$emit('modal:update', response))
                     .catch(error => console.log(error));
             },
             remove() {
                 this.form.delete(`/beacons/${this.beaconId}/containers/${this.item.id}`)
-                    .then(response => this.$emit('container-modal:remove', this.item))
+                    .then(response => this.$emit('modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('container-modal:close');
+                this.$emit('modal:close');
             }
         },
         computed: {

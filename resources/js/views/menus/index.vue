@@ -78,8 +78,8 @@
                 </confirm-dialog>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:add="addItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:add="addItem">
                 </upsert-modal>
             </div>
         </template>

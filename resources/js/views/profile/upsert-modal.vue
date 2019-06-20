@@ -143,11 +143,11 @@
         methods: {
             update() {
                 this.form.put(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('upsert-modal:update', response))
+                    .then(response => this.$emit('modal:update', response))
                     .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('upsert-modal:close');
+                this.$emit('modal:close');
             }
         }
     }

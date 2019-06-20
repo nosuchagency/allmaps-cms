@@ -85,8 +85,8 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:update="updateItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem">
                 </upsert-modal>
             </div>
         </template>

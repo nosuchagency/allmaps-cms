@@ -37,9 +37,9 @@
         <location-modal v-if="locationModalVisible"
                         :visible="locationModalVisible"
                         :location="location.location"
-                        @location-modal:close="closeLocationModal"
-                        @location-modal:update="updateLocation"
-                        @location-modal:remove="removeLocation">
+                        @modal:close="closeLocationModal"
+                        @modal:update="updateLocation"
+                        @modal:remove="removeLocation">
         </location-modal>
     </div>
 </template>

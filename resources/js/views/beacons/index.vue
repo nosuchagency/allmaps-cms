@@ -10,6 +10,17 @@
                 </template>
                 <template slot="right">
                     <el-tooltip effect="dark"
+                                content="Import beacons"
+                                placement="top-start"
+                                v-if="$auth.user().hasPermissionTo('beacons.create')">
+                        <el-button type="primary"
+                                   size="small"
+                                   @click="openBeaconImportModal()"
+                                   circle>
+                            <i class="fa fa-file-import"></i>
+                        </el-button>
+                    </el-tooltip>
+                    <el-tooltip effect="dark"
                                 :content="$t('general.actions.create', {name : $t('beacons.singular')})"
                                 placement="top-start"
                                 v-if="$auth.user().hasPermissionTo('beacons.create')">
@@ -130,9 +141,13 @@
                 </confirm-dialog>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:add="addItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:add="addItem">
                 </upsert-modal>
+                <beacon-import-modal v-if="beaconImportModalVisible"
+                                     :visible="beaconImportModalVisible"
+                                     @modal:close="closeBeaconImportModal">
+                </beacon-import-modal>
             </div>
         </template>
     </layout>
@@ -142,16 +157,19 @@
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
     import QueryParams from 'js/utils/QueryParams';
+    import beaconImportModal from './beacon-import-modal';
 
     export default {
         mixins: [multipleSelection],
         components: {
             upsertModal,
+            beaconImportModal
         },
         data() {
             return {
                 upsertModalVisible: false,
                 confirmDeleteVisible: false,
+                beaconImportModalVisible: false,
                 items: null,
                 loading: false,
                 resource: 'beacons',
@@ -202,6 +220,12 @@
             closeUpsertModal() {
                 this.upsertModalVisible = false;
             },
+            openBeaconImportModal() {
+                this.beaconImportModalVisible = true;
+            },
+            closeBeaconImportModal() {
+                this.beaconImportModalVisible = false;
+            }
         },
         computed: {
             text() {

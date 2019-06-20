@@ -46,8 +46,8 @@
                           :visible="folderModalVisible"
                           :item="selectedFolder"
                           :container="item"
-                          @upsert-modal:close="closeFolderModal"
-                          @upsert-modal:add="addFolder">
+                          @modal:close="closeFolderModal"
+                          @modal:add="addFolder">
             </folder-modal>
         </template>
     </drag-table>

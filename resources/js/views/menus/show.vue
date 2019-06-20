@@ -97,19 +97,19 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
                 <menu-item-upsert-modal v-if="menuItemModalActive"
                                         :visible="menuItemModalActive"
                                         :type="menuItemType"
                                         :menu="item"
                                         :item="selectedMenuItem"
-                                        @menu-item-modal:add="addMenuItem"
-                                        @menu-item-modal:remove="removeMenuItem"
-                                        @menu-item-modal:update="updateMenuItem"
-                                        @menu-item-modal:close="closeMenuItemModal">
+                                        @modal:add="addMenuItem"
+                                        @modal:remove="removeMenuItem"
+                                        @modal:update="updateMenuItem"
+                                        @modal:close="closeMenuItemModal">
                 </menu-item-upsert-modal>
             </div>
         </template>

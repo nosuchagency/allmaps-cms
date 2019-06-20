@@ -84,18 +84,18 @@
         <building-modal v-if="buildingModalVisible"
                         :visible="buildingModalVisible"
                         :item="building"
-                        @building-modal:close="buildingModalVisible = false"
-                        @building-modal:update="updateBuilding"
-                        @building-modal:remove="removeBuilding">
+                        @modal:close="buildingModalVisible = false"
+                        @modal:update="updateBuilding"
+                        @modal:remove="removeBuilding">
         </building-modal>
         <floor-modal v-if="floorModalVisible"
                      :visible="floorModalVisible"
                      :item="floor"
                      :building="building"
-                     @floor-modal:close="floorModalVisible = false"
-                     @floor-modal:add="addFloor"
-                     @floor-modal:update="updateFloor"
-                     @floor-modal:remove="removeFloor">
+                     @modal:close="floorModalVisible = false"
+                     @modal:add="addFloor"
+                     @modal:update="updateFloor"
+                     @modal:remove="removeFloor">
         </floor-modal>
     </el-card>
 </template>

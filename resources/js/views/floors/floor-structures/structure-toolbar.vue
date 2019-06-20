@@ -39,9 +39,9 @@
         <structure-modal v-if="structureModalVisible"
                          :visible="structureModalVisible"
                          :structure="structure.structure"
-                         @structure-modal:close="closeStructureModal"
-                         @structure-modal:update="updateStructure"
-                         @structure-modal:remove="removeStructure">
+                         @modal:close="closeStructureModal"
+                         @modal:update="updateStructure"
+                         @modal:remove="removeStructure">
         </structure-modal>
     </div>
 </template>

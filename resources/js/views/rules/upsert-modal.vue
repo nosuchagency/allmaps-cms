@@ -187,7 +187,7 @@
         methods: {
             create() {
                 this.form.post(`/containers/${this.containerId}/beacons/${this.beaconId}/rules`)
-                    .then(response => this.$emit('rule-modal:add', {
+                    .then(response => this.$emit('modal:add', {
                         rule: response,
                         containerId: this.containerId,
                         beaconId: this.beaconId
@@ -196,7 +196,7 @@
             },
             update() {
                 this.form.put(`/containers/${this.containerId}/beacons/${this.beaconId}/rules/${this.item.id}`)
-                    .then(response => this.$emit('rule-modal:update', {
+                    .then(response => this.$emit('modal:update', {
                         rule: response,
                         containerId: this.containerId,
                         beaconId: this.beaconId
@@ -205,7 +205,7 @@
             },
             remove() {
                 this.form.delete(`/containers/${this.containerId}/beacons/${this.beaconId}/rules/${this.item.id}`)
-                    .then(response => this.$emit('rule-modal:remove', {
+                    .then(response => this.$emit('modal:remove', {
                         rule: this.item,
                         containerId: this.containerId,
                         beaconId: this.beaconId
@@ -213,7 +213,7 @@
                     .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('rule-modal:close')
+                this.$emit('modal:close')
             }
         }
     }

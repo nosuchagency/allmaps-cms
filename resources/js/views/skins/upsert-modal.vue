@@ -105,21 +105,21 @@
             },
             create() {
                 this.form.post(`/${this.resource}`, {headers: {'content-type': 'multipart/form-data'}})
-                    .then(response => this.$emit('upsert-modal:add', response))
+                    .then(response => this.$emit('modal:add', response))
                     .catch(error => console.log(error));
             },
             update() {
                 this.form.post(`/${this.resource}/${this.item.id}`, {headers: {'content-type': 'multipart/form-data'}})
-                    .then(response => this.$emit('upsert-modal:update', response))
+                    .then(response => this.$emit('modal:update', response))
                     .catch(error => console.log(error));
             },
             remove() {
                 this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('upsert-modal:remove', this.item))
+                    .then(response => this.$emit('modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('upsert-modal:close');
+                this.$emit('modal:close');
             }
         },
         computed: {

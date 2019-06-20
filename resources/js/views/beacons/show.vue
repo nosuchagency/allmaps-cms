@@ -146,29 +146,29 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
                 <container-modal v-if="containerModalVisible"
                                  :visible="containerModalVisible"
                                  :item="selectedContainer"
                                  :beacon-id="item.id"
                                  :containers="item.containers"
-                                 @container-modal:close="closeContainerModal"
-                                 @container-modal:add="addContainer"
-                                 @container-modal:update="updateContainer"
-                                 @container-modal:remove="removeContainer">
+                                 @modal:close="closeContainerModal"
+                                 @modal:add="addContainer"
+                                 @modal:update="updateContainer"
+                                 @modal:remove="removeContainer">
                 </container-modal>
                 <rule-modal v-if="ruleModalVisible"
                             :visible="ruleModalVisible"
                             :item="selectedRule"
                             :container-id="selectedContainer.id"
                             :beacon-id="item.id"
-                            @rule-modal:close="closeRuleModal"
-                            @rule-modal:add="addRule"
-                            @rule-modal:update="updateRule"
-                            @rule-modal:remove="removeRule">
+                            @modal:close="closeRuleModal"
+                            @modal:add="addRule"
+                            @modal:update="updateRule"
+                            @modal:remove="removeRule">
                 </rule-modal>
             </div>
         </template>

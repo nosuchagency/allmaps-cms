@@ -452,18 +452,18 @@
             update() {
                 this.form.put(`/locations/${this.location.id}`)
                     .then(response => {
-                        this.$emit('location-modal:update', response);
+                        this.$emit('modal:update', response);
                         this.closeModal();
                     })
                     .catch(error => console.log(error));
             },
             remove() {
                 this.form.delete(`/locations/${this.location.id}`)
-                    .then(response => this.$emit('location-modal:remove', this.item))
+                    .then(response => this.$emit('modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('location-modal:close');
+                this.$emit('modal:close');
             },
             setImage(image = null) {
                 this.form.image = image;
