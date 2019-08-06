@@ -4,26 +4,15 @@
             <toolbar>
                 <template slot="left">
                     <div class="title-icon-wrapper">
-                        <i class="fa fa-wifi title-icon"></i>
-                        <label>{{$t('beacons.plural')}}</label>
+                        <i class="fa fa-tags title-icon"></i>
+                        <label>{{$t('beacon-providers.plural')}}</label>
                     </div>
                 </template>
                 <template slot="right">
                     <el-tooltip effect="dark"
-                                content="Import beacons"
+                                :content="$t('general.actions.create', {name : $t('beacon-providers.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('beacons.create')">
-                        <el-button type="primary"
-                                   size="small"
-                                   @click="openBeaconImportModal()"
-                                   circle>
-                            <i class="fa fa-file-import"></i>
-                        </el-button>
-                    </el-tooltip>
-                    <el-tooltip effect="dark"
-                                :content="$t('general.actions.create', {name : $t('beacons.singular')})"
-                                placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('beacons.create')">
+                                v-if="$auth.user().hasPermissionTo('beacon-providers.create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -41,22 +30,12 @@
                                   :selections="selectedItems"
                                   @apply-bulk-action="applyBulkAction">
                     </bulk-actions>
-                    <search-filter :offset="4"
+                    <search-filter :offset="14"
                                    :span="4"
                                    @search="setFilter('search', $event)">
                     </search-filter>
-                    <single-filter :span="4"
-                                   url="/categories"
-                                   placeholder="Choose Category"
-                                   @selection="setFilter('category', $event ? $event.id : '')">
-                    </single-filter>
-                    <multiple-filter url="/tags"
-                                     placeholder="Choose Tags"
-                                     @selection="setFilter('tags', $event.map(cat => cat.id).join(','))">
-                    </multiple-filter>
                 </ribbon>
                 <el-table :data="tableItems"
-                          @row-click="$router.push({name: 'beacons-show', params: {id: $event.id}})"
                           :default-sort="{prop: 'name', order: 'ascending'}"
                           @selection-change="handleSelectionChange">
                     <el-table-column type="selection"
@@ -64,58 +43,25 @@
                                      align="center">
                     </el-table-column>
                     <el-table-column property="name"
-                                     :label="$t('beacons.attributes.name')"
+                                     :label="$t('beacon-providers.attributes.name')"
                                      sortable>
                     </el-table-column>
-                    <el-table-column :label="$t('beacons.attributes.proximity_uuid')"
-                                     align="center">
-                        <template slot-scope="scope">
-                            <template>
-                                {{scope.row.proximity_uuid || '-'}}
-                            </template>
-                        </template>
+                    <el-table-column property="type"
+                                     :label="$t('beacon-providers.attributes.type')"
+                                     sortable>
                     </el-table-column>
-                    <el-table-column :label="$t('beacons.attributes.namespace')"
-                                     align="center">
+                    <el-table-column align="right">
                         <template slot-scope="scope">
-                            <template>
-                                {{scope.row.namespace || '-'}}
-                            </template>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="$t('beacons.attributes.instance_id')"
-                                     align="center">
-                        <template slot-scope="scope">
-                            <template>
-                                {{scope.row.instance_id || '-'}}
-                            </template>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="$t('beacons.attributes.content')"
-                                     align="center">
-                        <template slot-scope="scope">
-                            {{scope.row.containers.length}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="$t('beacons.attributes.map')"
-                                     align="center">
-                        <template slot-scope="scope">
-                            <i class="fa fa-check" v-if="scope.row.locations.length > 0"></i>
-                            <i class="fa fa-times" v-else></i>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="$t('beacons.attributes.category')"
-                                     align="center">
-                        <template slot-scope="scope">
-                            <el-tag v-if="scope.row.category"
-                                    type="primary"
-                                    size="small"
-                                    disable-transitions>
-                                {{scope.row.category.name}}
-                            </el-tag>
-                            <template v-else>
-                                -
-                            </template>
+                            <el-tooltip effect="dark"
+                                        :content="$t('general.actions.edit', {name : $t('beacon-providers.singular')})"
+                                        placement="top-start">
+                                <el-button type="primary"
+                                           size="small"
+                                           @click="openUpsertModal(scope.row)"
+                                           circle>
+                                    <i class="fa fa-edit"></i>
+                                </el-button>
+                            </el-tooltip>
                         </template>
                     </el-table-column>
                     <template slot="empty">
@@ -149,13 +95,12 @@
                 </confirm-dialog>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
+                              :item="selectedBeaconProvider"
                               @modal:close="closeUpsertModal"
-                              @modal:add="addItem">
+                              @modal:add="addItem"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
-                <beacon-import-modal v-if="beaconImportModalVisible"
-                                     :visible="beaconImportModalVisible"
-                                     @modal:close="closeBeaconImportModal">
-                </beacon-import-modal>
             </div>
         </template>
     </layout>
@@ -165,33 +110,31 @@
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
     import QueryParams from 'js/utils/QueryParams';
-    import beaconImportModal from './beacon-import-modal';
 
     export default {
         mixins: [multipleSelection],
         components: {
-            upsertModal,
-            beaconImportModal
+            upsertModal
+        },
+        props: {
+            id: Number
         },
         data() {
             return {
                 upsertModalVisible: false,
                 confirmDeleteVisible: false,
-                beaconImportModalVisible: false,
                 items: null,
                 loading: false,
-                resource: 'beacons',
+                resource: 'beacon-providers',
+                selectedBeaconProvider: null,
                 params: {
                     'page[number]': 1,
-                    search: '',
-                    category: '',
-                    tags: '',
-                    include: 'containers,locations,tags'
+                    search: ''
                 }
             };
         },
         created() {
-            this.getItems(this.getUrl());
+            this.getItems(this.getUrl(), () => this.openModal(this.id));
         },
         watch: {
             params: {
@@ -208,11 +151,21 @@
             getUrl() {
                 return this.resource + '/paginated';
             },
-            async getItems(url) {
+            openModal(id) {
+                let item = this.items.data.find((item) => item.id === id);
+
+                if (item) {
+                    this.openUpsertModal(item);
+                }
+            },
+            async getItems(url, callback = null) {
                 this.loading = true;
                 try {
                     const {data} = await this.$axios.get(url + new QueryParams(this.params));
                     this.items = data;
+                    if (typeof callback == 'function') {
+                        callback()
+                    }
                 } catch (error) {
                     console.log(error);
                 } finally {
@@ -220,27 +173,32 @@
                 }
             },
             addItem(item) {
-                this.$router.push('/' + this.resource + '/' + item.id);
+                this.items.data.push(item);
+                this.items.meta.total++;
+                this.closeUpsertModal();
             },
-            openUpsertModal() {
+            updateItem(item) {
+                let index = this.items.data.findIndex(({id}) => id === item.id);
+                this.items.data.splice(index, 1, item);
+                this.closeUpsertModal();
+            },
+            removeItem(item) {
+                let index = this.items.data.findIndex(({id}) => id === item.id);
+                this.items.data.splice(index, 1);
+                this.items.meta.total--;
+                this.closeUpsertModal();
+            },
+            openUpsertModal(beaconProvider = null) {
+                this.selectedBeaconProvider = beaconProvider;
                 this.upsertModalVisible = true;
             },
             closeUpsertModal() {
                 this.upsertModalVisible = false;
-            },
-            openBeaconImportModal() {
-                this.beaconImportModalVisible = true;
-            },
-            closeBeaconImportModal() {
-                this.beaconImportModalVisible = false;
             }
         },
         computed: {
-            isImporting() {
-                return true;
-            },
             text() {
-                let name = this.selectedItems.length > 1 ? this.$t('beacons.plural') : this.$t('beacons.singular');
+                let name = this.selectedItems.length > 1 ? this.$t('beacon-providers.plural') : this.$t('beacon-providers.singular');
 
                 return this.$t('general.actions.delete', {name});
             },
@@ -256,12 +214,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .el-table {
-        /deep/ &__row {
-            cursor: pointer;
-        }
-    }
-
     .pagination-container {
         margin: 25px 0;
         display: flex;
@@ -286,13 +238,5 @@
 
     .el-pagination.is-background /deep/ .el-pager li {
         background-color: white;
-    }
-
-    .fa-check {
-        color: #67c23a;
-    }
-
-    .fa-times {
-        color: #f56c6c;
     }
 </style>

@@ -1,101 +1,100 @@
 <template>
-    <portal to="modals">
-        <el-dialog :visible="visible"
-                   :before-close="closeModal">
-            <el-form :model="form"
-                     label-width="120px"
-                     @keydown.native="form.errors.clear($event.target.name)">
-                <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Fixture" name="fixture">
-                        <br>
-                        <el-form-item :label="$t('fixtures.attributes.name')"
-                                      :class="{'is-error' : form.errors.has('name')}">
-                            <el-input v-model="form.name" autofocus></el-input>
-                        </el-form-item>
-                        <el-form-item :label="$t('fixtures.attributes.description')"
-                                      :class="{'is-error' : form.errors.has('description')}">
-                            <el-input v-model="form.description"
-                                      type="textarea"
-                                      :rows="3">
-                            </el-input>
-                        </el-form-item>
-                    </el-tab-pane>
-                    <el-tab-pane label="Image" name="image">
-                        <br>
-                        <el-form-item :label="$t('fixtures.attributes.image')"
-                                      :class="{'is-error' : form.errors.has('image')}">
-                            <image-uploader :images="image"
-                                            @image:added="form.image = $event"
-                                            @image:removed="form.image = null">
-                            </image-uploader>
-                        </el-form-item>
-                        <el-form-item :label="$t('fixtures.attributes.image_width')"
-                                      :class="{'is-error' : form.errors.has('image_width')}">
-                            <el-input-number v-model="form.image_width"
-                                             :min="0">
-                            </el-input-number>
-                        </el-form-item>
-                        <el-form-item :label="$t('fixtures.attributes.image_height')"
-                                      :class="{'is-error' : form.errors.has('image_height')}">
-                            <el-input-number v-model="form.image_height"
-                                             :min="0">
-                            </el-input-number>
-                        </el-form-item>
-                    </el-tab-pane>
-                    <el-tab-pane label="Taxonomy" name="taxonomies">
-                        <br>
-                        <el-form-item :label="$t('fixtures.attributes.category')"
-                                      :class="{'is-error' : form.errors.has('category')}">
-                            <fetch-items url="/categories">
-                                <el-select v-model="form.category"
-                                           slot-scope="{items, loading}"
-                                           placeholder="Select"
-                                           clearable
-                                           value-key="id">
-                                    <el-option v-for="item in items"
-                                               :key="item.id"
-                                               :label="item.name"
-                                               :value="item">
-                                    </el-option>
-                                </el-select>
-                            </fetch-items>
-                        </el-form-item>
-                        <el-form-item :label="$t('fixtures.attributes.tags')"
-                                      :class="{'is-error' : form.errors.has('tags')}">
-                            <fetch-items url="/tags">
-                                <el-select v-model="form.tags"
-                                           slot-scope="{items, loading}"
-                                           placeholder="Select"
-                                           multiple
-                                           value-key="id">
-                                    <el-option v-for="item in items"
-                                               :key="item.id"
-                                               :label="item.name"
-                                               :value="item">
-                                    </el-option>
-                                </el-select>
-                            </fetch-items>
-                        </el-form-item>
-                    </el-tab-pane>
-                </el-tabs>
-            </el-form>
-            <span slot="footer">
-                <template v-if="item">
-                    <el-button v-if="!confirmDelete"
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="confirmDelete = true">
-                            Delete
-                    </el-button>
-                    <el-button v-else
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="remove">
-                        Are you sure?
-                    </el-button>
-                </template>
+    <modal :visible="visible"
+           @modal:close="closeModal">
+        <el-form :model="form"
+                 label-width="120px"
+                 @keydown.native="form.errors.clear($event.target.name)">
+            <el-tabs v-model="currentTab">
+                <el-tab-pane label="Fixture" name="fixture">
+                    <br>
+                    <el-form-item :label="$t('fixtures.attributes.name')"
+                                  :class="{'is-error' : form.errors.has('name')}">
+                        <el-input v-model="form.name" autofocus></el-input>
+                    </el-form-item>
+                    <el-form-item :label="$t('fixtures.attributes.description')"
+                                  :class="{'is-error' : form.errors.has('description')}">
+                        <el-input v-model="form.description"
+                                  type="textarea"
+                                  :rows="3">
+                        </el-input>
+                    </el-form-item>
+                </el-tab-pane>
+                <el-tab-pane label="Image" name="image">
+                    <br>
+                    <el-form-item :label="$t('fixtures.attributes.image')"
+                                  :class="{'is-error' : form.errors.has('image')}">
+                        <image-uploader :images="image"
+                                        @image:added="form.image = $event"
+                                        @image:removed="form.image = null">
+                        </image-uploader>
+                    </el-form-item>
+                    <el-form-item :label="$t('fixtures.attributes.image_width')"
+                                  :class="{'is-error' : form.errors.has('image_width')}">
+                        <el-input-number v-model="form.image_width"
+                                         :min="0">
+                        </el-input-number>
+                    </el-form-item>
+                    <el-form-item :label="$t('fixtures.attributes.image_height')"
+                                  :class="{'is-error' : form.errors.has('image_height')}">
+                        <el-input-number v-model="form.image_height"
+                                         :min="0">
+                        </el-input-number>
+                    </el-form-item>
+                </el-tab-pane>
+                <el-tab-pane label="Taxonomy" name="taxonomies">
+                    <br>
+                    <el-form-item :label="$t('fixtures.attributes.category')"
+                                  :class="{'is-error' : form.errors.has('category')}">
+                        <fetch-items url="/categories">
+                            <el-select v-model="form.category"
+                                       slot-scope="{items, loading}"
+                                       placeholder="Select"
+                                       clearable
+                                       value-key="id">
+                                <el-option v-for="item in items"
+                                           :key="item.id"
+                                           :label="item.name"
+                                           :value="item">
+                                </el-option>
+                            </el-select>
+                        </fetch-items>
+                    </el-form-item>
+                    <el-form-item :label="$t('fixtures.attributes.tags')"
+                                  :class="{'is-error' : form.errors.has('tags')}">
+                        <fetch-items url="/tags">
+                            <el-select v-model="form.tags"
+                                       slot-scope="{items, loading}"
+                                       placeholder="Select"
+                                       multiple
+                                       value-key="id">
+                                <el-option v-for="item in items"
+                                           :key="item.id"
+                                           :label="item.name"
+                                           :value="item">
+                                </el-option>
+                            </el-select>
+                        </fetch-items>
+                    </el-form-item>
+                </el-tab-pane>
+            </el-tabs>
+        </el-form>
+        <span slot="footer">
+            <template v-if="item">
+                <el-button v-if="!confirmDelete"
+                           type="text"
+                           size="small"
+                           class="btn-remove"
+                           @click="confirmDelete = true">
+                    Delete
+                </el-button>
+                <el-button v-else
+                           type="text"
+                           size="small"
+                           class="btn-remove"
+                           @click="remove">
+                    Are you sure?
+                </el-button>
+            </template>
                 <el-button type="text"
                            size="small"
                            class="btn-cancel"
@@ -108,9 +107,8 @@
                            @click="item ? update() : create()">
                     Confirm
                 </el-button>
-            </span>
-        </el-dialog>
-    </portal>
+        </span>
+    </modal>
 </template>
 
 <script>

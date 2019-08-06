@@ -22,6 +22,7 @@ return [
     'searchables' => 'Searchables',
     'skins' => 'Skins',
     'map-settings' => 'Map Settings',
+    'beacon_providers' => 'Beacon Providers',
     'email_layouts' => 'Email Layouts',
     'email_templates' => 'Email Templates',
     'account' => 'My Account',

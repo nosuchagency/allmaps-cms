@@ -5,47 +5,38 @@
                  label-width="120px"
                  @keydown.native="form.errors.clear($event.target.name)">
             <el-tabs v-model="currentTab">
-                <el-tab-pane label="Findable" name="findable">
+                <el-tab-pane label="Beacon Provider" name="beacon_provider">
                     <br>
-                    <el-form-item :label="$t('searchables.attributes.name')"
+                    <el-form-item label="Name"
                                   :class="{'is-error' : form.errors.has('name')}">
-                        <el-input v-model="form.name"></el-input>
+                        <el-input v-model="form.name" autofocus></el-input>
                     </el-form-item>
-                </el-tab-pane>
-                <el-tab-pane label="Taxonomy" name="taxonomies">
-                    <br>
-                    <el-form-item :label="$t('searchables.attributes.category')"
-                                  :class="{'is-error' : form.errors.has('category')}">
-                        <fetch-items url="/categories">
-                            <el-select v-model="form.category"
-                                       slot-scope="{items, loading}"
-                                       placeholder="Select"
-                                       clearable
-                                       value-key="id">
-                                <el-option v-for="item in items"
-                                           :key="item.id"
-                                           :label="item.name"
-                                           :value="item">
-                                </el-option>
-                            </el-select>
-                        </fetch-items>
+                    <el-form-item label="Type"
+                                  :class="{'is-error' : form.errors.has('type')}">
+                        <el-select v-model="form.type"
+                                   :disabled="!!item">
+                            <el-option
+                                    v-for="item in ['kontakt', 'estimote']"
+                                    :key="item"
+                                    :label="item"
+                                    :value="item">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item :label="$t('searchables.attributes.tags')"
-                                  :class="{'is-error' : form.errors.has('tags')}">
-                        <fetch-items url="/tags">
-                            <el-select v-model="form.tags"
-                                       slot-scope="{items, loading}"
-                                       placeholder="Select"
-                                       multiple
-                                       value-key="id">
-                                <el-option v-for="item in items"
-                                           :key="item.id"
-                                           :label="item.name"
-                                           :value="item">
-                                </el-option>
-                            </el-select>
-                        </fetch-items>
-                    </el-form-item>
+                    <template v-if="!item">
+                        <el-form-item v-if="form.type === 'kontakt'" label="Api Key"
+                                      :class="{'is-error' : form.errors.has('meta.api_key') || form.errors.has('meta')}">
+                            <el-input v-model="form.meta.api_key" autofocus></el-input>
+                        </el-form-item>
+                        <el-form-item v-if="form.type === 'estimote'" label="App id"
+                                      :class="{'is-error' : form.errors.has('meta.app_id') || form.errors.has('meta')}">
+                            <el-input v-model="form.meta.app_id" autofocus></el-input>
+                        </el-form-item>
+                        <el-form-item v-if="form.type === 'estimote'" label="App token"
+                                      :class="{'is-error' : form.errors.has('meta.app_token') || form.errors.has('meta')}">
+                            <el-input v-model="form.meta.app_token" autofocus></el-input>
+                        </el-form-item>
+                    </template>
                 </el-tab-pane>
             </el-tabs>
         </el-form>
@@ -70,7 +61,7 @@
                        size="small"
                        class="btn-cancel"
                        @click="closeModal">
-                Cancel
+                    Cancel
             </el-button>
             <el-button type="success"
                        size="small"
@@ -92,13 +83,17 @@
         },
         data() {
             return {
-                currentTab: 'searchable',
-                resource: 'searchables',
+                currentTab: 'beacon_provider',
+                resource: 'beacon-providers',
                 confirmDelete: false,
                 form: new Form({
                     name: this.item ? this.item.name : '',
-                    category: this.item ? this.item.category : '',
-                    tags: this.item ? this.item.tags : []
+                    type: this.item ? this.item.type : 'kontakt',
+                    meta: {
+                        api_key: '',
+                        app_id: '',
+                        app_token: ''
+                    }
                 })
             }
         },

@@ -109,36 +109,36 @@
                 </el-tab-pane>
             </el-tabs>
         </el-form>
-        <span slot="footer">
+        <template slot="footer">
             <template v-if="item">
                 <el-button v-if="!confirmDelete"
                            type="text"
                            size="small"
                            class="btn-remove"
                            @click="confirmDelete = true">
-                            Delete
+                    Delete
                 </el-button>
                 <el-button v-else
                            type="text"
                            size="small"
                            class="btn-remove"
                            @click="remove">
-                        Are you sure?
+                    Are you sure?
                 </el-button>
             </template>
             <el-button type="text"
                        size="small"
                        class="btn-cancel"
                        @click="closeModal">
-                    Cancel
+                Cancel
             </el-button>
             <el-button type="success"
                        size="small"
                        :loading="form.busy"
                        @click="item ? update() : create()">
-                    Confirm
+                Confirm
             </el-button>
-        </span>
+        </template>
     </modal>
 </template>
 

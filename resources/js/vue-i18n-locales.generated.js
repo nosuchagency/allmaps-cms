@@ -261,6 +261,7 @@ export default {
             "searchables": "Searchables",
             "skins": "Skins",
             "map-settings": "Map Settings",
+            "beacon_providers": "Beacon Providers",
             "email_layouts": "Email Layouts",
             "email_templates": "Email Templates",
             "account": "My Account",
@@ -476,11 +477,11 @@ export default {
             "attributes": {
                 "id": "ID",
                 "name": "Name",
+                "identifier": "Identifier",
                 "description": "Description",
-                "eddystone_uid": "Eddystone UID",
-                "eddystone_url": "Eddystone URL",
-                "eddystone_tlm": "Eddystone TLM",
-                "eddystone_eid": "Eddystone EID",
+                "namespace": "Namespace",
+                "instance_id": "Instance ID",
+                "url": "URL",
                 "proximity_uuid": "Proximity UUID",
                 "major": "Major",
                 "minor": "Minor",
@@ -491,6 +492,15 @@ export default {
                 "content": "Content",
                 "map": "Map",
                 "tags": "Tags"
+            }
+        },
+        "beacon-providers": {
+            "singular": "Beacon Provider",
+            "plural": "Beacon Providers",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "type": "Type"
             }
         },
         "general": {

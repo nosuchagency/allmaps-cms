@@ -1,46 +1,45 @@
 <template>
-    <portal to="modals">
-        <el-dialog :visible="visible"
-                   :before-close="closeModal">
-            <el-form :model="form"
-                     label-width="120px"
-                     @keydown.native="form.errors.clear($event.target.name)">
-                <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Token" name="token">
-                        <br>
-                        <el-form-item :label="$t('tokens.attributes.name')"
-                                      :class="{'is-error' : form.errors.has('name')}">
-                            <el-input v-model="form.name" autofocus></el-input>
-                        </el-form-item>
-                        <el-form-item :label="$t('tokens.attributes.role')"
-                                      :class="{'is-error' : form.errors.has('role')}">
-                            <fetch-items url="/roles">
-                                <el-select slot-scope="{items, loading}"
-                                           v-model="form.role"
-                                           placeholder="Select"
-                                           value-key="id">
-                                    <el-option v-for="role in items"
-                                               :key="role.id"
-                                               :label="role.name"
-                                               :value="role">
-                                    </el-option>
-                                </el-select>
-                            </fetch-items>
-                        </el-form-item>
-                        <el-form-item :label="$t('tokens.attributes.token')"
-                                      v-if="item">
-                            <el-input :value="form.token"
-                                      ref="token"
-                                      :readonly="true">
-                                <el-button slot="append"
-                                           @click="copyToClipboard()">Copy
-                                </el-button>
-                            </el-input>
-                        </el-form-item>
-                    </el-tab-pane>
-                </el-tabs>
-            </el-form>
-            <span slot="footer">
+    <modal :visible="visible"
+           @modal:close="closeModal">
+        <el-form :model="form"
+                 label-width="120px"
+                 @keydown.native="form.errors.clear($event.target.name)">
+            <el-tabs v-model="currentTab">
+                <el-tab-pane label="Token" name="token">
+                    <br>
+                    <el-form-item :label="$t('tokens.attributes.name')"
+                                  :class="{'is-error' : form.errors.has('name')}">
+                        <el-input v-model="form.name" autofocus></el-input>
+                    </el-form-item>
+                    <el-form-item :label="$t('tokens.attributes.role')"
+                                  :class="{'is-error' : form.errors.has('role')}">
+                        <fetch-items url="/roles">
+                            <el-select slot-scope="{items, loading}"
+                                       v-model="form.role"
+                                       placeholder="Select"
+                                       value-key="id">
+                                <el-option v-for="role in items"
+                                           :key="role.id"
+                                           :label="role.name"
+                                           :value="role">
+                                </el-option>
+                            </el-select>
+                        </fetch-items>
+                    </el-form-item>
+                    <el-form-item :label="$t('tokens.attributes.token')"
+                                  v-if="item">
+                        <el-input :value="form.token"
+                                  ref="token"
+                                  :readonly="true">
+                            <el-button slot="append"
+                                       @click="copyToClipboard()">Copy
+                            </el-button>
+                        </el-input>
+                    </el-form-item>
+                </el-tab-pane>
+            </el-tabs>
+        </el-form>
+        <span slot="footer">
                 <template v-if="item">
                     <el-button v-if="!confirmDelete"
                                type="text"
@@ -70,8 +69,7 @@
                     Confirm
                 </el-button>
             </span>
-        </el-dialog>
-    </portal>
+    </modal>
 </template>
 
 <script>

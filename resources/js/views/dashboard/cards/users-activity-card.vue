@@ -42,7 +42,7 @@
         data() {
             return {
                 loading: false,
-                events: ['created', 'updated', 'deleted'],
+                events: ['created', 'updated', 'deleted', 'started', 'finished'],
                 items: null
             }
         },

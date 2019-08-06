@@ -1,60 +1,59 @@
 <template>
-    <portal to="modals">
-        <el-dialog :visible="visible"
-                   :before-close="closeModal">
-            <el-form :model="form"
-                     label-width="120px"
-                     @keydown.native="form.errors.clear($event.target.name)">
-                <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Skin" name="skin">
-                        <br>
-                        <el-form-item :label="$t('skins.attributes.name')"
-                                      :class="{'is-error' : form.errors.has('name')}">
-                            <el-input v-model="form.name" autofocus></el-input>
-                        </el-form-item>
-                        <el-form-item :label="$t('skins.attributes.file')"
-                                      :class="{'is-error' : form.errors.has('file')}">
-                            <input type="file" @change="onFileChange"></input>
-                        </el-form-item>
-                        <template v-if="item">
-                            <el-form-item>
-                                <a :href="`${baseUrl}/skins/${item.id}/download`" v-if="item.valid">
-                                    <el-button type="primary"
-                                               size="mini">
-                                        Download Skin
-                                    </el-button>
-                                </a>
-                                <span class="info-text-danger"
-                                      v-else>
+    <modal :visible="visible"
+           @modal:close="closeModal">
+        <el-form :model="form"
+                 label-width="120px"
+                 @keydown.native="form.errors.clear($event.target.name)">
+            <el-tabs v-model="currentTab">
+                <el-tab-pane label="Skin" name="skin">
+                    <br>
+                    <el-form-item :label="$t('skins.attributes.name')"
+                                  :class="{'is-error' : form.errors.has('name')}">
+                        <el-input v-model="form.name" autofocus></el-input>
+                    </el-form-item>
+                    <el-form-item :label="$t('skins.attributes.file')"
+                                  :class="{'is-error' : form.errors.has('file')}">
+                        <input type="file" @change="onFileChange"></input>
+                    </el-form-item>
+                    <template v-if="item">
+                        <el-form-item>
+                            <a :href="`${baseUrl}/skins/${item.id}/download`" v-if="item.valid">
+                                <el-button type="primary"
+                                           size="mini">
+                                    Download Skin
+                                </el-button>
+                            </a>
+                            <span class="info-text-danger"
+                                  v-else>
                                         The skin is not valid
                                 </span>
-                            </el-form-item>
-                        </template>
-                        <el-form-item>
-                            <el-checkbox v-model="mobile">Mobile</el-checkbox>
-                            <el-checkbox v-model="tablet">Tablet</el-checkbox>
-                            <el-checkbox v-model="desktop">Desktop</el-checkbox>
                         </el-form-item>
-                    </el-tab-pane>
-                </el-tabs>
-            </el-form>
-            <span slot="footer">
-                <template v-if="item">
-                    <el-button v-if="!confirmDelete"
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="confirmDelete = true">
-                            Delete
-                    </el-button>
-                    <el-button v-else
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="remove">
-                        Are you sure?
-                    </el-button>
-                </template>
+                    </template>
+                    <el-form-item>
+                        <el-checkbox v-model="mobile">Mobile</el-checkbox>
+                        <el-checkbox v-model="tablet">Tablet</el-checkbox>
+                        <el-checkbox v-model="desktop">Desktop</el-checkbox>
+                    </el-form-item>
+                </el-tab-pane>
+            </el-tabs>
+        </el-form>
+        <span slot="footer">
+            <template v-if="item">
+                <el-button v-if="!confirmDelete"
+                           type="text"
+                           size="small"
+                           class="btn-remove"
+                           @click="confirmDelete = true">
+                    Delete
+                </el-button>
+                <el-button v-else
+                           type="text"
+                           size="small"
+                           class="btn-remove"
+                           @click="remove">
+                    Are you sure?
+                </el-button>
+            </template>
                 <el-button type="text"
                            size="small"
                            class="btn-cancel"
@@ -68,8 +67,7 @@
                     Confirm
                 </el-button>
             </span>
-        </el-dialog>
-    </portal>
+    </modal>
 </template>
 
 <script>

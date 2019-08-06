@@ -38,6 +38,9 @@
                     case 'floor':
                     case 'floors':
                         return 'grip-lines';
+                    case 'import':
+                    case 'imports':
+                        return 'file-import';
                     case 'layout':
                     case 'layouts':
                         return 'pen-fancy';

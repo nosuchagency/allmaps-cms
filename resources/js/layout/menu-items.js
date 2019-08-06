@@ -111,6 +111,11 @@ let menuItems = {
                             icon: 'palette',
                             route: 'skins'
                         },
+                        {
+                            title: this.$t('menu.beacon_providers'),
+                            icon: 'palette',
+                            route: 'beacon-providers'
+                        },
                         // {
                         //     title: this.$t('menu.map-settings'),
                         //     children: null,

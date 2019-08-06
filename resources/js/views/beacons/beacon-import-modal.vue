@@ -9,19 +9,30 @@
                     <br>
                     <el-form-item label="Provider"
                                   :class="{'is-error' : form.errors.has('provider')}">
-                        <el-select v-model="form.provider"
-                                   placeholder="Select"
-                                   value-key="id">
-                            <el-option v-for="item in providers"
-                                       :key="item.value"
-                                       :label="item.label"
-                                       :value="item.value">
-                            </el-option>
-                        </el-select>
+                        <fetch-items url="/beacon-providers">
+                            <el-select v-model="form.provider"
+                                       slot-scope="{items, loading}"
+                                       placeholder="Select"
+                                       clearable
+                                       value-key="id">
+                                <el-option v-for="item in items"
+                                           :key="item.id"
+                                           :label="item.name"
+                                           :value="item">
+                                </el-option>
+                            </el-select>
+                        </fetch-items>
                     </el-form-item>
-                    <el-form-item label="API Key"
-                                  :class="{'is-error' : form.errors.has('api_key')}">
-                        <el-input v-model="form.api_key"></el-input>
+                    <el-form-item label="Override"
+                                  :class="{'is-error' : form.errors.has('override')}">
+                        <el-switch v-model="form.override"></el-switch>
+                    </el-form-item>
+                    <el-form-item label="Description"
+                                  :class="{'is-error' : form.errors.has('description')}">
+                        <el-input v-model="form.description"
+                                  type="textarea"
+                                  :rows="3">
+                        </el-input>
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
@@ -34,7 +45,9 @@
                     Cancel
                 </el-button>
                 <el-button type="success"
-                           size="small">
+                           size="small"
+                           :loading="form.busy"
+                           @click="create()">
                     Import
                 </el-button>
             </span>
@@ -53,18 +66,20 @@
                 currentTab: 'import',
                 form: new Form({
                     provider: null,
-                    api_key: ''
-                }),
-                providers: [
-                    {value: 'kontakt.io', label: 'kontakt.io'},
-                    {value: 'estimote', label: 'estimote'},
-                ]
+                    override: false,
+                    description: '',
+                })
             }
         },
         methods: {
             closeModal() {
                 this.$emit('modal:close');
-            }
+            },
+            create() {
+                this.form.post('/beacons/import')
+                    .then(response => this.closeModal())
+                    .catch(error => console.log(error));
+            },
         }
 
     }

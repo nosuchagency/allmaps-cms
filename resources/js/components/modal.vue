@@ -2,7 +2,8 @@
     <portal to="modals">
         <el-dialog v-if="visible"
                    :visible="visible"
-                   :before-close="closeModal">
+                   :before-close="closeModal"
+                   :width="width">
             <slot></slot>
             <template v-slot:footer>
                 <slot name="footer"></slot>
@@ -14,7 +15,14 @@
 <script>
     export default {
         props: {
-            visible: Boolean
+            visible: {
+                type: Boolean,
+                default: false
+            },
+            width: {
+                type: String,
+                default: '50%'
+            }
         },
         methods: {
             closeModal() {
