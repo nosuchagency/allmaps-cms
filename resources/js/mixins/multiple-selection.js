@@ -5,17 +5,16 @@ let multipleSelection = {
             bulkRemoving: false,
             bulkActions: [
                 {value: null, label: 'Bulk Actions'},
-                {value: 'delete', label: 'Delete'},
-                {value: 'publish', label: 'Publish'},
+                {value: 'delete', label: 'Delete'}
             ]
         }
     },
     methods: {
-        handleSelectionChange(val) {
-            this.selectedItems = val;
+        handleSelectionChange(items) {
+            this.selectedItems = items;
         },
-        applyBulkAction(action) {
-            if (action === 'delete') {
+        applyBulkAction(bulkAction) {
+            if (bulkAction === 'delete') {
                 this.confirmDeleteVisible = true;
             }
         },
@@ -27,7 +26,7 @@ let multipleSelection = {
             this.bulkRemoving = true;
 
             try {
-                await this.$axios.post('/' + this.resource + '/bulk-destroy', {items: this.selectedItems});
+                await this.$axios.post(`/${this.resource}/bulk-destroy`, {items: this.selectedItems});
                 this.$router.go('/' + this.resource);
             } catch (error) {
                 console.log(error);

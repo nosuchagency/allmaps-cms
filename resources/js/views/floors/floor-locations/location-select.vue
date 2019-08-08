@@ -5,46 +5,44 @@
                    @click="visible = true">
             {{title}}
         </el-button>
-        <portal to="modals" v-if="visible">
-            <el-dialog :visible="visible"
-                       @close="closeModal">
-                <el-tabs v-model="currentTab">
-                    <el-tab-pane :label="title" name="main">
-                        <br>
-                        <fetch-items :url="url">
-                            <el-select v-model="location"
-                                       slot-scope="{items, loading}"
-                                       placeholder="Select"
-                                       clearable
-                                       filterable
-                                       value-key="id"
-                                       ref="select"
-                                       @input="setLocation">
-                                <el-option v-for="item in items"
-                                           :key="item.id"
-                                           :label="item.name"
-                                           :value="item">
-                                </el-option>
-                            </el-select>
-                        </fetch-items>
-                    </el-tab-pane>
-                </el-tabs>
-                <span slot="footer">
-                    <el-button type="text"
-                               size="small"
-                               @click="visible = false">
-                        Cancel
-                    </el-button>
-                    <el-button type="success"
-                               size="small"
-                               @click="create"
-                               :loading="form.busy"
-                               :disabled="!location">
-                        Add {{title}}
-                    </el-button>
-                </span>
-            </el-dialog>
-        </portal>
+        <modal :visible="visible"
+               @modal:close="closeModal">
+            <el-tabs v-model="currentTab">
+                <el-tab-pane :label="title" name="main">
+                    <br>
+                    <fetch-items :url="url">
+                        <el-select v-model="location"
+                                   slot-scope="{items, loading}"
+                                   placeholder="Select"
+                                   clearable
+                                   filterable
+                                   value-key="id"
+                                   ref="select"
+                                   @input="setLocation">
+                            <el-option v-for="item in items"
+                                       :key="item.id"
+                                       :label="item.name"
+                                       :value="item">
+                            </el-option>
+                        </el-select>
+                    </fetch-items>
+                </el-tab-pane>
+            </el-tabs>
+            <span slot="footer">
+                <el-button type="text"
+                           size="small"
+                           @click="visible = false">
+                    Cancel
+                </el-button>
+                <el-button type="success"
+                           size="small"
+                           @click="create"
+                           :loading="form.busy"
+                           :disabled="!location">
+                    Add {{title}}
+                </el-button>
+            </span>
+        </modal>
     </div>
 </template>
 

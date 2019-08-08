@@ -11,7 +11,7 @@
                         content="Create new Folder"
                         placement="top-start"
                         style="margin-left: auto;"
-                        v-if="$auth.user().permissions.includes('folders.create')">
+                        v-if="$auth.user().hasPermissionTo('folders.create')">
                 <el-button type="primary"
                            size="small"
                            @click="openFolderModal()"
@@ -40,19 +40,21 @@
                     </template>
                 </template>
             </el-table-column>
+        </template>
+        <template slot="footer">
             <folder-modal v-if="folderModalVisible"
                           :visible="folderModalVisible"
                           :item="selectedFolder"
                           :container="item"
-                          @upsert-modal:close="closeFolderModal"
-                          @upsert-modal:add="addFolder">
+                          @modal:close="closeFolderModal"
+                          @modal:add="addFolder">
             </folder-modal>
         </template>
     </drag-table>
 </template>
 
 <script>
-    import dragTable from 'js/components/drag-table.vue';
+    import dragTable from 'js/components/drag-table';
     import folderModal from '../../folders/upsert-modal';
 
     export default {

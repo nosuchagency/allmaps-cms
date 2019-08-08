@@ -24,9 +24,7 @@ require('./leaflet-icon-fix');
 require('./sentry-setup');
 require('./axios-setup');
 
-require('./global-functions');
-
-const files = require.context('./components/global', true, /\.vue$/i);
+const files = require.context('./components', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)));
 
 Vue.router = router;
@@ -40,7 +38,5 @@ new Vue({
     i18n,
     store,
     router,
-    components: {
-        app
-    }
+    render: h => h(app)
 }).$mount('#app');

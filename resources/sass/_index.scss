@@ -7,10 +7,6 @@ body {
     margin: 0;
 }
 
-label {
-    //font-weight: 700;
-}
-
 html {
     height: 100%;
     box-sizing: border-box;
@@ -27,7 +23,7 @@ html {
 }
 
 .no-padding {
-    padding: 0px !important;
+    padding: 0 !important;
 }
 
 .padding-content {
@@ -112,7 +108,6 @@ code {
 .warn-content {
     background: rgba(66, 185, 131, 0.1);
     border-radius: 2px;
-    padding: 16px;
     padding: 1rem;
     line-height: 1.6rem;
     word-spacing: .05rem;
@@ -197,64 +192,6 @@ code {
 
 .text-capitalize {
     text-transform: capitalize;
-}
-
-.el-form-item {
-    margin-bottom: 10px !important;
-
-    &__label {
-        padding: 0 12px 0 0 !important;
-    }
-
-    &.inline-select {
-        .el-form-item__content {
-            display: flex;
-
-            .el-select {
-                flex-grow: 1;
-            }
-
-            .el-button {
-                margin-left: 5px;
-            }
-        }
-    }
-}
-
-.el-checkbox.is-bordered {
-    height: 38px !important;
-}
-
-.el-select {
-    width: 100%;
-
-    input {
-        text-transform: capitalize;
-    }
-}
-
-.el-button {
-    &.is-circle {
-        width: 32px;
-    }
-}
-
-.el-scrollbar {
-    span {
-        text-transform: capitalize;
-    }
-}
-
-.el-color-picker {
-    width: 100% !important;
-
-    &__trigger {
-        width: 100% !important;
-    }
-}
-
-.el-slider {
-    padding-left: 9px;
 }
 
 .title-icon-wrapper {

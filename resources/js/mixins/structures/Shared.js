@@ -1,6 +1,11 @@
+import {lineString, bezierSpline} from '@turf/turf';
+
 export default {
     getStructure() {
         return this.structure;
+    },
+    getComponent() {
+        return this.structure.component;
     },
     getId() {
         return this.structure.id;
@@ -8,29 +13,50 @@ export default {
     getName() {
         return this.structure.name;
     },
+    getCircleRadius() {
+        return this.structure.radius;
+    },
     getShape() {
         return this.structure.component.shape;
     },
     getType() {
         return this.structure.component.type;
     },
-    getCurved() {
-        return this.structure.component.curved;
+    getStroke() {
+        return this.structure.component.stroke;
     },
-    getColor() {
-        return this.structure.component.color;
+    getStrokeType() {
+        return this.structure.component.stroke_type;
     },
-    getOpacity() {
-        return this.structure.component.opacity;
+    getStrokeColor() {
+        return this.structure.component.stroke_color;
     },
-    getWidth() {
-        return this.structure.component.width;
+    getStrokeWidth() {
+        return this.structure.component.stroke_width;
     },
-    getHeight() {
-        return this.structure.component.height;
+    getStrokeOpacity() {
+        return this.structure.component.stroke_opacity;
+    },
+    getFill() {
+        return this.structure.component.fill;
+    },
+    getFillColor() {
+        return this.structure.component.fill_color;
+    },
+    getFillOpacity() {
+        return this.structure.component.fill_opacity;
     },
     getImage() {
         return this.structure.component.image;
+    },
+    getImageWidth() {
+        return this.structure.component.image_width;
+    },
+    getImageHeight() {
+        return this.structure.component.image_height;
+    },
+    isCurved() {
+        return this.structure.component.stroke_type === 'curved';
     },
     getMarkers() {
         if (!this.structure.markers) {
@@ -40,8 +66,8 @@ export default {
         return this.structure.markers;
     },
     bezierSpline(coordinates) {
-        let line = turf.lineString(coordinates.map(x => [x.lat, x.lng]));
-        let curved = turf.bezierSpline(line);
+        let line = lineString(coordinates.map(x => [x.lat, x.lng]));
+        let curved = bezierSpline(line);
 
         return curved.geometry.coordinates;
     },
@@ -67,5 +93,24 @@ export default {
     },
     getDestination() {
         return null;
+    },
+    getAttributes() {
+        return {
+            radius: this.getCircleRadius(),
+            stroke: this.getStroke(),
+            color: this.getStrokeColor(),
+            weight: this.getStrokeWidth(),
+            opacity: this.getStrokeOpacity(),
+            fill: this.getFill(),
+            fillColor: this.getFillColor(),
+            fillOpacity: this.getFillOpacity(),
+            dashArray: this.getStrokeType() === 'dashed' ? '5,10' : null,
+        }
+    },
+    getPayload() {
+        return {
+            coordinates: this.getCoordinates(),
+            markers: this.getMarkers()
+        }
     }
 }

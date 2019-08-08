@@ -1,5 +1,5 @@
 <template>
-    <el-card class="box-card">
+    <el-card>
         <template slot="header">
             <div class="title-icon-wrapper">
                 <i class="fa fa-building title-icon"></i>
@@ -53,7 +53,7 @@
                                    size="small"
                                    icon="el-icon-picture-outline"
                                    circle
-                                   v-if="$auth.user().permissions.includes('floors.read')"
+                                   v-if="$auth.user().hasPermissionTo('floors.read')"
                                    @click="$router.push(`/places/${building.id}/buildings/${building.id}/floors/${scope.row.id}/structures`)">
                         </el-button>
                     </el-tooltip>
@@ -63,7 +63,7 @@
                         <el-button type="warning"
                                    size="small"
                                    circle
-                                   v-if="$auth.user().permissions.includes('floors.read')"
+                                   v-if="$auth.user().hasPermissionTo('floors.read')"
                                    @click="$router.push(`/places/${building.id}/buildings/${building.id}/floors/${scope.row.id}/locations`)">
                             <i class="fa fa-location-arrow"></i>
                         </el-button>
@@ -84,18 +84,18 @@
         <building-modal v-if="buildingModalVisible"
                         :visible="buildingModalVisible"
                         :item="building"
-                        @building-modal:close="buildingModalVisible = false"
-                        @building-modal:update="updateBuilding"
-                        @building-modal:remove="removeBuilding">
+                        @modal:close="buildingModalVisible = false"
+                        @modal:update="updateBuilding"
+                        @modal:remove="removeBuilding">
         </building-modal>
         <floor-modal v-if="floorModalVisible"
                      :visible="floorModalVisible"
                      :item="floor"
                      :building="building"
-                     @floor-modal:close="floorModalVisible = false"
-                     @floor-modal:add="addFloor"
-                     @floor-modal:update="updateFloor"
-                     @floor-modal:remove="removeFloor">
+                     @modal:close="floorModalVisible = false"
+                     @modal:add="addFloor"
+                     @modal:update="updateFloor"
+                     @modal:remove="removeFloor">
         </floor-modal>
     </el-card>
 </template>

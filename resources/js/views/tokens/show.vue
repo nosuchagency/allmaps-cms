@@ -14,7 +14,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('tokens.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('tokens.update')">
+                                v-if="$auth.user().hasPermissionTo('tokens.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -32,14 +32,14 @@
             </div>
 
             <div class="content" v-else>
-                <el-card class="box-card">
+                <el-card>
                     <template slot="header">
                         <div class="title-icon-wrapper">
                             <i class="fa fa-tasks title-icon"></i>
                             <label>Activity</label>
                         </div>
                     </template>
-                    <el-table :data="item.actions"
+                    <el-table :data="item.activities"
                               :default-sort="{prop: 'name', order: 'ascending'}">
                         <el-table-column label="Token">
                             <template slot-scope="scope">
@@ -57,7 +57,7 @@
                                 <el-tooltip :content="scope.row.subject_type">
                                     <icon :resource="scope.row.subject_type"></icon>
                                 </el-tooltip>
-                                {{scope.row.subject_name}}
+                                {{scope.row.subject.name}}
                             </template>
                         </el-table-column>
                         <el-table-column label="Time">
@@ -73,9 +73,9 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
             </div>
         </template>

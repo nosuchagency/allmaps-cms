@@ -1,10 +1,20 @@
-module.exports = [
+import Vue from 'vue';
+
+export default [
     {
         path: '/components',
         name: 'components-index',
         component: require('../../views/components'),
+        props: true,
         meta: {
             auth: true
+        },
+        beforeEnter: (to, from, next) => {
+            if (Vue.auth.user().hasPermissionTo('components.read')) {
+                next();
+            } else {
+                next({name: '403'});
+            }
         }
     },
     {
@@ -14,6 +24,13 @@ module.exports = [
         props: true,
         meta: {
             auth: true
+        },
+        beforeEnter: (to, from, next) => {
+            if (Vue.auth.user().hasPermissionTo('components.read')) {
+                next();
+            } else {
+                next({name: '403'});
+            }
         }
     }
 ];

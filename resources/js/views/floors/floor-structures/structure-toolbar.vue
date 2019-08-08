@@ -13,7 +13,7 @@
                 </span>
                 <span class="structure-color">
                     <i class="fa fa-square"
-                       :style="{color : structure.getColor(), opacity : structure.getOpacity()}">
+                       :style="{color : structure.getStrokeColor(), opacity : structure.getStrokeOpacity()}">
                     </i>
                 </span>
                 <span class="structure-shape">
@@ -39,15 +39,15 @@
         <structure-modal v-if="structureModalVisible"
                          :visible="structureModalVisible"
                          :structure="structure.structure"
-                         @structure-modal:close="closeStructureModal"
-                         @structure-modal:update="updateStructure"
-                         @structure-modal:remove="removeStructure">
+                         @modal:close="closeStructureModal"
+                         @modal:update="updateStructure"
+                         @modal:remove="removeStructure">
         </structure-modal>
     </div>
 </template>
 
 <script>
-    import structureModal from './structure-modal';
+    import structureModal from '../../structures/upsert-modal';
 
     export default {
         components: {
@@ -80,12 +80,8 @@
                 this.saving = true;
 
                 try {
-                    let coordinates = this.structure.getCoordinates();
-                    let markers = this.structure.getMarkers();
-                    const {data} = await this.$axios.put('/structures/' + this.structure.getId(), {
-                        coordinates,
-                        markers
-                    });
+                    let payload = this.structure.getPayload();
+                    const {data} = await this.$axios.put(`/structures/${this.structure.getId()}`, payload);
                     this.updateStructure(data);
                 } catch (error) {
                     console.log(error);

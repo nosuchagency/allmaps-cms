@@ -12,7 +12,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.create', {name : $t('tags.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('tags.create')">
+                                v-if="$auth.user().hasPermissionTo('tags.create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -25,12 +25,15 @@
         </template>
         <template slot="content">
             <div class="content">
-                <ribbon @bulk-action="applyBulkAction"
-                        @ribbon:search="search"
-                        :selections="selectedItems"
-                        :bulk-actions="bulkActions"
-                        :category-filter-activated="false"
-                        :tags-filter-activated="false">
+                <ribbon>
+                    <bulk-actions :bulk-actions="bulkActions"
+                                  :selections="selectedItems"
+                                  @apply-bulk-action="applyBulkAction">
+                    </bulk-actions>
+                    <search-filter :offset="14"
+                                   :span="4"
+                                   @search="setFilter('search', $event)">
+                    </search-filter>
                 </ribbon>
                 <el-table :data="tableItems"
                           :default-sort="{prop: 'name', order: 'ascending'}"
@@ -71,9 +74,9 @@
                     </div>
                     <div class="pagination-container-right">
                         <el-pagination background
-                                       @prev-click="refetch"
-                                       @next-click="refetch"
-                                       @current-change="refetch"
+                                       @prev-click="setFilter('page[number]', $event)"
+                                       @next-click="setFilter('page[number]', $event)"
+                                       @current-change="setFilter('page[number]', $event)"
                                        layout="prev, pager, next"
                                        :total="items.meta.total"
                                        :page-size="50">
@@ -89,10 +92,10 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="selectedTag"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:add="addItem"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:add="addItem"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
             </div>
         </template>
@@ -102,12 +105,15 @@
 <script>
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
-    import _ from 'lodash';
+    import QueryParams from 'js/utils/QueryParams';
 
     export default {
         mixins: [multipleSelection],
         components: {
             upsertModal
+        },
+        props: {
+            id: Number
         },
         data() {
             return {
@@ -116,32 +122,46 @@
                 items: null,
                 loading: false,
                 resource: 'tags',
-                searchQuery: '',
-                selectedTag: null
+                selectedTag: null,
+                params: {
+                    'page[number]': 1,
+                    search: ''
+                }
             };
         },
         created() {
-            this.getItems(this.getUrl());
+            this.getItems(this.getUrl(), () => this.openModal(this.id));
+        },
+        watch: {
+            params: {
+                handler(val) {
+                    this.getItems(this.getUrl());
+                },
+                deep: true
+            }
         },
         methods: {
-            search: _.debounce(function (query) {
-                this.searchQuery = query;
-                this.getItems(this.getUrl() + this.getFilterParams());
-            }, 500),
-            refetch(page) {
-                this.getItems(this.getUrl() + this.getFilterParams() + '&page=' + page);
+            setFilter(key, value) {
+                this.params[key] = value;
             },
             getUrl() {
                 return this.resource + '/paginated';
             },
-            getFilterParams() {
-                return '?search=' + this.searchQuery;
+            openModal(id) {
+                let item = this.items.data.find((item) => item.id === id);
+
+                if (item) {
+                    this.openUpsertModal(item);
+                }
             },
-            async getItems(url) {
+            async getItems(url, callback = null) {
+                this.loading = true;
                 try {
-                    this.loading = true;
-                    const response = await this.$axios.get(url);
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(url + new QueryParams(this.params));
+                    this.items = data;
+                    if (typeof callback == 'function') {
+                        callback()
+                    }
                 } catch (error) {
                     console.log(error);
                 } finally {

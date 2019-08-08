@@ -10,7 +10,7 @@ let Polygon = {
                     this.structure = structure;
                     this.readonly = readonly;
 
-                    L.Polygon.prototype.initialize.call(this, this.structure.coordinates || [], structure.component);
+                    L.Polygon.prototype.initialize.call(this, this.structure.coordinates || [], this.getAttributes());
 
                     this.activateEventListeners();
                 },
@@ -29,7 +29,7 @@ let Polygon = {
                     let points = this.getMarkers();
                     points.push(latlng);
 
-                    if (this.getCurved() && points.length > 1) {
+                    if (this.isCurved() && points.length > 1) {
                         let polyline = this.bezierSpline(points);
                         this.setLatLngs(polyline);
                     } else {
@@ -49,7 +49,11 @@ let Polygon = {
                     return null;
                 },
                 addMarkers() {
-                    this.getCoordinates().forEach(self.addMarker);
+                    if(this.isCurved()) {
+                        this.getMarkers().forEach(self.addMarker);
+                    } else {
+                        this.getCoordinates().forEach(self.addMarker);
+                    }
                 }
             }
         });

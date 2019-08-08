@@ -14,7 +14,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('containers.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('containers.update')">
+                                v-if="$auth.user().hasPermissionTo('containers.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -30,7 +30,7 @@
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
             <div class="content" v-else>
-                <el-card class="box-card">
+                <el-card>
                     <div slot="header" class="clearfix">
                         <div class="title-icon-wrapper">
                             <i class="fa fa-chart-bar title-icon"></i>
@@ -51,7 +51,7 @@
                                 @content-change="item.contents = $event">
                 </contents-table>
                 <template v-if="item">
-                    <el-card class="box-card">
+                    <el-card>
                         <template slot="header">
                             <div class="title-icon-wrapper">
                                 <i class="fa fa-wifi title-icon"></i>
@@ -74,8 +74,7 @@
                                    :styles="styles">
                         </bar-chart>
                     </el-card>
-                    <el-card class="box-card"
-                             v-for="beacon in item.beacons"
+                    <el-card v-for="beacon in item.beacons"
                              :key="beacon.id">
                         <template slot="header">
                             <div class="title-icon-wrapper">
@@ -148,13 +147,48 @@
                             </el-table-column>
                         </el-table>
                     </el-card>
+                    <el-card>
+                        <template slot="header">
+                            <div class="title-icon-wrapper">
+                                <i class="fa fa-archive title-icon"></i>
+                                <label>Content</label>
+                            </div>
+                        </template>
+                        <el-table :data="item.locations"
+                                  size="small">
+                            <el-table-column label="Name"
+                                             sortable
+                                             property="name">
+                            </el-table-column>
+                            <el-table-column align="right">
+                                <template slot-scope="scope">
+                                    <el-tooltip effect="dark"
+                                                content="Detach location"
+                                                placement="top-start">
+                                        <el-button type="danger"
+                                                   size="small"
+                                                   @click="openConfirmUnlinkModal(scope.row)"
+                                                   circle>
+                                            <i class="fa fa-unlink"></i>
+                                        </el-button>
+                                    </el-tooltip>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-card>
                 </template>
+                <confirm-dialog v-if="confirmDetachVisible"
+                                :message="$t('general.confirm')"
+                                @cancel="confirmDetachVisible = false"
+                                @confirm="detachLocation"
+                                :visible="confirmDetachVisible">
+                </confirm-dialog>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
                 <beacon-modal v-if="beaconModalVisible"
                               :visible="beaconModalVisible"
@@ -187,8 +221,9 @@
     import beaconModal from './beacon-modal';
     import ruleModal from '../rules/upsert-modal';
     import upsertModal from './upsert-modal';
-    import pieChart from '../../components/PieChart';
-    import barChart from '../../components/BarChart';
+    import pieChart from 'js/components/charts/PieChart';
+    import barChart from 'js/components/charts/BarChart';
+    import sumBy from 'lodash/sumBy';
 
     export default {
         components: {
@@ -206,8 +241,10 @@
                 beaconModalVisible: false,
                 ruleModalVisible: false,
                 upsertModalVisible: false,
+                confirmDetachVisible: false,
                 selectedBeacon: null,
                 selectedRule: null,
+                selectedLocation: null,
                 item: null,
             };
         },
@@ -281,13 +318,31 @@
                 let ruleIndex = beacon.rules.findIndex(({id}) => id === data.rule.id);
                 beacon.rules.splice(ruleIndex, 1);
                 this.closeRuleModal();
+            },
+            openConfirmUnlinkModal(location) {
+                this.selectedLocation = location;
+                this.confirmDetachVisible = true;
+            },
+            async detachLocation() {
+                try {
+                    await this.$axios.post(`/${this.resource}/${this.item.id}/relationships/locations?_method=delete`, {data: [this.selectedLocation]});
+                    let index = this.item.locations.findIndex(({id}) => id === this.selectedLocation.id);
+                    this.item.locations.splice(index, 1);
+                    this.confirmDetachVisible = false;
+                    this.selectedLocation = null;
+                } catch (error) {
+                    console.log(error);
+                }
             }
         },
         computed: {
             options() {
                 return {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    legend: {
+                        position: 'right'
+                    }
                 };
             },
             pieChartData() {
@@ -304,12 +359,12 @@
                                 '#7647a2'
                             ],
                             data: [
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'web') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'image') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'video') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'file') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'gallery') : 0,
-                                this.item ? _.sumBy(this.item.contents, ({type}) => type === 'text') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'web') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'image') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'video') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'file') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'gallery') : 0,
+                                this.item ? sumBy(this.item.contents, ({type}) => type === 'text') : 0,
                             ]
                         }
                     ]
@@ -320,7 +375,7 @@
                     labels: this.item ? this.item.beacons.map(beacon => beacon.name) : [],
                     datasets: [
                         {
-                            data: this.item ? this.item.beacons.map(beacon => beacon.hits) : 0,
+                            data: this.item ? this.item.beacons.map(beacon => beacon.hits.length) : 0,
                         }
                     ]
                 };
@@ -334,7 +389,8 @@
                         yAxes: [
                             {
                                 ticks: {
-                                    beginAtZero: true
+                                    beginAtZero: true,
+                                    stepSize: 1
                                 }
                             }
                         ]

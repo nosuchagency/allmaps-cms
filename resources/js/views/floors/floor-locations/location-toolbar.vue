@@ -37,15 +37,15 @@
         <location-modal v-if="locationModalVisible"
                         :visible="locationModalVisible"
                         :location="location.location"
-                        @location-modal:close="closeLocationModal"
-                        @location-modal:update="updateLocation"
-                        @location-modal:remove="removeLocation">
+                        @modal:close="closeLocationModal"
+                        @modal:update="updateLocation"
+                        @modal:remove="removeLocation">
         </location-modal>
     </div>
 </template>
 
 <script>
-    import locationModal from './location-modal';
+    import locationModal from '../../locations/upsert-modal';
 
     export default {
         components: {
@@ -75,7 +75,7 @@
 
                 try {
                     let coordinates = this.location.getCoordinates();
-                    const {data} = await this.$axios.put('/locations/' + this.location.getId(), {coordinates});
+                    const {data} = await this.$axios.put(`/locations/${this.location.getId()}`, {coordinates});
                     this.updateLocation(data);
                 } catch (error) {
                     console.log(error);

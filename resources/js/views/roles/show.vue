@@ -14,7 +14,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('roles.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('roles.update')">
+                                v-if="$auth.user().hasPermissionTo('roles.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -41,9 +41,9 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
             </div>
         </template>

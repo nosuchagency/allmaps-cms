@@ -1,3 +1,5 @@
+import cloneDeep from 'lodash/cloneDeep';
+
 let creationMethodsMixin = {
     data() {
         return {
@@ -8,7 +10,7 @@ let creationMethodsMixin = {
         startEditing(location) {
             this.$emit('location-copy:set', location);
 
-            let component = this.initializeLocation(_.cloneDeep(location.getLocation())).addTo(this.editingLayer);
+            let component = this.initializeLocation(cloneDeep(location.getLocation())).addTo(this.editingLayer);
             component.startEditing();
 
             if (location.getType() === 'fixture') {

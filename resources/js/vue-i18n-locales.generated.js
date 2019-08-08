@@ -27,7 +27,7 @@ export default {
             },
             "403": {
                 "title": "Unauthorized - 403",
-                "description": "You do not possess the necessary permissions to visit this page. Contact the system\n                    administrator if you need access to this particular page.",
+                "description": "You do not possess the necessary permissions to access the requested resource. Contact the system\n                    administrator if you need access to this particular page.",
                 "link_text": "Go to Dashboard"
             },
             "404": {
@@ -48,6 +48,20 @@ export default {
                 "tags": "Tags"
             }
         },
+        "menu_items": {
+            "singular": "Menu Item",
+            "plural": "Menu Items",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "order": "Order",
+                "shown": "Shown",
+                "poi": "Poi",
+                "location": "Location",
+                "tag": "Tag",
+                "category": "Category"
+            }
+        },
         "passwords": {
             "password": "Passwords must be at least six characters and match the confirmation.",
             "reset": "Your password has been reset!",
@@ -63,8 +77,8 @@ export default {
                 "name": "Name",
                 "description": "Description",
                 "image": "Image",
-                "width": "Width",
-                "height": "Height",
+                "image_width": "Width",
+                "image_height": "Height",
                 "category": "Category",
                 "tags": "Tags"
             }
@@ -155,6 +169,7 @@ export default {
                 "id": "ID",
                 "name": "Name",
                 "image": "Image",
+                "menu": "Menu",
                 "place_id": "Place ID"
             },
             "map_plan": "Map Plan"
@@ -180,7 +195,30 @@ export default {
                 "phone": "Phone",
                 "email": "Email",
                 "search_activated": "Search Activated",
-                "search_text": "Search Text"
+                "search_text": "Search Text",
+                "category": "Category",
+                "tags": "Tags"
+            }
+        },
+        "skins": {
+            "singular": "Skin",
+            "plural": "Skins",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "file": "File",
+                "mobile": "Mobile",
+                "tablet": "Tablet",
+                "desktop": "Desktop",
+                "valid": "Valid"
+            }
+        },
+        "menus": {
+            "singular": "Menu",
+            "plural": "Menus",
+            "attributes": {
+                "id": "ID",
+                "name": "Name"
             }
         },
         "users": {
@@ -203,22 +241,27 @@ export default {
         },
         "menu": {
             "dashboard": "Dashboard",
+            "map": "Map",
             "places": "Places",
+            "components": "Components",
+            "menus": "Menus",
             "beacons": "Beacons",
             "pois": "Points of Interest",
             "fixtures": "Fixtures",
             "containers": "Content",
             "locations": "Locations",
             "user_management": "User Management",
+            "activities": "Activities",
             "users": "Users",
             "roles": "Roles",
             "tokens": "API Tokens",
             "settings": "Settings",
             "categories": "Categories",
             "tags": "Tags",
-            "components": "Map Components",
             "searchables": "Searchables",
+            "skins": "Skins",
             "map-settings": "Map Settings",
+            "beacon_providers": "Beacon Providers",
             "email_layouts": "Email Layouts",
             "email_templates": "Email Templates",
             "account": "My Account",
@@ -234,13 +277,16 @@ export default {
             }
         },
         "containers": {
-            "singular": "Container",
-            "plural": "Containers",
+            "singular": "Content",
+            "plural": "Contents",
             "attributes": {
                 "id": "ID",
                 "name": "Name",
                 "description": "Description",
                 "folders_enabled": "Folders enabled",
+                "mobile_skin": "Mobile Skin",
+                "tablet_skin": "Tablet Skin",
+                "desktop_skin": "Desktop Skin",
                 "folders": "Folders",
                 "category": "Category",
                 "tags": "Tags",
@@ -254,16 +300,19 @@ export default {
                 "id": "ID",
                 "name": "Name",
                 "type": "Type",
-                "description": "Description",
                 "shape": "Shape",
-                "color": "Color",
-                "opacity": "Opacity",
-                "weight": "Weight",
-                "curved": "Curved",
+                "description": "Description",
+                "stroke": "Stroke",
+                "stroke_type": "Type",
+                "stroke_color": "Color",
+                "stroke_width": "Width",
+                "stroke_opacity": "Opacity",
+                "fill": "Fill",
+                "fill_color": "Color",
+                "fill_opacity": "Opacity",
                 "image": "Image",
-                "thickness": "Thickness",
-                "width": "Width",
-                "height": "Height",
+                "image_width": "Width",
+                "image_height": "Height",
                 "category": "Category",
                 "tags": "Tags"
             }
@@ -281,6 +330,7 @@ export default {
                 "lat": "Latitude",
                 "lng": "Longitude",
                 "activated": "Activated",
+                "menu": "Menu",
                 "category": "Category",
                 "tags": "Tags"
             },
@@ -293,6 +343,14 @@ export default {
                 "id": "ID",
                 "name": "Name",
                 "description": "Description"
+            }
+        },
+        "activities": {
+            "singular": "Activity",
+            "plural": "Activities",
+            "attributes": {
+                "id": "ID",
+                "name": "Name"
             }
         },
         "profile": {
@@ -419,11 +477,11 @@ export default {
             "attributes": {
                 "id": "ID",
                 "name": "Name",
+                "identifier": "Identifier",
                 "description": "Description",
-                "eddystone_uid": "Eddystone UID",
-                "eddystone_url": "Eddystone URL",
-                "eddystone_tlm": "Eddystone TLM",
-                "eddystone_eid": "Eddystone EID",
+                "namespace": "Namespace",
+                "instance_id": "Instance ID",
+                "url": "URL",
                 "proximity_uuid": "Proximity UUID",
                 "major": "Major",
                 "minor": "Minor",
@@ -434,6 +492,15 @@ export default {
                 "content": "Content",
                 "map": "Map",
                 "tags": "Tags"
+            }
+        },
+        "beacon-providers": {
+            "singular": "Beacon Provider",
+            "plural": "Beacon Providers",
+            "attributes": {
+                "id": "ID",
+                "name": "Name",
+                "type": "Type"
             }
         },
         "general": {
@@ -477,7 +544,14 @@ export default {
                 "description": "Description",
                 "image": "Image",
                 "type": "Type",
-                "color": "Color",
+                "stroke": "Stroke",
+                "stroke_type": "Type",
+                "stroke_color": "Color",
+                "stroke_width": "Width",
+                "stroke_opacity": "Opacity",
+                "fill": "Fill",
+                "fill_color": "Color",
+                "fill_opacity": "Opacity",
                 "category": "Category",
                 "tags": "Tags"
             }

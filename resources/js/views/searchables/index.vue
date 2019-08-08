@@ -12,12 +12,15 @@
         </template>
         <template slot="content">
             <div class="content">
-                <ribbon @bulk-action="applyBulkAction"
-                        @ribbon:search="searchQuery = $event"
-                        :selections="selectedItems"
-                        :bulk-actions="bulkActions"
-                        :category-filter-activated="false"
-                        :tags-filter-activated="false">
+                <ribbon>
+                    <bulk-actions :bulk-actions="bulkActions"
+                                  :selections="selectedItems"
+                                  @apply-bulk-action="applyBulkAction">
+                    </bulk-actions>
+                    <search-filter :offset="14"
+                                   :span="4"
+                                   @search="setFilter('search', $event)">
+                    </search-filter>
                 </ribbon>
                 <el-table :data="tableItems"
                           :default-sort="{prop: 'name', order: 'ascending'}"
@@ -81,21 +84,27 @@
                 items: null,
                 loading: false,
                 resource: 'plugins',
-                searchQuery: ''
+                params: {
+                    'page[number]': 1,
+                    search: ''
+                }
             };
         },
         created() {
             this.getItems(this.getUrl());
         },
         methods: {
+            setFilter(key, value) {
+                this.params[key] = value;
+            },
             getUrl() {
                 return '/' + this.resource;
             },
             async getItems(url) {
+                this.loading = true;
                 try {
-                    this.loading = true;
-                    const response = await this.$axios.get(url);
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(url);
+                    this.items = data;
                 } catch (error) {
                     console.log(error);
                 } finally {
@@ -109,11 +118,11 @@
                     return [];
                 }
 
-                if (!this.searchQuery) {
+                if (!this.params.search) {
                     return this.items;
                 }
 
-                return this.items.filter(item => item.name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+                return this.items.filter(item => item.name.toLowerCase().includes(this.params.search.toLowerCase()))
             }
         }
     };

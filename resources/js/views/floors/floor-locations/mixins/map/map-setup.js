@@ -11,17 +11,24 @@ let mapSetup = {
                 zoom: 19
             });
 
-            L.gridLayer
-                .googleMutant({
-                    type: 'roadmap',
-                    styles: [
-                        {
-                            elementType: 'labels',
-                            stylers: [{visibility: 'off'}]
-                        }
-                    ]
-                })
-                .addTo(this.map);
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidmljdG9yLWVtaWwiLCJhIjoiY2p2bnEwNGF5MWt4cjQ4bno5M2lrbnR5MiJ9.lI1yQnR0jvfZo-oLwfLKWQ', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 30,
+                id: 'mapbox.streets',
+                accessToken: 'pk.eyJ1IjoidmljdG9yLWVtaWwiLCJhIjoiY2p2bnEwNGF5MWt4cjQ4bno5M2lrbnR5MiJ9.lI1yQnR0jvfZo-oLwfLKWQ'
+            }).addTo(this.map);
+
+            // L.gridLayer
+            //     .googleMutant({
+            //         type: 'roadmap',
+            //         styles: [
+            //             {
+            //                 elementType: 'labels',
+            //                 stylers: [{visibility: 'off'}]
+            //             }
+            //         ]
+            //     })
+            //     .addTo(this.map);
 
             this.map.zoomControl.setPosition('bottomleft');
 
@@ -36,20 +43,20 @@ let mapSetup = {
             L.easyButton({
                 position: 'bottomleft',
                 states: [{
-                    stateName: 'structures-hidden',
-                    icon: 'fa-image',
-                    title: 'Click to show structures',
-                    onClick: (btn, map) => {
-                        btn.state('structures-visible');
-                        this.structuresLayer.addTo(this.mainLayer);
-                    }
-                }, {
                     stateName: 'structures-visible',
                     icon: 'fa-image',
                     title: 'Click to hide structures',
                     onClick: (btn, map) => {
                         btn.state('structures-hidden');
                         this.structuresLayer.removeFrom(this.mainLayer);
+                    }
+                }, {
+                    stateName: 'structures-hidden',
+                    icon: 'fa-image',
+                    title: 'Click to show structures',
+                    onClick: (btn, map) => {
+                        btn.state('structures-visible');
+                        this.structuresLayer.addTo(this.mainLayer);
                     }
                 }]
             }).addTo(this.map);
@@ -87,7 +94,7 @@ let mapSetup = {
                 case 'fixture':
                     return new L.Fixture(location);
                 case 'poi':
-                    if (location.poi.type === 'area') {
+                    if (location.locatable.type === 'area') {
                         return new L.PoiArea(location);
                     }
                     return new L.PoiPoint(location);

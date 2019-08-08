@@ -1,128 +1,128 @@
 <template>
-    <portal to="modals">
-        <el-dialog :visible="visible"
-                   :before-close="closeModal"
-                   width="60%">
-            <el-form :model="form"
-                     status-icon
-                     label-width="120px"
-                     @keydown.native="form.errors.clear($event.target.name)">
-                <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Rule" name="rule">
-                        <br>
-                        <el-row :gutter="25">
-                            <el-col :span="12">
-                                <el-form-item label="Beacon Distance"
-                                              :class="{'is-error' : form.errors.has('distance')}">
-                                    <el-select v-model="form.distance">
-                                        <el-option v-for="item in distances"
-                                                   :key="item.value"
-                                                   :label="item.label"
-                                                   :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="Weekday(s)"
-                                              :class="{'is-error' : form.errors.has('weekday')}">
-                                    <el-select v-model="form.weekday">
-                                        <el-option v-for="item in weekdays"
-                                                   :key="item.value"
-                                                   :label="item.label"
-                                                   :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </el-tab-pane>
-                    <el-tab-pane label="Time Restriction" name="time">
-                        <br>
-                        <el-row :gutter="25">
-                            <el-col>
-                                <el-form-item label="Enable">
-                                    <el-switch v-model="form.time_restricted"></el-switch>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item v-if="form.time_restricted"
-                                              label="Time from"
-                                              :class="{'is-error' : form.errors.has('time_from')}">
-                                    <el-time-select v-model="form.time_from"
-                                                    :picker-options="{
+    <modal :visible="visible"
+           @modal:close="closeModal"
+           width="60%">
+        <el-form :model="form"
+                 label-width="120px"
+                 @keydown.native="form.errors.clear($event.target.name)">
+            <el-tabs v-model="currentTab">
+                <el-tab-pane label="Rule" name="rule">
+                    <br>
+                    <el-row :gutter="25">
+                        <el-col :span="12">
+                            <el-form-item label="Beacon Distance"
+                                          :class="{'is-error' : form.errors.has('distance')}">
+                                <el-select v-model="form.distance">
+                                    <el-option v-for="item in distances"
+                                               :key="item.value"
+                                               :label="item.label"
+                                               :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="Weekday(s)"
+                                          :class="{'is-error' : form.errors.has('weekday')}">
+                                <el-select v-model="form.weekday">
+                                    <el-option v-for="item in weekdays"
+                                               :key="item.value"
+                                               :label="item.label"
+                                               :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+                <el-tab-pane label="Time Restriction" name="time">
+                    <br>
+                    <el-row :gutter="25">
+                        <el-col>
+                            <el-form-item label="Enable">
+                                <el-switch v-model="form.time_restricted"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item v-if="form.time_restricted"
+                                          label="Time from"
+                                          :class="{'is-error' : form.errors.has('time_from')}">
+                                <el-time-select v-model="form.time_from"
+                                                :picker-options="{
                                                         start: '00:00',
                                                         step: '00:05',
                                                         end: '23:55'
                                                      }">
-                                    </el-time-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item v-if="form.time_restricted"
-                                              label="Time to"
-                                              :class="{'is-error' : form.errors.has('time_to')}">
-                                    <el-time-select v-model="form.time_to"
-                                                    :picker-options="{
+                                </el-time-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item v-if="form.time_restricted"
+                                          label="Time to"
+                                          :class="{'is-error' : form.errors.has('time_to')}">
+                                <el-time-select v-model="form.time_to"
+                                                :picker-options="{
                                                         start: '00:00',
                                                         step: '00:05',
                                                         end: '23:55',
                                                         minTime: form.time_from
                                                      }">
-                                    </el-time-select>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </el-tab-pane>
-                    <el-tab-pane label="Date Restriction" name="date">
-                        <br>
-                        <el-row :gutter="25">
-                            <el-col>
-                                <el-form-item label="Enable">
-                                    <el-switch v-model="form.date_restricted"></el-switch>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item v-if="form.date_restricted"
-                                              label="Date from"
-                                              :class="{'is-error' : form.errors.has('date_from')}">
-                                    <el-date-picker v-model="form.date_from"
-                                                    type="date"
-                                                    format="dd-MM-yyyy">
-                                    </el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item v-if="form.date_restricted"
-                                              label="Date to"
-                                              :class="{'is-error' : form.errors.has('date_to')}">
-                                    <el-date-picker v-model="form.date_to"
-                                                    type="date"
-                                                    format="dd-MM-yyyy">
-                                    </el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </el-tab-pane>
-                </el-tabs>
-            </el-form>
-            <span slot="footer">
-                 <template v-if="item">
-                    <el-button v-if="!confirmDelete"
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="confirmDelete = true">
-                            Delete
-                    </el-button>
-                    <el-button v-else
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="remove">
-                        Are you sure?
-                    </el-button>
-                </template>
+                                </el-time-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+                <el-tab-pane label="Date Restriction" name="date">
+                    <br>
+                    <el-row :gutter="25">
+                        <el-col>
+                            <el-form-item label="Enable">
+                                <el-switch v-model="form.date_restricted"></el-switch>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item v-if="form.date_restricted"
+                                          label="Date from"
+                                          :class="{'is-error' : form.errors.has('date_from')}">
+                                <el-date-picker v-model="form.date_from"
+                                                type="date"
+                                                format="dd-MM-yyyy"
+                                                value-format="dd-MM-yyyy">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item v-if="form.date_restricted"
+                                          label="Date to"
+                                          :class="{'is-error' : form.errors.has('date_to')}">
+                                <el-date-picker v-model="form.date_to"
+                                                type="date"
+                                                format="dd-MM-yyyy"
+                                                value-format="dd-MM-yyyy">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+            </el-tabs>
+        </el-form>
+        <span slot="footer">
+            <template v-if="item">
+                <el-button v-if="!confirmDelete"
+                           type="text"
+                           size="small"
+                           class="btn-remove"
+                           @click="confirmDelete = true">
+                    Delete
+                </el-button>
+                <el-button v-else
+                           type="text"
+                           size="small"
+                           class="btn-remove"
+                           @click="remove">
+                    Are you sure?
+                </el-button>
+            </template>
                 <el-button type="text"
                            size="small"
                            class="btn-cancel"
@@ -136,8 +136,7 @@
                     Confirm
                 </el-button>
             </span>
-        </el-dialog>
-    </portal>
+    </modal>
 </template>
 
 <script>
@@ -186,7 +185,7 @@
         methods: {
             create() {
                 this.form.post(`/containers/${this.containerId}/beacons/${this.beaconId}/rules`)
-                    .then(response => this.$emit('rule-modal:add', {
+                    .then(response => this.$emit('modal:add', {
                         rule: response,
                         containerId: this.containerId,
                         beaconId: this.beaconId
@@ -195,7 +194,7 @@
             },
             update() {
                 this.form.put(`/containers/${this.containerId}/beacons/${this.beaconId}/rules/${this.item.id}`)
-                    .then(response => this.$emit('rule-modal:update', {
+                    .then(response => this.$emit('modal:update', {
                         rule: response,
                         containerId: this.containerId,
                         beaconId: this.beaconId
@@ -204,15 +203,15 @@
             },
             remove() {
                 this.form.delete(`/containers/${this.containerId}/beacons/${this.beaconId}/rules/${this.item.id}`)
-                    .then(response => this.$emit('rule-modal:remove', {
-                        rule: response,
+                    .then(response => this.$emit('modal:remove', {
+                        rule: this.item,
                         containerId: this.containerId,
                         beaconId: this.beaconId
                     }))
                     .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('rule-modal:close')
+                this.$emit('modal:close')
             }
         }
     }

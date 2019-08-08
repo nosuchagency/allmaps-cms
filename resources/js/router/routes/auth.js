@@ -1,4 +1,4 @@
-module.exports = [
+export default [
     {
         path: '/login',
         name: 'login',
@@ -9,16 +9,16 @@ module.exports = [
     },
     {
         path: '/password/reset',
-        name: 'forgot-password',
-        component: require('../../views/auth/forgot-password'),
+        name: 'password-forgot',
+        component: require('../../views/auth/password-forgot'),
         meta: {
             auth: false
         }
     },
     {
         path: '/password/reset/:token',
-        name: 'reset-password',
-        component: require('../../views/auth/reset-password'),
+        name: 'password-reset',
+        component: require('../../views/auth/password-reset'),
         props: true,
         meta: {
             auth: false

@@ -14,7 +14,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('components.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('components.update')">
+                                v-if="$auth.user().hasPermissionTo('components.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -35,9 +35,9 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
             </div>
         </template>
@@ -45,12 +45,10 @@
 </template>
 
 <script>
-    import imageUpload from 'js/components/image-upload';
     import upsertModal from './upsert-modal';
 
     export default {
         components: {
-            imageUpload,
             upsertModal
         },
         data() {

@@ -10,7 +10,7 @@ module.exports = {
         let token = headers.Authorization || headers.authorization;
 
         if (token) {
-            token = token.split(/Bearer\:?\s?/i);
+            token = token.split(/Bearer:?\s?/i);
 
             return token[token.length > 1 ? 1 : 0].trim();
         }

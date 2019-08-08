@@ -9,8 +9,8 @@ return [
         'name' => 'Name',
         'description' => 'Description',
         'image' => 'Image',
-        'width' => 'Width',
-        'height' => 'Height',
+        'image_width' => 'Width',
+        'image_height' => 'Height',
         'category' => 'Category',
         'tags' => 'Tags'
     ],

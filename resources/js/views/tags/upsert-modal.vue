@@ -1,60 +1,57 @@
 <template>
-    <portal to="modals">
-        <el-dialog :visible="visible"
-                   :before-close="closeModal">
-            <el-form :model="form"
-                     status-icon
-                     label-width="120px"
-                     @keydown.native="form.errors.clear($event.target.name)">
-                <el-tabs v-model="currentTab">
-                    <el-tab-pane label="Tag" name="tag">
-                        <br>
-                        <el-form-item :label="$t('tags.attributes.name')"
-                                      :class="{'is-error' : form.errors.has('name')}">
-                            <el-input v-model="form.name" autofocus></el-input>
-                        </el-form-item>
-                        <el-form-item :label="$t('tags.attributes.description')"
-                                      :class="{'is-error' : form.errors.has('description')}">
-                            <el-input v-model="form.description"
-                                      type="textarea"
-                                      :rows="3">
-                            </el-input>
-                        </el-form-item>
-                    </el-tab-pane>
-                </el-tabs>
-            </el-form>
-            <span slot="footer">
-                <template v-if="item">
-                    <el-button v-if="!confirmDelete"
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="confirmDelete = true">
-                            Delete
-                    </el-button>
-                    <el-button v-else
-                               type="text"
-                               size="small"
-                               class="btn-remove"
-                               @click="remove">
-                        Are you sure?
-                    </el-button>
-                </template>
-                <el-button type="text"
+    <modal :visible="visible"
+           @modal:close="closeModal">
+        <el-form :model="form"
+                 label-width="120px"
+                 @keydown.native="form.errors.clear($event.target.name)">
+            <el-tabs v-model="currentTab">
+                <el-tab-pane label="Tag" name="tag">
+                    <br>
+                    <el-form-item :label="$t('tags.attributes.name')"
+                                  :class="{'is-error' : form.errors.has('name')}">
+                        <el-input v-model="form.name" autofocus></el-input>
+                    </el-form-item>
+                    <el-form-item :label="$t('tags.attributes.description')"
+                                  :class="{'is-error' : form.errors.has('description')}">
+                        <el-input v-model="form.description"
+                                  type="textarea"
+                                  :rows="3">
+                        </el-input>
+                    </el-form-item>
+                </el-tab-pane>
+            </el-tabs>
+        </el-form>
+        <span slot="footer">
+            <template v-if="item">
+                <el-button v-if="!confirmDelete"
+                           type="text"
                            size="small"
-                           class="btn-cancel"
-                           @click="closeModal">
+                           class="btn-remove"
+                           @click="confirmDelete = true">
+                    Delete
+                </el-button>
+                <el-button v-else
+                           type="text"
+                           size="small"
+                           class="btn-remove"
+                           @click="remove">
+                    Are you sure?
+                </el-button>
+            </template>
+            <el-button type="text"
+                       size="small"
+                       class="btn-cancel"
+                       @click="closeModal">
                     Cancel
-                </el-button>
-                <el-button type="success"
-                           size="small"
-                           :loading="form.busy"
-                           @click="item ? update() : create()">
+            </el-button>
+            <el-button type="success"
+                       size="small"
+                       :loading="form.busy"
+                       @click="item ? update() : create()">
                     Confirm
-                </el-button>
-            </span>
-        </el-dialog>
-    </portal>
+            </el-button>
+        </span>
+    </modal>
 </template>
 
 <script>
@@ -79,21 +76,21 @@
         methods: {
             create() {
                 this.form.post(`/${this.resource}`)
-                    .then(response => this.$emit('upsert-modal:add', response))
+                    .then(response => this.$emit('modal:add', response))
                     .catch(error => console.log(error));
             },
             update() {
                 this.form.put(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('upsert-modal:update', response))
+                    .then(response => this.$emit('modal:update', response))
                     .catch(error => console.log(error));
             },
             remove() {
                 this.form.delete(`/${this.resource}/${this.item.id}`)
-                    .then(response => this.$emit('upsert-modal:remove', response))
+                    .then(response => this.$emit('modal:remove', this.item))
                     .catch(error => console.log(error));
             },
             closeModal() {
-                this.$emit('upsert-modal:close');
+                this.$emit('modal:close');
             }
         }
     }

@@ -44,8 +44,8 @@ let Beacon = {
                 },
                 getIcon() {
                     return new L.Icon({
-                        iconUrl: this.location.beacon.image,
-                        iconSize: [20, 20]
+                        iconUrl: this.getImage(),
+                        iconSize: [30, 30]
                     });
                 },
                 save() {

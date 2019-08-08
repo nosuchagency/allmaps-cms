@@ -16,8 +16,8 @@ let Fixture = {
                         coordinates = location.coordinates;
                     } else {
                         let metersPerPixel = this.getMetersPerPixel();
-                        let width = (this.getWidth() / 100) / metersPerPixel;
-                        let height = (this.getHeight() / 100) / metersPerPixel;
+                        let width = (this.getImageWidth() / 100) / metersPerPixel;
+                        let height = (this.getImageHeight() / 100) / metersPerPixel;
 
                         let center = self.map.getCenter();
                         let pointC = self.map.latLngToContainerPoint(center);
@@ -27,7 +27,7 @@ let Fixture = {
                         coordinates = [[bottomLeft.lat, bottomLeft.lng], [topRight.lat, topRight.lng]];
                     }
 
-                    let options = {...location.fixture, ...{transform: true, draggable: true, weight: 0}};
+                    let options = {...location.locatable, ...{transform: true, draggable: true, weight: 0}};
 
                     L.Rectangle.prototype.initialize.call(this, coordinates, options);
                     setTimeout(() => this.dragging.disable(), 1);
@@ -130,15 +130,6 @@ let Fixture = {
                     let latLngY = self.map.containerPointToLatLng(pointY);
 
                     return latLngC.distanceTo(latLngX);
-                },
-                getWidth() {
-                    return this.location.fixture.width;
-                },
-                getHeight() {
-                    return this.location.fixture.height;
-                },
-                getImage() {
-                    return this.location.fixture.image;
                 }
             }
         });

@@ -1,5 +1,5 @@
 <template>
-    <el-card class="box-card">
+    <el-card>
         <template slot="header">
             <slot name="header"></slot>
         </template>
@@ -21,6 +21,7 @@
             </el-table-column>
             <slot name="table-columns"></slot>
         </el-table>
+        <slot name="footer"></slot>
     </el-card>
 </template>
 

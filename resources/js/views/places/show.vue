@@ -12,7 +12,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('places.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('places.update')">
+                                v-if="$auth.user().hasPermissionTo('places.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="upsertModalVisible = true"
@@ -32,7 +32,7 @@
 
             <div class="content" v-else>
 
-                <el-card class="box-card">
+                <el-card>
                     <template slot="header">
                         <div style="display: flex; width: 100%;">
                             <div class="title-icon-wrapper">
@@ -76,7 +76,7 @@
                     </el-row>
                 </el-card>
 
-                <el-card class="box-card">
+                <el-card>
                     <div style="display: flex;">
                         <div class="title-icon-wrapper">
                             <i class="fa fa-building title-icon"></i>
@@ -86,7 +86,7 @@
                                     :content="$t('general.actions.add', {name : $t('buildings.singular')})"
                                     placement="top-start"
                                     style="margin-left: auto;"
-                                    v-if="$auth.user().permissions.includes('buildings.create')">>
+                                    v-if="$auth.user().hasPermissionTo('buildings.create')">>
                             <el-button type="primary"
                                        size="small"
                                        @click="buildingModalVisible = true"
@@ -105,15 +105,15 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="upsertModalVisible = false"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
                 <building-modal v-if="buildingModalVisible"
                                 :visible="buildingModalVisible"
                                 :place="item"
-                                @building-modal:close="buildingModalVisible = false"
-                                @building-modal:add="addBuilding">
+                                @modal:close="buildingModalVisible = false"
+                                @modal:add="addBuilding">
                 </building-modal>
             </div>
         </template>
@@ -173,7 +173,13 @@
             removeBuilding(building) {
                 let index = this.item.buildings.findIndex(({id}) => id === building.id);
                 this.item.buildings.splice(index, 1);
-            }
+            },
+            openUpsertModal() {
+                this.upsertModalVisible = true;
+            },
+            closeUpsertModal() {
+                this.upsertModalVisible = false;
+            },
         },
         computed: {
             placePopupContent() {

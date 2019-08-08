@@ -14,7 +14,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('beacons.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('beacons.update')">
+                                v-if="$auth.user().hasPermissionTo('beacons.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -33,7 +33,7 @@
 
             <div class="content" v-else>
                 <template v-if="item">
-                    <el-card class="box-card">
+                    <el-card>
                         <template slot="header">
                             <div class="title-icon-wrapper">
                                 <i class="fa fa-map-marker-alt title-icon"></i>
@@ -41,7 +41,7 @@
                             </div>
                         </template>
                         <simple-map v-if="item.locations.length > 0"
-                                    :latitudes="this.item.locations[0].coordinates.lat"
+                                    :latitude="this.item.locations[0].coordinates.lat"
                                     :longitude="this.item.locations[0].coordinates.lng">
                         </simple-map>
                         <div class="no-location" v-else>
@@ -50,7 +50,7 @@
                     </el-card>
                 </template>
                 <template v-if="item">
-                    <el-card class="box-card">
+                    <el-card>
                         <div style="display: flex;">
                             <div class="title-icon-wrapper">
                                 <i class="fa fa-archive title-icon"></i>
@@ -69,8 +69,7 @@
                             </el-tooltip>
                         </div>
                     </el-card>
-                    <el-card class="box-card"
-                             v-for="container in item.containers"
+                    <el-card v-for="container in item.containers"
                              :key="container.id">
                         <template slot="header">
                             <div class="title-icon-wrapper">
@@ -147,29 +146,29 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
                 <container-modal v-if="containerModalVisible"
                                  :visible="containerModalVisible"
                                  :item="selectedContainer"
                                  :beacon-id="item.id"
                                  :containers="item.containers"
-                                 @container-modal:close="closeContainerModal"
-                                 @container-modal:add="addContainer"
-                                 @container-modal:update="updateContainer"
-                                 @container-modal:remove="removeContainer">
+                                 @modal:close="closeContainerModal"
+                                 @modal:add="addContainer"
+                                 @modal:update="updateContainer"
+                                 @modal:remove="removeContainer">
                 </container-modal>
                 <rule-modal v-if="ruleModalVisible"
                             :visible="ruleModalVisible"
                             :item="selectedRule"
                             :container-id="selectedContainer.id"
                             :beacon-id="item.id"
-                            @rule-modal:close="closeRuleModal"
-                            @rule-modal:add="addRule"
-                            @rule-modal:update="updateRule"
-                            @rule-modal:remove="removeRule">
+                            @modal:close="closeRuleModal"
+                            @modal:add="addRule"
+                            @modal:update="updateRule"
+                            @modal:remove="removeRule">
                 </rule-modal>
             </div>
         </template>
@@ -208,6 +207,7 @@
                 try {
                     const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
                     this.item = data;
+                    console.log(data);
                 } catch (error) {
                     console.log(error);
                 }

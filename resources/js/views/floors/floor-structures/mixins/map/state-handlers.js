@@ -1,9 +1,11 @@
+import cloneDeep from 'lodash/cloneDeep';
+
 let stateMethodsMixin = {
     methods: {
         startEditing(structure) {
             this.$emit('structure-copy:set', structure);
 
-            let component = this.initializeStructure(_.cloneDeep(structure.getStructure())).addTo(this.editingLayer);
+            let component = this.initializeStructure(cloneDeep(structure.getStructure())).addTo(this.editingLayer);
             component.startEditing();
 
             if (structure.getShape() === 'image') {
@@ -47,4 +49,4 @@ let stateMethodsMixin = {
     }
 };
 
-module.exports = stateMethodsMixin;
+export default stateMethodsMixin;

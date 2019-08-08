@@ -6,10 +6,11 @@
                     <div class="title-icon-wrapper">
                         <i class="fa fa-archive title-icon"></i>
                         <template v-if="item">
-                            <router-link v-if="item" :to="'/containers/' + item.container.id">
+                            <router-link v-if="item"
+                                         :to="{ name: 'containers-show', params: { id: item.container.id }}">
                                 {{ item.container.name }}
                             </router-link>
-                            <i class="fa fa-caret-right" style="margin: 0 10px;"></i>
+                            <i class="fa fa-caret-right"></i>
                             <i class="fa fa-folder title-icon"></i>
                             <label>{{item.name}}</label>
                         </template>
@@ -19,7 +20,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('folders.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('folders.update')">
+                                v-if="$auth.user().hasPermissionTo('folders.update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -44,9 +45,9 @@
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:update="updateItem"
-                              @upsert-modal:remove="removeItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:update="updateItem"
+                              @modal:remove="removeItem">
                 </upsert-modal>
             </div>
         </template>
@@ -54,7 +55,7 @@
 </template>
 
 <script>
-    import contentsTable from '../containers/components/contents-table.vue';
+    import contentsTable from '../containers/components/contents-table';
     import upsertModal from './upsert-modal';
 
     export default {
@@ -103,5 +104,9 @@
         &:hover {
             color: #939393;
         }
+    }
+
+    .fa-caret-right {
+        margin: 0 10px;
     }
 </style>

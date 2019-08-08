@@ -12,7 +12,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.create', {name : $t('roles.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().permissions.includes('roles.create')">
+                                v-if="$auth.user().hasPermissionTo('roles.create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -26,12 +26,15 @@
         <template slot="content">
 
             <div class="content">
-                <ribbon @bulk-action="applyBulkAction"
-                        @ribbon:search="search"
-                        :selections="selectedItems"
-                        :bulk-actions="bulkActions"
-                        :category-filter-activated="false"
-                        :tags-filter-activated="false">
+                <ribbon>
+                    <bulk-actions :bulk-actions="bulkActions"
+                                  :selections="selectedItems"
+                                  @apply-bulk-action="applyBulkAction">
+                    </bulk-actions>
+                    <search-filter :offset="14"
+                                   :span="4"
+                                   @search="setFilter('search', $event)">
+                    </search-filter>
                 </ribbon>
                 <el-table :data="tableItems"
                           @row-click="$router.push({name: 'roles-show', params: {id: $event.id}})"
@@ -59,9 +62,9 @@
                     </div>
                     <div class="pagination-container-right">
                         <el-pagination background
-                                       @prev-click="refetch"
-                                       @next-click="refetch"
-                                       @current-change="refetch"
+                                       @prev-click="setFilter('page[number]', $event)"
+                                       @next-click="setFilter('page[number]', $event)"
+                                       @current-change="setFilter('page[number]', $event)"
                                        layout="prev, pager, next"
                                        :total="items.meta.total"
                                        :page-size="50">
@@ -76,8 +79,8 @@
                 </confirm-dialog>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
-                              @upsert-modal:close="closeUpsertModal"
-                              @upsert-modal:add="addItem">
+                              @modal:close="closeUpsertModal"
+                              @modal:add="addItem">
                 </upsert-modal>
             </div>
         </template>
@@ -87,7 +90,7 @@
 <script>
     import multipleSelection from 'js/mixins/multiple-selection';
     import upsertModal from './upsert-modal';
-    import _ from 'lodash';
+    import QueryParams from 'js/utils/QueryParams';
 
     export default {
         mixins: [multipleSelection],
@@ -101,31 +104,35 @@
                 items: null,
                 loading: false,
                 resource: 'roles',
-                searchQuery: '',
+                params: {
+                    'page[number]': 1,
+                    search: ''
+                }
             };
         },
         created() {
             this.getItems(this.getUrl());
         },
+        watch: {
+            params: {
+                handler(val) {
+                    this.getItems(this.getUrl());
+                },
+                deep: true
+            }
+        },
         methods: {
-            search: _.debounce(function (query) {
-                this.searchQuery = query;
-                this.getItems(this.getUrl() + this.getFilterParams());
-            }, 500),
-            refetch(page) {
-                this.getItems(this.getUrl() + this.getFilterParams() + '&page=' + page);
+            setFilter(key, value) {
+                this.params[key] = value;
             },
             getUrl() {
                 return this.resource + '/paginated';
             },
-            getFilterParams() {
-                return '?search=' + this.searchQuery;
-            },
             async getItems(url) {
+                this.loading = true;
                 try {
-                    this.loading = true;
-                    const response = await this.$axios.get(url);
-                    this.items = response.data;
+                    const {data} = await this.$axios.get(url + new QueryParams(this.params));
+                    this.items = data;
                 } catch (error) {
                     console.log(error);
                 } finally {

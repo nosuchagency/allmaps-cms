@@ -6,7 +6,7 @@
                     <div class="title-icon-wrapper">
                         <i class="fa fa-map-marked-alt title-icon"></i>
                         <template v-if="item">
-                            <router-link :to="`/places/${item.place.id}`">
+                            <router-link :to="{ name: 'places-show', params: { id: item.place.id }}">
                                 {{ item.place.name }}
                             </router-link>
                             <i class="fa fa-caret-right" style="margin: 0 10px;"></i>
@@ -60,7 +60,7 @@
 
 <script>
     import Hub from '../../../events/hub';
-    import floorMap from './floor-map.vue';
+    import floorMap from './floor-map';
     import structureToolbar from './structure-toolbar';
     import structureSelect from './structure-select';
 
