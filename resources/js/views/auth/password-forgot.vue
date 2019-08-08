@@ -3,7 +3,7 @@
         <div class="card-container">
             <el-card>
                 <div class="title-container">
-                    <h3 class="title">Beacon Bacon</h3>
+                    <h3 class="title">AllMaps</h3>
                 </div>
                 <el-form :model="form"
                          @submit.native.prevent

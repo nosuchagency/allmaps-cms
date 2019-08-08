@@ -19,8 +19,7 @@
     <script>
         window.apiSettings = {
             baseUrl: "{{config('bb.api.url')}}",
-            prefix: "{{config('bb.api.prefix')}}",
-            key: "{{config('bb.api.key')}}"
+            prefix: "{{config('bb.api.prefix')}}"
         };
     </script>
 </head>

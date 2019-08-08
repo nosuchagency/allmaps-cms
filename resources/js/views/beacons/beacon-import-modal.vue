@@ -77,7 +77,10 @@
             },
             create() {
                 this.form.post('/beacons/import')
-                    .then(response => this.closeModal())
+                    .then(response => {
+                        this.$emit('beacons:imported');
+                        this.closeModal();
+                    })
                     .catch(error => console.log(error));
             },
         }

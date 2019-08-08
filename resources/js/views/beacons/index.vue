@@ -154,7 +154,8 @@
                 </upsert-modal>
                 <beacon-import-modal v-if="beaconImportModalVisible"
                                      :visible="beaconImportModalVisible"
-                                     @modal:close="closeBeaconImportModal">
+                                     @modal:close="closeBeaconImportModal"
+                                     @beacons:imported="getItems(getUrl())">
                 </beacon-import-modal>
             </div>
         </template>
