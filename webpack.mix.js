@@ -28,6 +28,6 @@ if (mix.inProduction()) {
     mix.version();
 } else {
     mix.browserSync({
-        proxy: 'beacon-bacon-cms.test'
+        proxy: 'allmaps-cms.test'
     });
 }

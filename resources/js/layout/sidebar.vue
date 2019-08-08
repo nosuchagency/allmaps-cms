@@ -6,7 +6,7 @@
             <li class="sidebar-top-item">
                 <span class="sidebar-top-title"
                       v-if="sidebar.opened">
-                    Beacon Bacon
+                    AllMaps
                 </span>
                 <hamburger :toggleClick="toggleSideBar"
                            :isActive="sidebar.opened">
