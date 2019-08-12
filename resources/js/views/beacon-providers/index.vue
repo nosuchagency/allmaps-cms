@@ -4,7 +4,7 @@
             <toolbar>
                 <template slot="left">
                     <div class="title-icon-wrapper">
-                        <i class="fa fa-tags title-icon"></i>
+                        <i class="fa fa-broadcast-tower title-icon"></i>
                         <label>{{$t('beacon-providers.plural')}}</label>
                     </div>
                 </template>
