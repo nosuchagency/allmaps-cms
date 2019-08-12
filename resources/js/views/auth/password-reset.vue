@@ -101,7 +101,7 @@
                         this.busy = false;
 
                         setTimeout(() => {
-                            window.location.href = '/dashboard';
+                            window.location.href = '/containers';
                         }, 1000);
                     })
                     .catch(error => this.busy = false);
