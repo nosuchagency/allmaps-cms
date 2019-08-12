@@ -128,16 +128,16 @@ let menuItems = {
                         //     icon: 'map',
                         //     route: 'map-settings'
                         // },
-                        {
-                            title: this.$t('menu.email_layouts'),
-                            icon: 'pen-fancy',
-                            route: 'layouts'
-                        },
-                        {
-                            title: this.$t('menu.email_templates'),
-                            icon: 'mail-bulk',
-                            route: 'templates'
-                        }
+                        // {
+                        //     title: this.$t('menu.email_layouts'),
+                        //     icon: 'pen-fancy',
+                        //     route: 'layouts'
+                        // },
+                        // {
+                        //     title: this.$t('menu.email_templates'),
+                        //     icon: 'mail-bulk',
+                        //     route: 'templates'
+                        // }
                     ]
                 },
                 {
