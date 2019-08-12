@@ -10,6 +10,18 @@
                     <el-input v-model="fields.name">
                     </el-input>
                 </el-form-item>
+                <el-form-item label="Name"
+                              :class="{'is-error' : form.errors.has('name')}">
+                    <input type="file"
+                           ref="file"
+                           @change="handleFile">
+                    </input>
+                </el-form-item>
+                <a target="_blank"
+                   :href="item.file"
+                   v-if="item && item.file">
+                    Download fil
+                </a>
             </el-tab-pane>
             <el-tab-pane label="Taxonomy" name="taxonomies">
                 <el-form-item :label="$t('places.attributes.category')"
@@ -59,7 +71,8 @@
         data() {
             return {
                 fields: this.getFields(),
-                currentTab: 'file'
+                currentTab: 'file',
+                processingFile: false
             };
         },
         watch: {
@@ -78,7 +91,8 @@
             getFields() {
                 return {
                     name: this.item ? this.item.name : '',
-                    type : 'file',
+                    file: '',
+                    type: 'file',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     folder: this.folder
@@ -87,14 +101,31 @@
             syncFields() {
                 this.$emit('sync-fields', this.fields);
             },
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
-            },
-            handlePreview(file) {
-                console.log(file);
-            },
-            handleChange(file, fileList) {
-                console.log(fileList);
+            async handleFile() {
+                if (this.$refs.file.files.length === 0) {
+                    return;
+                }
+
+                this.processingFile = true;
+
+                try {
+                    let payload = new FormData();
+                    let file = this.$refs.file.files[0];
+                    payload.append('file', file);
+
+                    let config = {
+                        header: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    };
+
+                    const {data} = await this.$axios.post('/files', payload, config);
+                    this.fields.file = data.path;
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    this.processingFile = false;
+                }
             }
         }
     };

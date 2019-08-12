@@ -150,7 +150,6 @@
                 try {
                     const {data} = await this.$axios.get(url + new QueryParams(this.params));
                     this.items = data;
-                    console.log(this.items);
                 } catch (error) {
                     console.log(error);
                 } finally {
