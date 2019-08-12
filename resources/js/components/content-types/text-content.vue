@@ -12,10 +12,7 @@
                 </el-form-item>
                 <el-form-item label="Text"
                               :class="{'is-error' : form.errors.has('text')}">
-                    <el-input type="textarea"
-                              v-model="fields.text"
-                              :rows="3">
-                    </el-input>
+                    <VueTrix v-model="fields.text" placeholder="enter your content..."/>
                 </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="Taxonomy" name="taxonomies">
@@ -58,7 +55,12 @@
 </template>
 
 <script>
+    import VueTrix from "vue-trix";
+
     export default {
+        components: {
+            VueTrix
+        },
         props: {
             item: Object,
             form: Object,
@@ -101,4 +103,7 @@
 </script>
 
 <style lang="scss" scoped>
+    /deep/ .trix-button-group--file-tools {
+        display: none;
+    }
 </style>

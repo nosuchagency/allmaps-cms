@@ -4,14 +4,12 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import elementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
-import wysiwyg from 'vue-wysiwyg';
 import PortalVue from 'portal-vue'
 import store from './store';
 import i18n from './i18n';
 
 Vue.use(VueAxios, axios);
 Vue.use(elementUI, {locale});
-Vue.use(wysiwyg, {});
 Vue.use(PortalVue);
 
 require('leaflet/dist/leaflet');

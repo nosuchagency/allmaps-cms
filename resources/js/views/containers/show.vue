@@ -256,6 +256,7 @@
                 try {
                     const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
                     this.item = data;
+                    console.log(this.item);
                 } catch (error) {
                     console.log(error);
                 }
