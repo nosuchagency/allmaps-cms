@@ -36,12 +36,6 @@ let menuItems = {
                 //         },
                 //     ],
                 // },
-                {
-                    title: this.$t('menu.beacons'),
-                    icon: 'wifi',
-                    route: 'beacons',
-                    border: true
-                },
                 // {
                 //     title: this.$t('menu.locations'),
                 //     icon: 'map-pin',
@@ -68,6 +62,12 @@ let menuItems = {
                     title: this.$t('menu.containers'),
                     icon: 'archive',
                     route: 'containers',
+                    border: true
+                },
+                {
+                    title: this.$t('menu.beacons'),
+                    icon: 'wifi',
+                    route: 'beacons',
                     border: true
                 },
                 {
