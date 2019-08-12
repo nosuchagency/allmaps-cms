@@ -119,7 +119,7 @@ let menuItems = {
                         },
                         {
                             title: this.$t('menu.beacon_providers'),
-                            icon: 'palette',
+                            icon: 'broadcast-tower',
                             route: 'beacon-providers'
                         },
                         // {
