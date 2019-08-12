@@ -4,6 +4,7 @@
              @keydown.native="form.errors.clear($event.target.name)">
         <el-tabs v-model="currentTab">
             <el-tab-pane label="Gallery" name="gallery">
+                <br>
                 <el-form-item label="Name"
                               :class="{'is-error' : form.errors.has('name')}">
                     <el-input v-model="fields.name">
