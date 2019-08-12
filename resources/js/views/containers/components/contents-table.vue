@@ -71,10 +71,10 @@
             <content-upsert-modal :visible="contentModalActive"
                                   :type="contentType"
                                   :item="selectedContent"
-                                  @content-modal:add="addContent"
-                                  @content-modal:remove="removeContent"
-                                  @content-modal:update="updateContent"
-                                  @content-modal:close="closeContentModal"
+                                  @modal:add="addContent"
+                                  @modal:remove="removeContent"
+                                  @modal:update="updateContent"
+                                  @modal:close="closeContentModal"
                                   :folder="folder">
             </content-upsert-modal>
         </template>
