@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 let routes = [
     {
         path: '/',
-        redirect: {name: 'dashboard'}
+        redirect: {name: 'containers-index'}
     },
     {
         path: '/dashboard',

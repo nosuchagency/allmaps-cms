@@ -79,7 +79,7 @@
                 this.$auth.login({
                     data: this.form,
                     url: 'login',
-                    redirect: {name: 'dashboard'},
+                    redirect: {name: 'containers-index'},
                     fetchUser: true,
                     error: (error) => {
                         this.error = error.response.data;
