@@ -147,35 +147,35 @@
                             </el-table-column>
                         </el-table>
                     </el-card>
-                    <el-card>
-                        <template slot="header">
-                            <div class="title-icon-wrapper">
-                                <i class="fa fa-archive title-icon"></i>
-                                <label>Content</label>
-                            </div>
-                        </template>
-                        <el-table :data="item.locations"
-                                  size="small">
-                            <el-table-column label="Name"
-                                             sortable
-                                             property="name">
-                            </el-table-column>
-                            <el-table-column align="right">
-                                <template slot-scope="scope">
-                                    <el-tooltip effect="dark"
-                                                content="Detach location"
-                                                placement="top-start">
-                                        <el-button type="danger"
-                                                   size="small"
-                                                   @click="openConfirmUnlinkModal(scope.row)"
-                                                   circle>
-                                            <i class="fa fa-unlink"></i>
-                                        </el-button>
-                                    </el-tooltip>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </el-card>
+<!--                    <el-card>-->
+<!--                        <template slot="header">-->
+<!--                            <div class="title-icon-wrapper">-->
+<!--                                <i class="fa fa-archive title-icon"></i>-->
+<!--                                <label>Content</label>-->
+<!--                            </div>-->
+<!--                        </template>-->
+<!--                        <el-table :data="item.locations"-->
+<!--                                  size="small">-->
+<!--                            <el-table-column label="Name"-->
+<!--                                             sortable-->
+<!--                                             property="name">-->
+<!--                            </el-table-column>-->
+<!--                            <el-table-column align="right">-->
+<!--                                <template slot-scope="scope">-->
+<!--                                    <el-tooltip effect="dark"-->
+<!--                                                content="Detach location"-->
+<!--                                                placement="top-start">-->
+<!--                                        <el-button type="danger"-->
+<!--                                                   size="small"-->
+<!--                                                   @click="openConfirmUnlinkModal(scope.row)"-->
+<!--                                                   circle>-->
+<!--                                            <i class="fa fa-unlink"></i>-->
+<!--                                        </el-button>-->
+<!--                                    </el-tooltip>-->
+<!--                                </template>-->
+<!--                            </el-table-column>-->
+<!--                        </el-table>-->
+<!--                    </el-card>-->
                 </template>
                 <confirm-dialog v-if="confirmDetachVisible"
                                 :message="$t('general.confirm')"
