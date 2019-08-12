@@ -4,6 +4,7 @@
              @keydown.native="form.errors.clear($event.target.name)">
         <el-tabs v-model="currentTab">
             <el-tab-pane label="Image" name="image">
+                <br>
                 <el-form-item label="Name"
                               :class="{'is-error' : form.errors.has('name')}">
                     <el-input v-model="fields.name">
@@ -18,6 +19,7 @@
                 </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="Taxonomy" name="taxonomies">
+                <br>
                 <el-form-item :label="$t('places.attributes.category')"
                               :class="{'is-error' : form.errors.has('category')}">
                     <fetch-items url="/categories">
