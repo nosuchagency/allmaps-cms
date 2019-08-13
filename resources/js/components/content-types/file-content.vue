@@ -113,13 +113,13 @@
                     let file = this.$refs.file.files[0];
                     payload.append('file', file);
 
-                    let config = {
-                        header: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    };
+                    // let config = {
+                    //     header: {
+                    //         'Content-Type': 'multipart/form-data'
+                    //     }
+                    // };
 
-                    const {data} = await this.$axios.post('/files', payload, config);
+                    const {data} = await this.$axios.post('/files', payload);
                     this.fields.file = data.path;
                 } catch (error) {
                     console.log(error);
