@@ -9,7 +9,7 @@ export default [
             auth: true
         },
         beforeEnter: (to, from, next) => {
-            if (Vue.auth.user().hasPermissionTo('map-settings.read')) {
+            if (Vue.auth.user().hasPermissionTo('map-setting:read')) {
                 next();
             } else {
                 next({name: '403'});

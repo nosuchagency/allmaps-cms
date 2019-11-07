@@ -2,7 +2,7 @@
     <modal :visible="visible"
            @modal:close="closeModal">
         <el-form :model="form"
-                 label-width="120px"
+                 label-width="140px"
                  @keydown.native="form.errors.clear($event.target.name)">
             <el-tabs v-model="currentTab">
                 <el-tab-pane label="User" name="user">
@@ -16,13 +16,22 @@
                         <el-input v-model="form.email">
                         </el-input>
                     </el-form-item>
-                    <el-form-item :label="$t('users.attributes.password')"
-                                  :class="{'is-error' : form.errors.has('password')}">
-                        <el-input v-model="form.password"
-                                  :placeholder="item ? $t('users.password_placeholder') : ''"
-                                  type="password">
-                        </el-input>
-                    </el-form-item>
+                    <template v-if="!item">
+                        <el-form-item :label="$t('users.attributes.password')"
+                                      :class="{'is-error' : form.errors.has('password')}">
+                            <el-input v-model="form.password"
+                                      :placeholder="item ? $t('users.password_placeholder') : ''"
+                                      type="password">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="Confirm Password"
+                                      :class="{'is-error' : form.errors.has('password_confirmation')}">
+                            <el-input v-model="form.password_confirmation"
+                                      :placeholder="item ? $t('users.password_placeholder') : ''"
+                                      type="password">
+                            </el-input>
+                        </el-form-item>
+                    </template>
                     <el-form-item :label="$t('users.attributes.role')"
                                   :class="{'is-error' : form.errors.has('role')}">
                         <fetch-items url="/roles">
@@ -37,6 +46,13 @@
                                 </el-option>
                             </el-select>
                         </fetch-items>
+                    </el-form-item>
+                    <el-form-item label="Description"
+                                  :class="{'is-error' : form.errors.has('description')}">
+                        <el-input v-model="form.description"
+                                  type="textarea"
+                                  :rows="3">
+                        </el-input>
                     </el-form-item>
                     <el-form-item v-if="!item"
                                   label="Send invitation">
@@ -133,15 +149,9 @@
                 currentTab: 'user',
                 resource: 'users',
                 confirmDelete: false,
-                form: new Form({
-                    name: this.item ? this.item.name : '',
-                    email: this.item ? this.item.email : '',
-                    password: '',
-                    role: this.item ? this.item.role : null,
-                    category: this.item ? this.item.category : '',
-                    tags: this.item ? this.item.tags : [],
-                    invitation: false
-                })
+                form: new Form(
+                    this.item ? this.getUpdateFormFields() : this.getCreateFormFields()
+                )
             }
         },
         methods: {
@@ -165,6 +175,29 @@
             },
             closeModal() {
                 this.$emit('modal:close');
+            },
+            getCreateFormFields() {
+                return {
+                    name: this.item ? this.item.name : '',
+                    email: this.item ? this.item.email : '',
+                    password: '',
+                    password_confirmation: '',
+                    role: this.item ? this.item.role : null,
+                    description: this.item ? this.item.description : '',
+                    category: this.item ? this.item.category : '',
+                    tags: this.item ? this.item.tags : [],
+                    invitation: false
+                }
+            },
+            getUpdateFormFields() {
+                return {
+                    name: this.item ? this.item.name : '',
+                    email: this.item ? this.item.email : '',
+                    role: this.item ? this.item.role : null,
+                    description: this.item ? this.item.description : '',
+                    category: this.item ? this.item.category : '',
+                    tags: this.item ? this.item.tags : [],
+                }
             }
         }
     }

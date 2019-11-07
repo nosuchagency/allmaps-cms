@@ -10,7 +10,7 @@ export default [
             auth: true
         },
         beforeEnter: (to, from, next) => {
-            if (Vue.auth.user().hasPermissionTo('tags.read')) {
+            if (Vue.auth.user().hasPermissionTo('tag:read')) {
                 next();
             } else {
                 next({name: '403'});

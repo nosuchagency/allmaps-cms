@@ -19,6 +19,6 @@ export default class User {
      * @return {boolean}
      */
     hasPermissionTo(...permissions) {
-        return permissions.some(permission => this.permissions.includes(permission));
+        return permissions.some(permission => this.role.permissions.some(perm => perm.name == permission));
     }
 }

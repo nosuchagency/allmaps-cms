@@ -14,7 +14,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('roles.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('roles.update')">
+                                v-if="$auth.user().hasPermissionTo('role:update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"

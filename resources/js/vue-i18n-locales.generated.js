@@ -27,7 +27,7 @@ export default {
             },
             "403": {
                 "title": "Unauthorized - 403",
-                "description": "You do not possess the necessary permissions to access the requested resource. Contact the system\n                    administrator if you need access to this particular page.",
+                "description": "You do not possess the necessary permissions to access the requested resource. Contact the system administrator if you need access to this particular page.",
                 "link_text": "Go to Dashboard"
             },
             "404": {

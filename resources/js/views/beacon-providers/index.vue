@@ -12,7 +12,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.create', {name : $t('beacon-providers.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('beacon-providers.create')">
+                                v-if="$auth.user().hasPermissionTo('beacon-provider:create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"

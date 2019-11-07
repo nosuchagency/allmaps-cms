@@ -9,7 +9,7 @@ export default [
             auth: true
         },
         beforeEnter: (to, from, next) => {
-            if (Vue.auth.user().hasPermissionTo('templates.read')) {
+            if (Vue.auth.user().hasPermissionTo('template:read')) {
                 next();
             } else {
                 next({name: '403'});

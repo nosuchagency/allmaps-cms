@@ -12,7 +12,7 @@
                     <el-tooltip effect="dark"
                                 content="Import beacons"
                                 placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('beacons.create')">
+                                v-if="$auth.user().hasPermissionTo('beacon:create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openBeaconImportModal()"
@@ -23,7 +23,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.create', {name : $t('beacons.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('beacons.create')">
+                                v-if="$auth.user().hasPermissionTo('beacon:create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"

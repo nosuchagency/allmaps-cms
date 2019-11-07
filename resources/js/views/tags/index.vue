@@ -12,7 +12,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.create', {name : $t('tags.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('tags.create')">
+                                v-if="$auth.user().hasPermissionTo('tag:create')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"

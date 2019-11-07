@@ -59,7 +59,7 @@
                         <el-button type="primary"
                                    size="small"
                                    circle
-                                   v-if="$auth.user().hasPermissionTo('contents.update')"
+                                   v-if="$auth.user().hasPermissionTo('content:update')"
                                    @click="openContentModal(scope.row.type, scope.row.id)">
                             <i class="fa fa-edit"></i>
                         </el-button>
