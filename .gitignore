@@ -1,19 +1,26 @@
+# Laravel
+
 /node_modules
 /public/hot
 /public/storage
-/public/js/app.js
-/public/js/public.js
-/public/css/app.css
-/public/css/public.css
-/public/mix-manifest.json
 /storage/*.key
-vendor/
-/.idea
-/.vscode
-/.vagrant
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
 Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-.env
+
+# Custom
+
+/public/storage
+/public/js
+/public/css
+/public/mix-manifest.json
+vendor/
+/.idea
+/.vscode
+/.vagrant
 .env.dusk.local
