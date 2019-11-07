@@ -20,7 +20,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('folders.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('folders.update')">
+                                v-if="$auth.user().hasPermissionTo('folder:update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -77,6 +77,7 @@
             async fetch() {
                 try {
                     const {data} = await this.$axios.get(`/${this.resource}/${this.$route.params.id}`);
+                    console.log(data);
                     this.item = data;
                 } catch (error) {
                     console.log(error);

@@ -10,7 +10,7 @@ export default [
             auth: true
         },
         beforeEnter: (to, from, next) => {
-            if (Vue.auth.user().hasPermissionTo('categories.read')) {
+            if (Vue.auth.user().hasPermissionTo('category:read')) {
                 next();
             } else {
                 next({name: '403'});

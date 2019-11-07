@@ -71,7 +71,7 @@
 </template>
 
 <script>
-    import Form from '../../utils/Form';
+    import Form from 'js/utils/Form';
 
     export default {
         props: {

@@ -14,7 +14,7 @@
                     <el-tooltip effect="dark"
                                 :content="$t('general.actions.update', {name : $t('menus.singular')})"
                                 placement="top-start"
-                                v-if="$auth.user().hasPermissionTo('menus.update')">
+                                v-if="$auth.user().hasPermissionTo('menu:update')">
                         <el-button type="primary"
                                    size="small"
                                    @click="openUpsertModal()"
@@ -85,7 +85,7 @@
                                     <el-button type="primary"
                                                size="small"
                                                circle
-                                               v-if="$auth.user().hasPermissionTo('menus.update')"
+                                               v-if="$auth.user().hasPermissionTo('menu:update')"
                                                @click="openMenuItemModal(scope.row.type, scope.row)">
                                         <i class="fa fa-edit"></i>
                                     </el-button>

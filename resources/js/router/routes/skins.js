@@ -10,7 +10,7 @@ export default [
             auth: true
         },
         beforeEnter: (to, from, next) => {
-            if (Vue.auth.user().hasPermissionTo('skins.read')) {
+            if (Vue.auth.user().hasPermissionTo('skin:read')) {
                 next();
             } else {
                 next({name: '403'});

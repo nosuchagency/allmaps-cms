@@ -10,7 +10,7 @@ export default [
             auth: true
         },
         beforeEnter: (to, from, next) => {
-            if (Vue.auth.user().hasPermissionTo('components.read')) {
+            if (Vue.auth.user().hasPermissionTo('component:read')) {
                 next();
             } else {
                 next({name: '403'});
@@ -26,7 +26,7 @@ export default [
             auth: true
         },
         beforeEnter: (to, from, next) => {
-            if (Vue.auth.user().hasPermissionTo('components.read')) {
+            if (Vue.auth.user().hasPermissionTo('component:read')) {
                 next();
             } else {
                 next({name: '403'});

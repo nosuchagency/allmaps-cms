@@ -9,7 +9,7 @@ export default [
             auth: true
         },
         beforeEnter: (to, from, next) => {
-            if (Vue.auth.user().hasPermissionTo('beacon-providers.read')) {
+            if (Vue.auth.user().hasPermissionTo('beacon-provider:read')) {
                 next();
             } else {
                 next({name: '403'});

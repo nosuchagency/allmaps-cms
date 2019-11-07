@@ -47,13 +47,8 @@
         data() {
             return {
                 server: {
-                    load(source, load, error, progress, abort, headers) {
-                        let request = new Request(source);
-                        fetch(request).then(function (response) {
-                            response.blob().then(function (myBlob) {
-                                load(myBlob)
-                            });
-                        });
+                    load: (source, load) => {
+                        fetch(source).then(res => res.blob()).then(load);
                     },
                     process: null,
                     revert: null,
