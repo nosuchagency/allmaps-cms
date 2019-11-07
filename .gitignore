@@ -7,7 +7,7 @@
 /public/css/public.css
 /public/mix-manifest.json
 /storage/*.key
-/vendor/
+vendor/
 /.idea
 /.vscode
 /.vagrant
