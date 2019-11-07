@@ -1,1 +1,1 @@
-# beacon-bacon-cms
+# AllMaps CMS
