@@ -2,55 +2,32 @@
     <el-card>
         <template slot="header">
             <div class="title-icon-wrapper">
-                <i class="fa title-icon" :class="`fa-${icon}`"></i>
-                <label>{{title}}</label>
+                <i class="fa title-icon" :class="`fa-${grouping.icon}`"></i>
+                <label>{{grouping.title}}</label>
             </div>
             <div style="margin-left: auto;">
                 <span style="font-size: 14px;">Advanced</span>
                 <el-switch v-model="showAdvanced"></el-switch>
-                <el-button type="success"
-                           size="mini"
-                           style="margin-left: 10px;"
-                           :loading="form.busy"
-                           @click="savePermissions(groups)">
-                    Save
-                </el-button>
             </div>
         </template>
         <div class="permissions-group">
             <div class="permission">
                 <span class="permission-label">All</span>
-                <el-switch :value="isPermissionsSet(groups)"
-                           @change="togglePermissions($event, groups)">
+                <el-switch :value="hasAllPermissions()"
+                           @change="setAllPermissions($event)">
                 </el-switch>
             </div>
-            <div class="permission">
-                <span class="permission-label">Create</span>
-                <el-switch :value="isPermissionsSet(groups, 'create')"
-                           @change="togglePermissions($event, groups, 'create')">
-                </el-switch>
-            </div>
-            <div class="permission">
-                <span class="permission-label">Read</span>
-                <el-switch :value="isPermissionsSet(groups, 'read')"
-                           @change="togglePermissions($event, groups, 'read')">
-                </el-switch>
-            </div>
-            <div class="permission">
-                <span class="permission-label">Update</span>
-                <el-switch :value="isPermissionsSet(groups, 'update')"
-                           @change="togglePermissions($event, groups, 'update')">
-                </el-switch>
-            </div>
-            <div class="permission">
-                <span class="permission-label">Delete</span>
-                <el-switch :value="isPermissionsSet(groups, 'delete')"
-                           @change="togglePermissions($event,groups, 'delete')">
-                </el-switch>
-            </div>
+            <template v-for="action in actions">
+                <div class="permission">
+                    <span class="permission-label">{{action}}</span>
+                    <el-switch :value="hasAllPermissionsByAction(action)"
+                               @change="setAllPermissionsByAction(action, $event)">
+                    </el-switch>
+                </div>
+            </template>
         </div>
         <template v-if="showAdvanced">
-            <template v-for="group in groups">
+            <template v-for="group in grouping.groups">
                 <div class="permissions-group">
                     <div class="permissions-group-title">
                         <icon :resource="group"></icon>
@@ -58,14 +35,16 @@
                     </div>
                     <div class="permission">
                         <span class="permission-label">All</span>
-                        <el-switch :value="isPermissionsSet([group])"
-                                   @change="togglePermissions($event,[group])">
+                        <el-switch :value="hasAllPermissionsInGroup(group)"
+                                   @change="setAllPermissionsInGroup(group, $event)">
                         </el-switch>
                     </div>
-                    <template v-for="action in ['create', 'read', 'update', 'delete']">
+                    <template v-for="action in actions">
                         <div class="permission">
                             <span class="permission-label">{{action}}</span>
-                            <el-switch v-model="permissions[getIndex(`${group}.${action}`)].possessed">
+                            <el-switch
+                                    @change="setPermission(getPermission(group + ':' + action), $event)"
+                                    :value="hasPermission(getPermission(group + ':' + action))">
                             </el-switch>
                         </div>
                     </template>
@@ -76,61 +55,58 @@
 </template>
 
 <script>
-    import Form from '../../../utils/Form';
+    import Cookies from 'js-cookie';
 
     export default {
         props: {
-            title: String,
-            icon: String,
-            role: Object,
-            groups: Array,
+            grouping: Object,
+            availablePermissions: Array,
             permissions: Array
         },
         data() {
             return {
-                showAdvanced: true,
-                form: new Form({
-                    name: this.role.name,
-                    permissions: this.permissions.slice()
-                })
+                showAdvanced: !!+Cookies.get(this.grouping.title),
+                actions: ['create', 'read', 'update', 'delete']
+            }
+        },
+        watch: {
+            showAdvanced(value) {
+                Cookies.set(this.grouping.title, value ? 1 : 0);
             }
         },
         methods: {
-            isPermissionsSet(groups = [], type = null) {
-                for (let permission of this.form.permissions) {
-                    let parts = permission.name.split('.');
-
-                    if (!groups.includes(parts[0])) {
-                        continue;
-                    }
-
-                    if ((type && parts[1] === type) || !type) {
-                        if (!permission.possessed) {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
+            getPermission(permission) {
+                return this.availablePermissions.find(({name}) => name === permission);
             },
-            togglePermissions(state, groups = [], type = null) {
-                for (let permission of this.form.permissions) {
-                    let parts = permission.name.split('.');
+            hasPermission(permission) {
+                return this.permissions.some(({name}) => name === permission.name);
+            },
+            setPermission(permission, state) {
+                let index = this.permissions.findIndex(({name}) => name === permission.name);
 
-                    if (!groups.includes(parts[0])) {
-                        continue;
-                    }
-
-                    if ((type && parts[1] === type) || !type) {
-                        permission.possessed = state;
-                    }
+                if (state && index === -1) {
+                    this.$emit('permission:add', permission);
+                } else if (!state && index !== -1) {
+                    this.$emit('permission:remove', permission);
                 }
             },
-            getIndex(value) {
-                return this.form.permissions.findIndex(({name}) => name === value);
+            hasAllPermissionsInGroup(group) {
+                return this.actions.every(action => this.hasPermission(this.getPermission(group + ':' + action)));
             },
-            savePermissions() {
-                this.form.put(`/roles/${this.role.id}`);
+            setAllPermissionsInGroup(group, state) {
+                this.actions.forEach(action => this.setPermission(this.getPermission(group + ':' + action), state))
+            },
+            hasAllPermissionsByAction(action) {
+                return this.grouping.groups.every(group => this.hasPermission(this.getPermission(group + ':' + action)));
+            },
+            setAllPermissionsByAction(action, state) {
+                this.grouping.groups.forEach(group => this.setPermission(this.getPermission(group + ':' + action), state));
+            },
+            hasAllPermissions() {
+                return this.grouping.groups.every(group => this.hasAllPermissionsInGroup(group));
+            },
+            setAllPermissions(state) {
+                this.grouping.groups.forEach(group => this.setAllPermissionsInGroup(group, state));
             }
         }
     }

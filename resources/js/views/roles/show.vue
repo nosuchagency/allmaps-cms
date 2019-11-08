@@ -26,16 +26,25 @@
             </toolbar>
         </template>
         <template slot="content">
-            <div class="loading" v-if="!item">
+            <div class="loading" v-if="!item || availablePermissions.length === 0">
                 <i class="fa fa-cog fa-spin loading-spinner"></i>
             </div>
             <div class="content" v-else>
-                <template v-for="permission in permissions">
-                    <permissions-card :title="permission.title"
-                                      :icon="permission.icon"
-                                      :role="item"
-                                      :permissions="item.permissions.filter(({name}) => permission.groups.includes(name.split('.')[0]))"
-                                      :groups="permission.groups">
+                <div style="display: flex">
+                    <el-button type="success"
+                               size="mini"
+                               style="margin-left: auto; margin-bottom: 10px;"
+                               :loading="busy"
+                               @click="save()">
+                        Save
+                    </el-button>
+                </div>
+                <template v-for="grouping in permissionGroupings">
+                    <permissions-card :grouping="grouping"
+                                      :available-permissions="availablePermissions"
+                                      :permissions="item.permissions"
+                                      @permission:add="addPermission"
+                                      @permission:remove="removePermission">
                     </permissions-card>
                 </template>
                 <upsert-modal v-if="upsertModalVisible"
@@ -64,26 +73,24 @@
                 resource: 'roles',
                 upsertModalVisible: false,
                 item: null,
-                showAdvancedPlaces: false,
-                showAdvancedContent: false,
-                showAdvancedLocations: false,
-                showAdvancedUserManagement: false,
-                showAdvancedSettings: false,
-                permissions: [
-                    {title: 'Places', icon: 'map-marked-alt', groups: ['places', 'buildings', 'floors']},
-                    {title: 'Content', icon: 'archive', groups: ['containers', 'folders', 'contents']},
-                    {title: 'Locations', icon: 'map-pin', groups: ['beacons', 'pois', 'fixtures']},
-                    {title: 'User Management', icon: 'users-cog', groups: ['users', 'roles', 'tokens']},
+                availablePermissions: [],
+                permissionGroupings: [
+                    {title: 'Places', icon: 'map-marked-alt', groups: ['place', 'building', 'floor']},
+                    {title: 'Content', icon: 'archive', groups: ['container', 'folder', 'content']},
+                    {title: 'Locations', icon: 'map-pin', groups: ['beacon', 'poi', 'fixture']},
+                    {title: 'User Management', icon: 'users-cog', groups: ['user', 'role', 'token']},
                     {
                         title: 'Settings',
                         icon: 'cog',
-                        groups: ['categories', 'tags', 'components', 'layouts', 'templates']
+                        groups: ['category', 'tag', 'component', 'layout', 'template']
                     }
-                ]
+                ],
+                busy: false
             };
         },
         created() {
             this.fetch();
+            this.fetchAvailablePermissions();
         },
         methods: {
             async fetch() {
@@ -92,6 +99,39 @@
                     this.item = data;
                 } catch (error) {
                     console.log(error);
+                }
+            },
+            async fetchAvailablePermissions() {
+                try {
+                    const {data} = await this.$axios.get('/permissions');
+                    this.availablePermissions = data;
+                } catch (error) {
+                    console.log(error);
+                }
+            },
+            addPermission(permission) {
+                let index = this.item.permissions.findIndex(({id}) => id === permission.id);
+
+                if (index === -1) {
+                    this.item.permissions.push(permission);
+                }
+            },
+            removePermission(permission) {
+                let index = this.item.permissions.findIndex(({id}) => id === permission.id);
+                if (index !== -1) {
+                    this.item.permissions.splice(index, 1);
+                }
+            },
+            async save() {
+                this.busy = true;
+
+                try {
+                    const {data} = await this.$axios.put(`/roles/${this.item.id}`, {permissions: this.item.permissions});
+                    this.item = data;
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    this.busy = false;
                 }
             },
             updateItem(item) {
