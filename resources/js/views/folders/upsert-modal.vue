@@ -102,11 +102,6 @@
                 confirmDelete: false,
                 form: new Form({
                     name: this.item ? this.item.name : '',
-                    address: this.item ? this.item.address : '',
-                    postcode: this.item ? this.item.postcode : '',
-                    city: this.item ? this.item.city : '',
-                    latitude: this.item && this.item.latitude ? this.item.latitude : 55.663874,
-                    longitude: this.item && this.item.longitude ? this.item.longitude : 12.393955,
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
                     container: this.container
