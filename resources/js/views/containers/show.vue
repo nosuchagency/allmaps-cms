@@ -148,12 +148,6 @@
                         </el-table>
                     </el-card>
                 </template>
-                <confirm-dialog v-if="confirmDetachVisible"
-                                :message="$t('general.confirm')"
-                                @cancel="confirmDetachVisible = false"
-                                @confirm="detachLocation"
-                                :visible="confirmDetachVisible">
-                </confirm-dialog>
                 <upsert-modal v-if="upsertModalVisible"
                               :visible="upsertModalVisible"
                               :item="item"
@@ -212,7 +206,6 @@
                 beaconModalVisible: false,
                 ruleModalVisible: false,
                 upsertModalVisible: false,
-                confirmDetachVisible: false,
                 selectedBeacon: null,
                 selectedRule: null,
                 selectedLocation: null,
@@ -289,21 +282,6 @@
                 let ruleIndex = beacon.rules.findIndex(({id}) => id === data.rule.id);
                 beacon.rules.splice(ruleIndex, 1);
                 this.closeRuleModal();
-            },
-            openConfirmUnlinkModal(location) {
-                this.selectedLocation = location;
-                this.confirmDetachVisible = true;
-            },
-            async detachLocation() {
-                try {
-                    await this.$axios.post(`/${this.resource}/${this.item.id}/relationships/locations?_method=delete`, {data: [this.selectedLocation]});
-                    let index = this.item.locations.findIndex(({id}) => id === this.selectedLocation.id);
-                    this.item.locations.splice(index, 1);
-                    this.confirmDetachVisible = false;
-                    this.selectedLocation = null;
-                } catch (error) {
-                    console.log(error);
-                }
             }
         },
         computed: {
