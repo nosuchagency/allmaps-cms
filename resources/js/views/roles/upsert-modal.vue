@@ -2,7 +2,7 @@
     <modal :visible="visible"
            @modal:close="closeModal">
         <el-form :model="form"
-                 label-width="120px"
+                 label-width="140px"
                  @keydown.native="form.errors.clear($event.target.name)">
             <el-tabs v-model="currentTab">
                 <el-tab-pane label="Role" name="role">
@@ -13,7 +13,6 @@
                     </el-form-item>
                 </el-tab-pane>
             </el-tabs>
-
         </el-form>
         <span slot="footer">
             <template v-if="item">
