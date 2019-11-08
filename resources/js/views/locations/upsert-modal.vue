@@ -3,7 +3,7 @@
            @modal:close="closeModal"
            width="60%">
         <el-form :model="form"
-                 label-width="120px"
+                 label-width="140px"
                  @keydown.native="form.errors.clear($event.target.name)">
             <el-tabs v-model="currentTab">
                 <el-tab-pane label="Location" name="location">

@@ -2,7 +2,7 @@
     <modal :visible="visible"
            @modal:close="closeModal">
         <el-form :model="form"
-                 label-width="120px"
+                 label-width="140px"
                  @keydown.native="form.errors.clear($event.target.name)">
             <el-tabs v-model="currentTab">
                 <el-tab-pane label="Map Component" name="component">
