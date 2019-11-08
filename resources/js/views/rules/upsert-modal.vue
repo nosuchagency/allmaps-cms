@@ -86,6 +86,20 @@
                         </el-date-picker>
                     </el-form-item>
                 </el-tab-pane>
+                <el-tab-pane label="Push" name="push">
+                    <br>
+                    <el-form-item label="Title"
+                                  :class="{'is-error' : form.errors.has('push_title')}">
+                        <el-input v-model="form.push_title" autofocus></el-input>
+                    </el-form-item>
+                    <el-form-item label="Body"
+                                  :class="{'is-error' : form.errors.has('push_body')}">
+                        <el-input v-model="form.push_body"
+                                  type="textarea"
+                                  :rows="3">
+                        </el-input>
+                    </el-form-item>
+                </el-tab-pane>
             </el-tabs>
         </el-form>
         <span slot="footer">
@@ -162,6 +176,8 @@
                     date_to: this.item ? this.item.date_to : null,
                     time_restricted: this.item ? !!this.item.time_restricted : false,
                     date_restricted: this.item ? !!this.item.date_restricted : false,
+                    push_title: this.item ? this.item.push_title : '',
+                    push_body: this.item ? this.item.push_body : '',
                 })
             }
         },
