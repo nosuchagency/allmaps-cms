@@ -5,7 +5,7 @@
                  label-width="140px"
                  @keydown.native="form.errors.clear($event.target.name)">
             <el-tabs v-model="currentTab">
-                <el-tab-pane label="User" name="user">
+                <el-tab-pane :label="$t('users.tabs.user')" name="user">
                     <br>
                     <el-form-item :label="$t('users.attributes.name')"
                                   :class="{'is-error' : form.errors.has('name')}">
@@ -24,7 +24,7 @@
                                       type="password">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="Confirm Password"
+                        <el-form-item :label="$t('users.attributes.password_confirmation')"
                                       :class="{'is-error' : form.errors.has('password_confirmation')}">
                             <el-input v-model="form.password_confirmation"
                                       :placeholder="item ? $t('users.password_placeholder') : ''"
@@ -47,26 +47,15 @@
                             </el-select>
                         </fetch-items>
                     </el-form-item>
-                    <el-form-item label="Description"
+                    <el-form-item :label="$t('users.attributes.description')"
                                   :class="{'is-error' : form.errors.has('description')}">
                         <el-input v-model="form.description"
                                   type="textarea"
                                   :rows="3">
                         </el-input>
                     </el-form-item>
-                    <el-form-item v-if="!item"
-                                  label="Send invitation">
-                        <el-checkbox v-model="form.invitation"></el-checkbox>
-                    </el-form-item>
-                    <el-form-item v-else>
-                        <el-button type="primary"
-                                   size="small"
-                                   @click="sendInvitation">
-                            Resend invitation
-                        </el-button>
-                    </el-form-item>
                 </el-tab-pane>
-                <el-tab-pane label="Taxonomy" name="taxonomies">
+                <el-tab-pane :label="$t('users.tabs.taxonomy')" name="taxonomies">
                     <br>
                     <el-form-item :label="$t('users.attributes.category')"
                                   :class="{'is-error' : form.errors.has('category')}">
@@ -186,7 +175,7 @@
                     description: this.item ? this.item.description : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
-                    invitation: false
+                    // invitation: false
                 }
             },
             getUpdateFormFields() {

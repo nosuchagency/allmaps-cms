@@ -4,18 +4,19 @@ return [
     'singular' => 'Bruger',
     'plural' => 'Brugere',
 
-    'index' => [
-        'new' => 'Opret ny bruger',
+    'attributes' => [
+        'id' => 'ID',
         'name' => 'Navn',
-        'edit' => 'Rediger bruger',
-        'email' => 'Email'
-    ],
-
-    'upsert' => [
-        'create' => 'Opret bruger',
-        'delete' => 'Slet bruger',
-        'details' => 'Brugerinformation',
-        'name' => 'Navn',
-        'email' => 'Email'
+        'email' => 'Email',
+        'avatar' => 'Avatar',
+        'locale' => 'Sprog',
+        'password' => 'Password',
+        'password_confirmation' => 'Bekræft password',
+        'activated' => 'Aktiveret',
+        'remember_token' => 'Remember Token',
+        'role' => 'Rolle',
+        'description' => 'Beskrivelse',
+        'category' => 'Kategori',
+        'tags' => 'Tags'
     ]
 ];
