@@ -178,5 +178,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+    .label {
+        font-weight: bold;
+    }
 </style>

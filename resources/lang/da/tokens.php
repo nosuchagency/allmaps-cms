@@ -10,5 +10,4 @@ return [
         'token' => 'Token',
         'role' => 'Rolle'
     ]
-
 ];
