@@ -5,7 +5,7 @@
                  label-width="140px"
                  @keydown.native="form.errors.clear($event.target.name)">
             <el-tabs v-model="currentTab">
-                <el-tab-pane label="User" name="user">
+                <el-tab-pane :label="$t('users.tabs.user')" name="user">
                     <br>
                     <el-form-item :label="$t('users.attributes.name')"
                                   :class="{'is-error' : form.errors.has('name')}">
@@ -16,13 +16,22 @@
                         <el-input v-model="form.email">
                         </el-input>
                     </el-form-item>
-                    <el-form-item :label="$t('users.attributes.password')"
-                                  :class="{'is-error' : form.errors.has('password')}">
-                        <el-input v-model="form.password"
-                                  :placeholder="$t('users.password_placeholder')"
-                                  type="password">
-                        </el-input>
-                    </el-form-item>
+                    <template v-if="!item">
+                        <el-form-item :label="$t('users.attributes.password')"
+                                      :class="{'is-error' : form.errors.has('password')}">
+                            <el-input v-model="form.password"
+                                      :placeholder="item ? $t('users.password_placeholder') : ''"
+                                      type="password">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item :label="$t('users.attributes.password_confirmation')"
+                                      :class="{'is-error' : form.errors.has('password_confirmation')}">
+                            <el-input v-model="form.password_confirmation"
+                                      :placeholder="item ? $t('users.password_placeholder') : ''"
+                                      type="password">
+                            </el-input>
+                        </el-form-item>
+                    </template>
                     <el-form-item :label="$t('users.attributes.role')"
                                   :class="{'is-error' : form.errors.has('role')}">
                         <fetch-items url="/roles">
@@ -38,7 +47,14 @@
                             </el-select>
                         </fetch-items>
                     </el-form-item>
-                    <el-form-item :label="$t('profile.locale')"
+                    <el-form-item :label="$t('users.attributes.description')"
+                                  :class="{'is-error' : form.errors.has('description')}">
+                        <el-input v-model="form.description"
+                                  type="textarea"
+                                  :rows="3">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item :label="$t('users.attributes.locale')"
                                   :class="{'is-error' : form.errors.has('locale')}">
                         <el-select v-model="form.locale"
                                    placeholder="Select">
@@ -55,7 +71,7 @@
                         </el-select>
                     </el-form-item>
                 </el-tab-pane>
-                <el-tab-pane label="Taxonomy" name="taxonomies">
+                <el-tab-pane :label="$t('users.tabs.taxonomy')" name="taxonomies">
                     <br>
                     <el-form-item :label="$t('users.attributes.category')"
                                   :class="{'is-error' : form.errors.has('category')}">
@@ -125,15 +141,15 @@
                 form: new Form({
                     name: this.item ? this.item.name : '',
                     email: this.item ? this.item.email : '',
-                    password: '',
                     role: this.item ? this.item.role : null,
+                    description: this.item ? this.item.description : '',
                     category: this.item ? this.item.category : '',
                     tags: this.item ? this.item.tags : [],
-                    locale: this.item ? this.item.locale : ''
+                    locale: this.item ? this.item.locale : 'en'
                 }),
                 locales: [
-                    {'label': 'English', 'value': 'en_GB', 'flag': 'gb'},
-                    {'label': 'Dansk', 'value': 'da_DK', 'flag': 'dk'}
+                    {'label': 'English', 'value': 'en', 'flag': 'gb'},
+                    {'label': 'Dansk', 'value': 'da', 'flag': 'dk'}
                 ]
             }
         },
@@ -145,7 +161,7 @@
             },
             closeModal() {
                 this.$emit('modal:close');
-            }
+            },
         }
     }
 </script>

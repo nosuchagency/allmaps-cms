@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'dashboard' => 'Dashboard',
+    'map' => 'Kort',
+    'places' => 'Steder',
+    'components' => 'Komponenter',
+    'menus' => 'Menus',
+    'beacons' => 'Beacons',
+    'pois' => 'Points of Interest',
+    'fixtures' => 'Armaturer',
+    'containers' => 'Content',
+    'locations' => 'Locations',
+    'user_management' => 'Brugerstyring',
+    'activities' => 'Aktiviteter',
+    'users' => 'Brugere',
+    'roles' => 'Roller',
+    'tokens' => 'API Tokens',
+    'settings' => 'Indstillinger',
+    'categories' => 'Kategorier',
+    'tags' => 'Tags',
+    'searchables' => 'Searchables',
+    'skins' => 'Skins',
+    'map-settings' => 'Map Settings',
+    'beacon_providers' => 'Beacon Providers',
+    'email_layouts' => 'Email Layouts',
+    'email_templates' => 'Email Templates',
+    'account' => 'Min profil',
+    'profile' => 'Profil',
+    'log_out' => 'Log ud'
+];

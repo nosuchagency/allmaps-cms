@@ -12,7 +12,7 @@
                 </template>
                 <template slot="right">
                     <el-tooltip effect="dark"
-                                content="Update Password"
+                                :content="$t('general.actions.update', {name : $t('users.attributes.password')})"
                                 placement="top-start"
                                 v-if="$auth.user().hasPermissionTo('user:update')">
                         <el-button type="primary"
@@ -117,8 +117,7 @@
                                 :visible="passwordModalVisible"
                                 :item="item"
                                 @modal:close="closePasswordModal"
-                                @modal:update="updateItem"
-                                @modal:remove="removeItem">
+                                @modal:update="updateItem">
                 </password-modal>
             </div>
         </template>
@@ -128,7 +127,6 @@
 <script>
     import upsertModal from './upsert-modal';
     import passwordModal from './password-modal';
-    import pieChart from 'js/components/charts/PieChart';
     import userContentStatistics from './user-content-statistics';
     import userLocationStatistics from './user-location-statistics';
 
@@ -136,7 +134,6 @@
         components: {
             upsertModal,
             passwordModal,
-            pieChart,
             userContentStatistics,
             userLocationStatistics
         },
