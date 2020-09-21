@@ -6,13 +6,10 @@
 
 <br />
 <p align="center">
-  <h3 align="center">AllMaps - The API Version</h3>
+  <h3 align="center">AllMaps - The CMS Version</h3>
 
   <p align="center">
     AllMaps is an open-source indoor map solution.
-    <br />
-    <a href="https://docs.allmaps.nosuchagency.net/"><strong>Explore the docs »</strong></a>
-    <br />
     <br />
     <a href="https://github.com/nosuchagency/allmaps-cms/issues">Report Bug</a>
     ·
