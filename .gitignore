@@ -24,3 +24,4 @@ vendor/
 /.vscode
 /.vagrant
 .env.dusk.local
+.DS_Store
