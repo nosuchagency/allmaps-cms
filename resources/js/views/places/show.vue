@@ -52,26 +52,23 @@
                                 <label style="font-weight: bold; color: #666; display: block; margin-bottom: 3px; font-size: 14px;">
                                     Address
                                 </label>
-                                <span style="font-size: 14px;">{{item.address || '-'}}</span>
+                                <span style="font-size: 14px;">{{item.address || '-'}}</span><br />
+                                <span style="font-size: 14px;">{{item.postcode || '-'}} {{item.city || '-'}}</span>
                             </div>
-                            <div style="margin-bottom: 10px;">
-                                <label style="font-weight: bold; color: #666; display: block; margin-bottom: 3px; font-size: 14px;">
-                                    Zip Code
-                                </label>
-                                <span style="font-size: 14px;">{{item.postcode || '-'}}</span>
-                            </div>
-                            <div style="margin-bottom: 10px;">
-                                <label style="font-weight: bold; color: #666; display: block; margin-bottom: 3px; font-size: 14px;">
-                                    City
-                                </label>
-                                <span style="font-size: 14px;">{{item.city || '-'}}</span>
-                            </div>
-                        </el-col>
-                        <el-col :span="12">
+
                             <map-location-select :latitude="item.latitude"
                                                  :longitude="item.longitude"
                                                  :marker-popup-content="placePopupContent">
                             </map-location-select>
+
+                        </el-col>
+                        <el-col :span="12">
+                            <div style="margin-top: 50px;">
+                            <pie-chart :chart-data="poiChartData"
+                               :options="poiChartOptions"
+                               :styles="allChartStyles">
+                            </pie-chart>
+                            </div>
                         </el-col>
                     </el-row>
                 </el-card>
@@ -94,6 +91,12 @@
                                 <i class="fa fa-plus"></i>
                             </el-button>
                         </el-tooltip>
+                    </div>
+                    <div style="display: flex; margin-top: 20px;">
+                        <line-chart :chart-data="buildingsChartData(item.buildings)"
+                               :options="lineChartOptions"
+                               :styles="allChartStyles">
+                        </line-chart>
                     </div>
                 </el-card>
                 <building-card v-for="building in item.buildings"
@@ -126,6 +129,9 @@
     import buildingModal from '../buildings/upsert-modal';
     import mapLocationSelect from './map-location-select';
     import buildingCard from './building-card';
+    import pieChart from 'js/components/charts/PieChart';
+    import barChart from 'js/components/charts/BarChart';
+    import lineChart from 'js/components/charts/LineChart';
 
     export default {
         mixins: [multipleSelection],
@@ -133,7 +139,10 @@
             upsertModal,
             buildingModal,
             mapLocationSelect,
-            buildingCard
+            buildingCard,
+            pieChart,
+            barChart,
+            lineChart
         },
         data() {
             return {
@@ -180,6 +189,46 @@
             closeUpsertModal() {
                 this.upsertModalVisible = false;
             },
+            chartColors() {
+                var colors = [
+                    '#41B883',
+                    '#E46651',
+                    '#00D8FF',
+                    '#DD1B16',
+                    '#e5e500',
+                    '#7647a2'
+                ];
+
+                return colors[colors.length * Math.random() | 0]
+            },
+            buildingsChartData(buildings) {
+                var datasets = [];
+                buildings.forEach(building => {
+                    var chartColor = this.chartColors();
+
+                    var dataset = {
+                        label: building.name,
+					    backgroundColor: chartColor,
+					    borderColor: chartColor,
+                        data: [
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50)
+                        ],
+                        fill: false,
+                    };
+
+                    datasets.push(dataset);
+                });
+
+                return {
+                    labels: ['August', 'September', 'Oktober', 'November', 'December', 'Januar'],
+                    datasets: datasets
+                }
+            },
         },
         computed: {
             placePopupContent() {
@@ -193,6 +242,86 @@
                     </div>
                 </div>
                 `;
+            },
+            allChartStyles() {
+                return {
+                    width: '100%',
+                    height: '250px',
+                    position: 'relative'
+                };
+            },
+            poiChartOptions() {
+                return {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+					    display: true,
+                        text: 'POI Showings - Week 2 of 2021'
+
+				    },
+                    legend: {
+                        position: 'right'
+                    }
+                };
+            },
+            poiChartData() {
+                return {
+                    labels: ['Cafe', 'Bibliotekar', 'Print/Kopi', 'Toilet', 'Aflevering', 'Skønlitteratur'],
+                    datasets: [
+                        {
+                            backgroundColor: [
+                                '#41B883',
+                                '#E46651',
+                                '#00D8FF',
+                                '#DD1B16',
+                                '#e5e500',
+                                '#7647a2'
+                            ],
+                            data: [
+                                12,
+                                36,
+                                10,
+                                51,
+                                22,
+                                8,
+                            ]
+                        }
+                    ]
+                }
+            },
+            lineChartOptions() {
+                return {
+                   responsive: true,
+                   maintainAspectRatio: false,
+				title: {
+					display: false,
+					text: ''
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Month'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Showings'
+						}
+					}]
+				}
+			    }
             }
         }
     };

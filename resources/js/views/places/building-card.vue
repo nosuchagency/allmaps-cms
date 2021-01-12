@@ -81,6 +81,16 @@
                 </template>
             </el-table-column>
         </el-table>
+
+            <div style="display: flex; margin-top: 20px;">
+                        <line-chart :chart-data="chartData(floors)"
+                               :options="chartOptions"
+                               :styles="chartStyles">
+                        </line-chart>
+                    </div>
+
+
+
         <building-modal v-if="buildingModalVisible"
                         :visible="buildingModalVisible"
                         :item="building"
@@ -103,11 +113,13 @@
 <script>
     import floorModal from '../floors/upsert-modal';
     import buildingModal from '../buildings/upsert-modal';
+    import lineChart from 'js/components/charts/LineChart';
 
     export default {
         components: {
             floorModal,
             buildingModal,
+            lineChart
         },
         props: {
             building: Object
@@ -120,7 +132,91 @@
                 floors: this.building.floors.slice(),
             }
         },
+        computed: {
+            chartStyles() {
+
+                return {
+                    width: '100%',
+                    height: '250px',
+                    position: 'relative'
+                };
+            },
+            chartOptions() {
+                return {
+                   responsive: true,
+                   maintainAspectRatio: false,
+				title: {
+					display: false,
+					text: ''
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Month'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Showings'
+						}
+					}]
+				}
+			    }
+            }
+        },
         methods: {
+            chartColors() {
+                var colors = [
+                    '#41B883',
+                    '#E46651',
+                    '#00D8FF',
+                    '#DD1B16',
+                    '#e5e500',
+                    '#7647a2'
+                ];
+
+                return colors[colors.length * Math.random() | 0]
+            },
+            chartData(floors) {
+                var datasets = [];
+                floors.forEach(floor => {
+                    var chartColor = this.chartColors();
+
+                    var dataset = {
+                        label: floor.name,
+					    backgroundColor: chartColor,
+					    borderColor: chartColor,
+                        data: [
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50),
+                            Math.round(Math.random() * 1000 + 50)
+                        ],
+                        fill: false,
+                    };
+
+                    datasets.push(dataset);
+                });
+
+                return {
+                    labels: ['August', 'September', 'Oktober', 'November', 'December', 'Januar'],
+                    datasets: datasets
+                }
+            },
             updateBuilding(building) {
                 this.$emit('building-card:update', building);
                 this.buildingModalVisible = false;
