@@ -20,7 +20,7 @@
         "@turf/turf": "^5.1.6",
         "@websanova/vue-auth": "^2.21.14-beta",
         "axios": "^0.21",
-        "chart.js": "^2.7.3",
+        "chart.js": "^2.9.4",
         "cross-env": "^5.2.0",
         "element-ui": "^2.8.2",
         "filepond": "^4.4.7",
